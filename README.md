@@ -56,6 +56,41 @@ Faqat interaktiv qismlar `"use client"`:
 | `FanClub` | forma va `fetch('/api/join')` |
 | `ToTop`, `RevealProvider` | skrollga bog'liq effektlar |
 
+## Ma'lumotlar bazasi
+
+**Prisma 7 + SQLite.** SQLite tanlangan, chunki server 1 GB RAM — alohida baza
+jarayoni qo'shimcha xotira olmaydi, baza oddiy fayl.
+
+```
+prisma/schema.prisma   # modellar
+prisma/migrations/     # migratsiya tarixi
+lib/prisma.ts          # klient (lazy singleton)
+```
+
+Lokal ishlash:
+
+```bash
+npm run db:migrate    # sxema o'zgargach yangi migratsiya
+npm run db:studio     # bazani brauzerda ko'rish
+```
+
+Baza fayli: lokal `prisma/dev.db`, serverda
+`/var/www/manchester-united-site/data/app.db` — reliz papkasidan tashqarida,
+shuning uchun deploy paytida almashmaydi.
+
+### Modellar
+
+| Model | Vazifasi |
+|---|---|
+| `FanApplication` | Fan-klub arizalari (`new` / `approved` / `rejected`) |
+
+### Postgres'ga o'tish
+
+Trafik yoki ma'lumot o'sib ketsa: `schema.prisma` da `provider` ni
+`postgresql` ga o'zgartiring, `DATABASE_URL` ni yangilang, adapterni
+`@prisma/adapter-pg` ga almashtiring va migratsiyalarni qayta yarating.
+Qolgan kod o'zgarishsiz qoladi.
+
 ## Backend qo'shish
 
 Ma'lumot qatlami allaqachon ajratilgan — barcha funksiyalar `async`:
@@ -67,6 +102,10 @@ export async function getSquad(): Promise<Player[]> {
   // return prisma.player.findMany();   ← baza ulanganda shunday bo'ladi
 }
 ```
+
+Fan-klub arizalari allaqachon bazaga yozilyapti (`app/api/join/route.ts`).
+Tarkib, o'yinlar va jadval hali demo massivlarda — ularni ham bazaga
+o'tkazish uchun `lib/queries.ts` ichini o'zgartirish yetarli.
 
 `app/page.tsx` va API route'lar faqat shu funksiyalarni chaqiradi,
 shuning uchun **baza ulanganda komponentlarga tegish shart emas**.

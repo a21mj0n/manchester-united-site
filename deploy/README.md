@@ -139,6 +139,32 @@ cd /var/www/manchester-united-site/repo
 
 Ikkala skript ham muvaffaqiyatsizlikda orqaga qaytarish buyrug'ini ko'rsatadi.
 
+## Ma'lumotlar bazasi
+
+SQLite fayli **reliz papkasidan tashqarida** turadi, shuning uchun deploy
+paytida almashmaydi:
+
+```
+/var/www/manchester-united-site/
+  data/app.db          # baza — deploy'da tegilmaydi
+  data/app.db.bak      # har deploy oldidan avtomatik zaxira
+  tools/               # migratsiyalar uchun Prisma CLI
+  current/             # joriy reliz (har deploy'da almashadi)
+  previous/            # oldingi reliz — rollback uchun
+```
+
+`activate-release.sh` har deploy'da: bazani zaxiralaydi → relizni
+almashtiradi → `prisma migrate deploy` ishlatadi → servisni qayta ishga
+tushiradi → tekshiradi. Xatolik bo'lsa kod ham, baza ham qaytariladi.
+
+Bazani qo'lda ko'rish:
+
+```bash
+ssh deploy@189.74.96.196
+cd /var/www/manchester-united-site/tools
+DATABASE_URL="file:../data/app.db" ./node_modules/.bin/prisma migrate status
+```
+
 ## Foydali buyruqlar
 
 ```bash
