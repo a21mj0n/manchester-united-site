@@ -21,6 +21,7 @@ export default function Footer() {
             width={52}
             height={52}
             className="footer__crest"
+            style={{ height: "auto" }}
           />
           <div>
             <strong>RED DEVILS UZBEKISTAN</strong>

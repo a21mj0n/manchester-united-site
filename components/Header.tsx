@@ -53,6 +53,7 @@ export default function Header() {
             width={44}
             height={44}
             className="logo__img"
+            style={{ height: "auto" }}
             priority
           />
           <span className="logo__text">

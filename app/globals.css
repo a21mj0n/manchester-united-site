@@ -524,3 +524,83 @@ ul{list-style:none}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
   .reveal{opacity:1;transform:none}
 }
+
+/* =========================================================
+   ADMIN PANEL va KIRISH
+   ========================================================= */
+
+/* ---------- Kirish sahifasi ---------- */
+.auth{
+  min-height:100svh;display:grid;place-items:center;padding:24px;
+  background:
+    radial-gradient(700px 420px at 50% 0%,rgba(218,41,28,.22),transparent 65%),
+    var(--black);
+}
+.auth__card{
+  width:100%;max-width:400px;padding:36px 32px;
+  background:linear-gradient(165deg,#15151c,#0d0d12);
+  border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+}
+.auth__title{
+  font-family:var(--font-display);font-size:1.9rem;letter-spacing:1px;text-transform:uppercase;
+}
+.auth__sub{color:var(--muted);font-size:.9rem;margin:6px 0 24px}
+
+/* ---------- Admin sahifasi ---------- */
+.admin{max-width:1180px;margin-inline:auto;padding:36px 22px 80px}
+.admin__head{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:20px;
+  flex-wrap:wrap;margin-bottom:28px;padding-bottom:22px;border-bottom:1px solid var(--line);
+}
+.admin__title{
+  font-family:var(--font-display);font-size:clamp(1.7rem,4vw,2.4rem);
+  letter-spacing:.5px;text-transform:uppercase;line-height:1.1;
+}
+.admin__sub{color:var(--muted);font-size:.92rem;margin-top:6px}
+.admin__actions{display:flex;gap:10px;flex-wrap:wrap}
+.admin__actions .btn{padding:10px 20px;font-size:.85rem}
+
+.admin__empty{
+  color:var(--muted);text-align:center;padding:56px 20px;
+  border:1px dashed var(--line);border-radius:var(--radius);margin-top:20px;
+}
+
+.admin__search{
+  width:100%;max-width:420px;margin-bottom:18px;padding:12px 16px;border-radius:12px;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--text);font-size:.92rem;
+}
+.admin__search:focus{outline:none;border-color:var(--red);background:rgba(218,41,28,.08)}
+.admin__search::placeholder{color:#5f5f6b}
+
+/* Filtr chiplari ustidagi hisoblagich */
+.chip__count{
+  display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;
+  background:rgba(0,0,0,.35);font-size:.75rem;font-weight:700;
+}
+
+/* ---------- Arizalar jadvali ---------- */
+.admin-table td{font-size:.9rem;vertical-align:middle}
+.admin-table__date{color:var(--muted);font-size:.82rem;white-space:nowrap}
+.admin-table tr.is-busy{opacity:.5;pointer-events:none}
+
+.admin-table__actions{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.mini{
+  padding:6px 12px;border-radius:8px;font-size:.76rem;font-weight:700;
+  border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--muted);
+  transition:all .2s var(--ease);white-space:nowrap;
+}
+.mini:hover:not(:disabled){color:#fff;border-color:rgba(255,255,255,.35)}
+.mini:disabled{opacity:.4;cursor:not-allowed}
+.mini--ok:hover:not(:disabled){background:rgba(46,204,113,.18);border-color:#4ade80;color:#4ade80}
+.mini--no:hover:not(:disabled){background:rgba(218,41,28,.18);border-color:var(--red);color:#ff7a6d}
+
+/* Holat belgilari */
+.pill--new{background:rgba(251,225,34,.16);color:var(--gold)}
+.pill--approved{background:rgba(46,204,113,.16);color:#4ade80}
+.pill--rejected{background:rgba(218,41,28,.2);color:#ff7a6d}
+
+@media (max-width:680px){
+  .admin{padding:24px 16px 60px}
+  .admin__head{flex-direction:column}
+  .auth__card{padding:28px 22px}
+}

@@ -57,6 +57,7 @@ export default function Hero() {
             width={400}
             height={400}
             className="hero__crest"
+            style={{ height: "auto" }}
             priority
           />
         </div>

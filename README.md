@@ -91,6 +91,36 @@ Trafik yoki ma'lumot o'sib ketsa: `schema.prisma` da `provider` ni
 `@prisma/adapter-pg` ga almashtiring va migratsiyalarni qayta yarating.
 Qolgan kod o'zgarishsiz qoladi.
 
+## Admin panel
+
+`/admin` — fan-klub arizalarini boshqarish: ro'yxat, holat bo'yicha filtr,
+qidiruv va holatni o'zgartirish (`Yangi` → `Qabul qilingan` / `Rad etilgan`).
+
+Kirish `/login` orqali, parol bilan. Sessiya 12 soat amal qiladi.
+
+### Xavfsizlik
+
+Tashqi kutubxonasiz: parol **scrypt** bilan xeshlanadi (`node:crypto`),
+sessiya esa **HMAC-SHA256** bilan imzolangan HttpOnly cookie'da saqlanadi.
+`middleware.ts` `/admin` va `/api/admin` yo'llarini himoyalaydi.
+Kirish urinishlari cheklangan: bitta IP uchun 5 daqiqada 10 marta.
+
+### Parolni o'zgartirish
+
+```bash
+npm run admin:password
+```
+
+Chiqqan xeshni serverda `/etc/red-devils.env` ichidagi `ADMIN_PASSWORD_HASH`
+ga qo'ying va servisni qayta ishga tushiring:
+
+```bash
+ssh root@SERVER "nano /etc/red-devils.env && systemctl restart red-devils"
+```
+
+Sirlar git'da saqlanmaydi — ular faqat serverdagi `/etc/red-devils.env`
+faylida (`chmod 600`) va lokal `.env` da turadi.
+
 ## Backend qo'shish
 
 Ma'lumot qatlami allaqachon ajratilgan — barcha funksiyalar `async`:
