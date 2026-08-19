@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Red Devils Uzbekistan — Manchester United muxlislari klubi</title>
+<meta name="description" content="O'zbekistondagi Manchester United muxlislari uchun rasmiy bo'lmagan jamoat sayti: jamoa tarkibi, o'yinlar, turnir jadvali, tarix va fan-klub.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="header" id="header">
+  <div class="container header__inner">
+    <a href="#hero" class="logo">
+      <img src="assets/crest.svg" alt="Red Devils Uzbekistan emblemasi" class="logo__img">
+      <span class="logo__text">
+        <strong>RED DEVILS</strong>
+        <small>Uzbekistan</small>
+      </span>
+    </a>
+
+    <nav class="nav" id="nav">
+      <a href="#news"     class="nav__link">Yangiliklar</a>
+      <a href="#matches"  class="nav__link">O'yinlar</a>
+      <a href="#squad"    class="nav__link">Tarkib</a>
+      <a href="#table"    class="nav__link">Jadval</a>
+      <a href="#history"  class="nav__link">Tarix</a>
+      <a href="#legends"  class="nav__link">Afsonalar</a>
+      <a href="#fanclub"  class="nav__link nav__link--cta">Fan-klub</a>
+    </nav>
+
+    <button class="burger" id="burger" aria-label="Menyu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="hero">
+  <div class="hero__bg" aria-hidden="true">
+    <div class="hero__glow"></div>
+    <div class="hero__stripes"></div>
+  </div>
+
+  <div class="container hero__inner">
+    <div class="hero__content">
+      <span class="badge reveal">🇺🇿 O'zbekistondagi muxlislar uyushmasi</span>
+      <h1 class="hero__title reveal">
+        <span class="line">GLORY GLORY</span>
+        <span class="line line--accent">MAN UNITED</span>
+      </h1>
+      <p class="hero__text reveal">
+        Old Traffordgacha 5 700 km. Lekin yurak masofani tanimaydi.
+        Bu sayt — O'zbekistondagi barcha «Qizil shaytonlar» muxlislari uchun:
+        o'yinlar, tarkib, tarix va birgalikda o'tkaziladigan tomoshalar.
+      </p>
+      <div class="hero__actions reveal">
+        <a href="#fanclub" class="btn btn--primary">Fan-klubga qo'shilish</a>
+        <a href="#matches" class="btn btn--ghost">Keyingi o'yin</a>
+      </div>
+
+      <ul class="hero__stats reveal">
+        <li><b data-count="20">0</b><span>Angliya chempioni</span></li>
+        <li><b data-count="3">0</b><span>Chempionlar ligasi</span></li>
+        <li><b data-count="13">0</b><span>FA Kubogi</span></li>
+        <li><b data-count="1878">0</b><span>Tashkil topgan yil</span></li>
+      </ul>
+    </div>
+
+    <div class="hero__visual reveal">
+      <img src="assets/crest.svg" alt="" class="hero__crest">
+    </div>
+  </div>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+      <span>GLORY GLORY MAN UNITED ★ THEATRE OF DREAMS ★ OLD TRAFFORD ★ SIR ALEX FERGUSON ★ CLASS OF '92 ★ RED DEVILS UZBEKISTAN ★</span>
+      <span>GLORY GLORY MAN UNITED ★ THEATRE OF DREAMS ★ OLD TRAFFORD ★ SIR ALEX FERGUSON ★ CLASS OF '92 ★ RED DEVILS UZBEKISTAN ★</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= NEXT MATCH / COUNTDOWN ================= -->
+<section class="next" id="next">
+  <div class="container">
+    <div class="next__card reveal">
+      <div class="next__label">Keyingi o'yin · Premer-liga</div>
+      <div class="next__teams">
+        <div class="team">
+          <div class="team__logo team__logo--mu">MU</div>
+          <span>Manchester United</span>
+        </div>
+        <div class="next__vs">
+          <span>VS</span>
+          <small id="matchDate">—</small>
+        </div>
+        <div class="team">
+          <div class="team__logo">ARS</div>
+          <span>Arsenal</span>
+        </div>
+      </div>
+
+      <div class="countdown" id="countdown">
+        <div><b>00</b><span>kun</span></div>
+        <div><b>00</b><span>soat</span></div>
+        <div><b>00</b><span>daqiqa</span></div>
+        <div><b>00</b><span>soniya</span></div>
+      </div>
+
+      <p class="next__note">📍 Old Trafford · Toshkent vaqti bilan ko'rsatilgan</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= NEWS ================= -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section__head reveal">
+      <h2 class="section__title">Yangiliklar</h2>
+      <p class="section__sub">Klub hayotidan so'nggi xabarlar va fan-klub e'lonlari</p>
+    </div>
+
+    <div class="news-grid">
+      <article class="news news--big reveal">
+        <div class="news__img news__img--1"></div>
+        <div class="news__body">
+          <span class="tag tag--red">Fan-klub</span>
+          <h3>Toshkentda birgalikda o'yin tomoshasi</h3>
+          <p>Har bir derbi o'yinida biz Toshkent markazidagi sport-barda yig'ilamiz. Sharf, ashula va 300 nafar qizil yurak.</p>
+          <span class="news__date">Har hafta · Toshkent</span>
+        </div>
+      </article>
+
+      <article class="news reveal">
+        <div class="news__img news__img--2"></div>
+        <div class="news__body">
+          <span class="tag">Akademiya</span>
+          <h3>Yoshlar akademiyasidan yangi iste'dodlar</h3>
+          <p>Carrington maydonlarida o'sgan navbatdagi avlod birinchi jamoaga yo'l oldi.</p>
+          <span class="news__date">Old Trafford</span>
+        </div>
+      </article>
+
+      <article class="news reveal">
+        <div class="news__img news__img--3"></div>
+        <div class="news__body">
+          <span class="tag">Transfer</span>
+          <h3>Transfer oynasi: nimalarni kutamiz</h3>
+          <p>Yarim mudofaa va hujum chizig'ini kuchaytirish — jamoaning asosiy vazifasi.</p>
+          <span class="news__date">Tahlil</span>
+        </div>
+      </article>
+
+      <article class="news reveal">
+        <div class="news__img news__img--4"></div>
+        <div class="news__body">
+          <span class="tag tag--gold">Tarix</span>
+          <h3>1999 — uchlik g'alaba tarixi</h3>
+          <p>Premer-liga, FA Kubogi va Chempionlar ligasi. Futbol tarixidagi eng buyuk mavsum.</p>
+          <span class="news__date">Retro</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MATCHES ================= -->
+<section class="section section--alt" id="matches">
+  <div class="container">
+    <div class="section__head reveal">
+      <h2 class="section__title">O'yinlar</h2>
+      <p class="section__sub">Natijalar va kelgusi uchrashuvlar jadvali</p>
+    </div>
+
+    <div class="tabs reveal" role="tablist">
+      <button class="tabs__btn is-active" data-tab="fixtures" role="tab">Kelgusi o'yinlar</button>
+      <button class="tabs__btn" data-tab="results" role="tab">Natijalar</button>
+    </div>
+
+    <div class="tab-panel is-active" id="tab-fixtures">
+      <ul class="match-list" id="fixturesList"></ul>
+    </div>
+    <div class="tab-panel" id="tab-results">
+      <ul class="match-list" id="resultsList"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SQUAD ================= -->
+<section class="section" id="squad">
+  <div class="container">
+    <div class="section__head reveal">
+      <h2 class="section__title">Jamoa tarkibi</h2>
+      <p class="section__sub">Qizil futbolkani kiyib maydonga chiqadigan o'yinchilar</p>
+    </div>
+
+    <div class="filters reveal" id="filters">
+      <button class="chip is-active" data-pos="all">Barchasi</button>
+      <button class="chip" data-pos="GK">Darvozabon</button>
+      <button class="chip" data-pos="DF">Himoyachi</button>
+      <button class="chip" data-pos="MF">Yarim himoyachi</button>
+      <button class="chip" data-pos="FW">Hujumchi</button>
+    </div>
+
+    <div class="squad-grid" id="squadGrid"></div>
+  </div>
+</section>
+
+<!-- ================= TABLE ================= -->
+<section class="section section--alt" id="table">
+  <div class="container">
+    <div class="section__head reveal">
+      <h2 class="section__title">Turnir jadvali</h2>
+      <p class="section__sub">Angliya Premer-ligasi · namunaviy ko'rinish</p>
+    </div>
+
+    <div class="table-wrap reveal">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th><th class="ta-left">Jamoa</th><th>O</th><th>G'</th><th>D</th><th>M</th><th>F</th><th>O'</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+    <p class="note reveal">O — o'yin, G' — g'alaba, D — durang, M — mag'lubiyat, F — farq, O' — ochko</p>
+  </div>
+</section>
+
+<!-- ================= HISTORY ================= -->
+<section class="section" id="history">
+  <div class="container">
+    <div class="section__head reveal">
+      <h2 class="section__title">Klub tarixi</h2>
+      <p class="section__sub">1878 yildan bugungi kungacha — Qizil shaytonlar yo'li</p>
+    </div>
+
+    <div class="timeline" id="timeline"></div>
+  </div>
+</section>
+
+<!-- ================= LEGENDS ================= -->
+<section class="section section--dark" id="legends">
+  <div class="container">
+    <div class="section__head reveal">
+      <h2 class="section__title">Afsonalar</h2>
+      <p class="section__sub">Old Trafford maydonini abadiy o'ziga bo'ysundirganlar</p>
+    </div>
+    <div class="legends" id="legendsGrid"></div>
+  </div>
+</section>
+
+<!-- ================= FAN CLUB ================= -->
+<section class="section" id="fanclub">
+  <div class="container fanclub">
+    <div class="fanclub__info reveal">
+      <h2 class="section__title">Fan-klubga qo'shiling</h2>
+      <p class="section__sub">
+        Red Devils Uzbekistan — bu rasmiy bo'lmagan muxlislar jamoasi.
+        Biz birgalikda o'yin ko'ramiz, futbol o'ynaymiz va xayriya aksiyalarini tashkil qilamiz.
+      </p>
+      <ul class="perks">
+        <li><span>⚽</span><div><b>Birgalikda tomosha</b><small>Toshkent, Samarqand, Farg'ona va boshqa shaharlarda</small></div></li>
+        <li><span>👕</span><div><b>Klub atributikasi</b><small>Sharf, futbolka va fan-klub kartasi</small></div></li>
+        <li><span>🏟️</span><div><b>Mini-futbol turnirlari</b><small>Har oyda muxlislar o'rtasida musobaqa</small></div></li>
+        <li><span>❤️</span><div><b>Xayriya</b><small>Bolalar uyiga sport anjomlari yetkazish</small></div></li>
+      </ul>
+    </div>
+
+    <form class="form reveal" id="joinForm" novalidate>
+      <h3 class="form__title">Ariza qoldiring</h3>
+      <label class="field">
+        <span>Ism familiya</span>
+        <input type="text" name="name" placeholder="Azimjon Toirov" required>
+      </label>
+      <label class="field">
+        <span>Shahar</span>
+        <select name="city" required>
+          <option value="">Tanlang…</option>
+          <option>Toshkent</option><option>Samarqand</option><option>Buxoro</option>
+          <option>Farg'ona</option><option>Namangan</option><option>Andijon</option>
+          <option>Nukus</option><option>Qarshi</option><option>Boshqa</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>Telegram yoki telefon</span>
+        <input type="text" name="contact" placeholder="@username / +998 90 123 45 67" required>
+      </label>
+      <label class="field">
+        <span>Nechanchi yildan beri muxlissiz?</span>
+        <input type="number" name="since" min="1878" max="2030" placeholder="2010">
+      </label>
+      <button type="submit" class="btn btn--primary btn--full">Arizani yuborish</button>
+      <p class="form__msg" id="formMsg" role="status"></p>
+      <p class="form__hint">Bu demo forma — ma'lumot hech qayerga yuborilmaydi.</p>
+    </form>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <img src="assets/crest.svg" alt="" class="footer__crest">
+      <div>
+        <strong>RED DEVILS UZBEKISTAN</strong>
+        <p>O'zbekistondagi Manchester United muxlislari jamoasi</p>
+      </div>
+    </div>
+
+    <nav class="footer__nav">
+      <a href="#news">Yangiliklar</a>
+      <a href="#matches">O'yinlar</a>
+      <a href="#squad">Tarkib</a>
+      <a href="#history">Tarix</a>
+      <a href="#fanclub">Fan-klub</a>
+    </nav>
+
+    <div class="footer__social">
+      <a href="#" aria-label="Telegram">TG</a>
+      <a href="#" aria-label="Instagram">IG</a>
+      <a href="#" aria-label="YouTube">YT</a>
+      <a href="#" aria-label="X">X</a>
+    </div>
+  </div>
+
+  <div class="container footer__bottom">
+    <p>© <span id="year"></span> Red Devils Uzbekistan — muxlislar tomonidan yaratilgan.</p>
+    <p class="footer__disc">
+      Rasmiy bo'lmagan sayt. Manchester United FC bilan bog'liq emas.
+      Saytdagi statistika va o'yin jadvali namunaviy (demo) ma'lumotlardir.
+    </p>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="Yuqoriga">↑</button>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

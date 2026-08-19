@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Red Devils Uzbekistan emblemasi">
+  <defs>
+    <linearGradient id="rd" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EF3123"/><stop offset="1" stop-color="#A31A11"/>
+    </linearGradient>
+    <linearGradient id="gd" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFF07A"/><stop offset="1" stop-color="#FBE122"/>
+    </linearGradient>
+  </defs>
+
+  <!-- tashqi halqa -->
+  <circle cx="100" cy="100" r="96" fill="url(#rd)"/>
+  <circle cx="100" cy="100" r="96" fill="none" stroke="#FBE122" stroke-width="4"/>
+  <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/>
+
+  <!-- yuqori va pastki lentalar -->
+  <path d="M100 12a88 88 0 0 1 84 61H16A88 88 0 0 1 100 12Z" fill="rgba(0,0,0,.22)"/>
+  <text x="100" y="46" text-anchor="middle" font-family="Anton, Impact, sans-serif"
+        font-size="19" letter-spacing="2.5" fill="#FBE122">RED DEVILS</text>
+  <text x="100" y="180" text-anchor="middle" font-family="Anton, Impact, sans-serif"
+        font-size="15" letter-spacing="3.5" fill="#fff">UZBEKISTAN</text>
+
+  <!-- markaziy qalqon -->
+  <path d="M100 60c14 8 26 10 36 10v34c0 22-16 36-36 44-20-8-36-22-36-44V70c10 0 22-2 36-10Z"
+        fill="#0B0B0F" stroke="url(#gd)" stroke-width="3"/>
+
+  <!-- uch tishli nayza (trident) -->
+  <g fill="url(#gd)">
+    <rect x="97" y="82" width="6" height="58" rx="3"/>
+    <path d="M78 78h6v22a16 16 0 0 0 32 0V78h6v22a22 22 0 0 1-44 0V78Z"/>
+    <path d="M75 70l6 10h-12zM100 62l6 10H94zM125 70l6 10h-12z"/>
+    <circle cx="100" cy="146" r="5"/>
+  </g>
+
+  <!-- 1878 -->
+  <text x="100" y="128" text-anchor="middle" font-family="Anton, Impact, sans-serif"
+        font-size="11" letter-spacing="1.5" fill="rgba(255,255,255,.55)">1878</text>
+</svg>
