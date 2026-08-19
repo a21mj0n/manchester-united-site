@@ -3,6 +3,23 @@
 Ubuntu 22.04/24.04 VPS uchun qadamba-qadam yo'riqnoma.
 Arxitektura: **nginx** (443/80) → **Next.js standalone** (127.0.0.1:3000), systemd boshqaruvida.
 
+## Qaysi usulni tanlash
+
+O'lchangan xotira sarfi:
+
+| Amal | Xotira |
+|---|---|
+| Saytni ishlatish | **~95 MB** |
+| Build qilish | **~1.2 GB** (eng yuqori nuqta) |
+
+| Serveringiz RAM | Usul |
+|---|---|
+| **1 GB** | **B usuli** — build lokal mashinada, serverga tayyor to'plam yuboriladi |
+| 2 GB va undan ko'p | A usuli — build serverning o'zida (`deploy/deploy.sh`) |
+
+1 GB serverda build qilishga urinish xotira yetishmasligi tufayli uziladi.
+B usulida serverga umuman `npm` kerak emas — faqat Node.js runtime.
+
 ---
 
 ## 1. DNS sozlash
@@ -38,6 +55,10 @@ sudo chown -R deploy:deploy /var/www/manchester-united-site
 ```
 
 ## 3. Kodni tortish va birinchi build
+
+> **B usulida** (1 GB server) bu bo'limni o'tkazib yuboring — serverda git ham,
+> npm ham kerak emas. Buning o'rniga lokal mashinangizda `./deploy/deploy-local.sh`
+> ishga tushiring, u papkalarni o'zi yaratadi. Keyin 4-bo'limdan davom eting.
 
 ```bash
 sudo -u deploy git clone https://github.com/a21mj0n/manchester-united-site.git \
@@ -92,15 +113,31 @@ Sertifikat avtomatik yangilanadi — tekshirish: `sudo certbot renew --dry-run`
 
 ## Keyingi yangilanishlar
 
-Lokalda `git push` qilgandan keyin, serverda:
+### B usuli — build lokal mashinada (1 GB server uchun)
+
+O'z kompyuteringizda:
+
+```bash
+./deploy/deploy-local.sh
+```
+
+Skript build qiladi, natijani (~50 MB) rsync orqali serverga yuboradi, versiyani
+almashtiradi va servisni qayta ishga tushiradi. Oxirida `/api/health` orqali tekshiradi.
+
+Server manzilini o'zgartirish kerak bo'lsa:
+
+```bash
+DEPLOY_SERVER=deploy@1.2.3.4 ./deploy/deploy-local.sh
+```
+
+### A usuli — build serverda (2 GB va undan ko'p)
 
 ```bash
 cd /var/www/manchester-united-site/repo
 ./deploy/deploy.sh
 ```
 
-Skript kodni tortadi, build qiladi, versiyani almashtiradi va servisni qayta ishga tushiradi.
-Oxirida `/api/health` orqali tekshiradi — muvaffaqiyatsiz bo'lsa, orqaga qaytarish buyrug'ini ko'rsatadi.
+Ikkala skript ham muvaffaqiyatsizlikda orqaga qaytarish buyrug'ini ko'rsatadi.
 
 ## Foydali buyruqlar
 
