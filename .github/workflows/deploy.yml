@@ -1,0 +1,77 @@
+name: Deploy
+
+# main ga push bo'lganda sayt avtomatik yangilanadi.
+# Qo'lda ishga tushirish uchun: Actions → Deploy → Run workflow
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Bir vaqtda faqat bitta deploy ishlasin
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build va serverga yuborish
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Kodni olish
+        uses: actions/checkout@v4
+
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Paketlar
+        run: npm ci
+
+      - name: TypeScript tekshiruvi
+        run: npx tsc --noEmit
+
+      - name: Build
+        run: npm run build
+
+      - name: To'plamni yig'ish
+        run: |
+          rm -rf deploy-bundle
+          cp -r .next/standalone deploy-bundle
+          cp -r public           deploy-bundle/
+          cp -r .next/static     deploy-bundle/.next/
+          du -sh deploy-bundle
+
+      - name: SSH kalitini sozlash
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Serverga yuborish
+        run: |
+          rsync -az --delete \
+            -e "ssh -i ~/.ssh/deploy_key -o BatchMode=yes" \
+            deploy-bundle/ \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/manchester-united-site/incoming/"
+
+      - name: Yangi versiyani ishga tushirish
+        run: |
+          ssh -i ~/.ssh/deploy_key -o BatchMode=yes \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+            "bash ~/activate-release.sh"
+
+      - name: Saytni tashqaridan tekshirish
+        run: |
+          sleep 3
+          curl -fsS --max-time 20 https://manchester-united.uz/api/health
+          echo
+          curl -fsS --max-time 20 -o /dev/null -w "bosh sahifa: %{http_code}\n" https://manchester-united.uz/
+
+      - name: Kalitni o'chirish
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

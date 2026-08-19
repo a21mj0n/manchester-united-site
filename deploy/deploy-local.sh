@@ -28,7 +28,12 @@ cp -r .next/static     "$BUILD_DIR/.next/"
 
 SIZE=$(du -sh "$BUILD_DIR" | cut -f1)
 echo "→ Serverga yuborilmoqda ($SIZE) → $SERVER"
-rsync -az --delete --info=progress2 "$BUILD_DIR/" "$SERVER:$APP_DIR/incoming/"
+# macOS dagi openrsync --info bayrog'ini bilmaydi, shuning uchun tekshiramiz
+RSYNC_FLAGS="-az --delete"
+if rsync --info=progress2 --version >/dev/null 2>&1; then
+  RSYNC_FLAGS="$RSYNC_FLAGS --info=progress2"
+fi
+rsync $RSYNC_FLAGS "$BUILD_DIR/" "$SERVER:$APP_DIR/incoming/"
 
 echo "→ Versiya almashtirilmoqda…"
 ssh "$SERVER" bash -euo pipefail <<REMOTE
