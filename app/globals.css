@@ -604,3 +604,70 @@ ul{list-style:none}
   .admin__head{flex-direction:column}
   .auth__card{padding:28px 22px}
 }
+
+/* =========================================================
+   RASMIY EMASLIGI HAQIDA IZOH
+   ========================================================= */
+.disclaimer{
+  background:rgba(251,225,34,.07);
+  border-block:1px solid rgba(251,225,34,.22);
+  padding:14px 0;
+}
+.disclaimer__inner{display:flex;align-items:flex-start;gap:12px;justify-content:center}
+.disclaimer__icon{font-size:1.05rem;line-height:1.5}
+.disclaimer p{
+  color:#d8d3ae;font-size:.88rem;line-height:1.55;max-width:760px;text-align:center;
+}
+.disclaimer b{color:var(--gold)}
+.disclaimer a{color:var(--gold);text-decoration:underline;text-underline-offset:2px}
+.disclaimer a:hover{color:#fff}
+
+@media (max-width:680px){
+  .disclaimer p{text-align:left;font-size:.84rem}
+  .disclaimer__inner{justify-content:flex-start}
+}
+
+/* =========================================================
+   ADMIN — YANGILIKLAR
+   ========================================================= */
+.news-admin__bar{margin-bottom:20px}
+
+.news-form{
+  background:linear-gradient(165deg,#15151c,#0d0d12);
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:26px;margin-bottom:26px;box-shadow:var(--shadow);
+}
+.news-form__row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.news-form .field textarea{
+  width:100%;padding:13px 16px;border-radius:12px;font:inherit;font-size:.95rem;resize:vertical;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--text);
+}
+.news-form .field textarea:focus{outline:none;border-color:var(--red);background:rgba(218,41,28,.08)}
+.news-form__checks{display:flex;gap:22px;flex-wrap:wrap;margin:6px 0 18px}
+.news-form__checks label{display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--muted);cursor:pointer}
+.news-form__checks input{accent-color:var(--red);width:16px;height:16px}
+.news-form__actions{display:flex;gap:10px;flex-wrap:wrap}
+
+.news-admin__list{display:flex;flex-direction:column;gap:14px}
+.news-admin{
+  display:grid;grid-template-columns:120px 1fr auto;gap:18px;align-items:center;
+  padding:16px;border-radius:var(--radius-sm);
+  background:var(--panel);border:1px solid var(--line);
+  transition:border-color .25s,opacity .25s;
+}
+.news-admin:hover{border-color:rgba(218,41,28,.45)}
+.news-admin.is-hidden{opacity:.55}
+.news-admin__thumb{
+  height:78px;border-radius:10px;background-size:cover;background-position:center;
+}
+.news-admin__body h3{font-size:1.02rem;margin:6px 0 4px}
+.news-admin__body p{color:var(--muted);font-size:.88rem}
+.news-admin__tags{display:flex;gap:6px;flex-wrap:wrap}
+.news-admin__actions{display:flex;flex-direction:column;gap:6px}
+
+@media (max-width:820px){
+  .news-form__row{grid-template-columns:1fr}
+  .news-admin{grid-template-columns:1fr;gap:12px}
+  .news-admin__thumb{height:120px}
+  .news-admin__actions{flex-direction:row;flex-wrap:wrap}
+}

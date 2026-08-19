@@ -10,7 +10,9 @@ import Legends from "@/components/Legends";
 import FanClub from "@/components/FanClub";
 import Footer from "@/components/Footer";
 import ToTop from "@/components/ToTop";
+import UnofficialNotice from "@/components/UnofficialNotice";
 import RevealProvider from "@/components/RevealProvider";
+import { getPublishedNews } from "@/lib/news";
 import {
   getFixtures,
   getLegends,
@@ -21,10 +23,20 @@ import {
 } from "@/lib/queries";
 import { getNextKickoff } from "@/lib/schedule";
 
+/**
+ * Sahifa har so'rovda qayta chiziladi.
+ *
+ * Statik keshlashda HTML build paytida yaratiladi, CI da esa baza
+ * yo'q — natijada deploy'dan keyin bir muddat standart yangiliklar
+ * ko'rinib qolardi. SQLite o'qish tez, shuning uchun dinamik qilamiz.
+ * Tashqi API javoblari baribir bir soat keshlanadi (lib/sportsdb.ts).
+ */
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   // Server komponentida ma'lumot olinadi — backend qo'shilganda
   // faqat lib/queries.ts o'zgaradi, bu yer o'sha-o'shaligicha qoladi.
-  const [squad, fixtures, results, standings, timeline, legends] =
+  const [squad, fixtures, results, standingsData, timeline, legends, news] =
     await Promise.all([
       getSquad(),
       getFixtures(),
@@ -32,6 +44,7 @@ export default async function HomePage() {
       getStandings(),
       getTimeline(),
       getLegends(),
+      getPublishedNews(),
     ]);
 
   return (
@@ -40,11 +53,16 @@ export default async function HomePage() {
       <Header />
       <main>
         <Hero />
+        <UnofficialNotice />
         <NextMatch kickoff={getNextKickoff().toISOString()} />
-        <News />
+        <News items={news} />
         <Matches fixtures={fixtures} results={results} />
         <Squad players={squad} />
-        <Standings rows={standings} />
+        <Standings
+        rows={standingsData.rows}
+        season={standingsData.season}
+        isPreviousSeason={standingsData.isPreviousSeason}
+      />
         <Timeline items={timeline} />
         <Legends items={legends} />
         <FanClub />

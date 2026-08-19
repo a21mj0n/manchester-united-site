@@ -1,12 +1,23 @@
 import type { Standing } from "@/lib/types";
 
-export default function Standings({ rows }: { rows: Standing[] }) {
+interface Props {
+  rows: Standing[];
+  season: string;
+  /** Joriy mavsum hali boshlanmagani uchun oldingi mavsum ko'rsatilyaptimi */
+  isPreviousSeason: boolean;
+}
+
+export default function Standings({ rows, season, isPreviousSeason }: Props) {
+  const seasonLabel = season === "namunaviy" ? "namunaviy ko'rinish" : season.replace("-", "/");
   return (
     <section className="section section--alt" id="table">
       <div className="container">
         <div className="section__head reveal">
           <h2 className="section__title">Turnir jadvali</h2>
-          <p className="section__sub">Angliya Premer-ligasi · namunaviy ko'rinish</p>
+          <p className="section__sub">
+            Angliya Premer-ligasi · {seasonLabel}
+            {isPreviousSeason && " · yakuniy (yangi mavsum hali boshlanmadi)"}
+          </p>
         </div>
 
         <div className="table-wrap reveal">

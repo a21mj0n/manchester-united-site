@@ -121,6 +121,33 @@ ssh root@SERVER "nano /etc/red-devils.env && systemctl restart red-devils"
 Sirlar git'da saqlanmaydi — ular faqat serverdagi `/etc/red-devils.env`
 faylida (`chmod 600`) va lokal `.env` da turadi.
 
+## O'yinlar va turnir jadvali — real ma'lumot
+
+Manba: [TheSportsDB](https://www.thesportsdb.com) — API kaliti shart emas,
+bepul `3` test kaliti ishlaydi. Ko'proq so'rov kerak bo'lsa `SPORTSDB_KEY`
+orqali o'z kalitingizni bering.
+
+- Kelgusi o'yinlar va natijalar — Manchester United jamoasi bo'yicha
+- Turnir jadvali — Angliya Premer-ligasi, joriy mavsum
+- Vaqtlar Toshkent vaqtiga (UTC+5) o'giriladi
+- Javoblar **1 soat keshlanadi** — API ortiqcha bezovta qilinmaydi
+
+Ikki bosqichli zaxira:
+
+1. Joriy mavsum jadvali hali to'lmagan bo'lsa (mavsum endi boshlangan),
+   oldingi mavsumning yakuniy jadvali ko'rsatiladi va shunday deb belgilanadi
+2. API umuman javob bermasa — `lib/data.ts` dagi demo ma'lumot ishlatiladi,
+   ya'ni sayt baribir ochiladi
+
+## Yangiliklar
+
+Yangiliklar bazada saqlanadi va `/admin/news` sahifasidan boshqariladi:
+qo'shish, tahrirlash, vaqtincha yashirish, o'chirish. Har bir karta uchun
+yorliq, yorliq rangi, fon naqshi (1-4) va "katta karta" belgisi tanlanadi.
+
+Baza bo'sh bo'lsa bosh sahifa bo'm-bo'sh qolmaydi — `lib/news-defaults.ts`
+dagi standart kartalar ko'rsatiladi.
+
 ## Telegram bildirishnomalari
 
 Yangi ariza kelganda Telegramga xabar tushadi. Ixtiyoriy — sozlanmasa

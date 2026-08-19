@@ -28,3 +28,25 @@ model FanApplication {
   @@index([createdAt])
   @@index([status])
 }
+
+/// Bosh sahifadagi yangiliklar kartalari
+model NewsPost {
+  id        Int      @id @default(autoincrement())
+  title     String
+  excerpt   String
+  /// Karta ustidagi yorliq: "Fan-klub", "Transfer", "Tarix"…
+  tag       String   @default("Yangilik")
+  /// Yorliq rangi: red | gold | default
+  tagColor  String   @default("default")
+  /// Fon naqshi raqami (1-4)
+  image     Int      @default(1)
+  /// Karta pastidagi kichik matn: "Har hafta · Toshkent"
+  meta      String   @default("")
+  /// Bosh sahifada katta karta sifatida ko'rsatilsinmi
+  featured  Boolean  @default(false)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, createdAt])
+}
