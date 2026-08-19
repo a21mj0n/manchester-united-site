@@ -10,3 +10,5 @@ next-env.d.ts
 .vercel
 tsconfig.tsbuildinfo
 .deploy-build
+
+/lib/generated/prisma

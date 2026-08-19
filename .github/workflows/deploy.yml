@@ -42,6 +42,7 @@ jobs:
           cp -r .next/standalone deploy-bundle
           cp -r public           deploy-bundle/
           cp -r .next/static     deploy-bundle/.next/
+          cp -r prisma           deploy-bundle/
           du -sh deploy-bundle
 
       - name: SSH kalitini sozlash

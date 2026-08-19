@@ -1,0 +1,30 @@
+// Red Devils Uzbekistan — ma'lumotlar bazasi sxemasi
+//
+// SQLite tanlandi: alohida server jarayoni talab qilmaydi va
+// qo'shimcha xotira olmaydi. Keyinchalik Postgres'ga o'tish uchun
+// provider ni almashtirib, migratsiyalarni qayta yaratish yetarli.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+/// Fan-klubga kelib tushgan arizalar
+model FanApplication {
+  id        Int      @id @default(autoincrement())
+  name      String
+  city      String
+  contact   String
+  /// Nechanchi yildan beri muxlis (ixtiyoriy)
+  since     Int?
+  /// new | approved | rejected
+  status    String   @default("new")
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([status])
+}

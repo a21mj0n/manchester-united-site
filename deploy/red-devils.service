@@ -17,6 +17,8 @@ WorkingDirectory=/var/www/manchester-united-site/current
 
 Environment=NODE_ENV=production
 Environment=PORT=3000
+# Baza fayli reliz papkasidan TASHQARIDA — deploy paytida almashmaydi
+Environment=DATABASE_URL=file:/var/www/manchester-united-site/data/app.db
 # Faqat lokal interfeys — tashqariga nginx chiqaradi
 Environment=HOSTNAME=127.0.0.1
 

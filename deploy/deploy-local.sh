@@ -14,6 +14,16 @@ APP_DIR="/var/www/manchester-united-site"
 SERVICE="red-devils"
 BUILD_DIR=".deploy-build"
 
+# better-sqlite3 — native modul: qaysi tizimda build qilinsa, o'sha
+# tizim uchun binar hosil bo'ladi. macOS'da yig'ilgan to'plam Linux
+# serverda ishlamaydi, shuning uchun bu skript faqat Linux'da ruxsat etiladi.
+if [ "$(uname -s)" != "Linux" ]; then
+  echo "✗ Bu skript faqat Linux'da ishlaydi (hozir: $(uname -s))."
+  echo "  Sababi: better-sqlite3 native moduli tizimga bog'liq."
+  echo "  Deploy uchun 'git push' qiling — GitHub Actions Ubuntu'da build qiladi."
+  exit 1
+fi
+
 echo "→ Paketlar tekshirilmoqda…"
 npm ci
 
@@ -25,6 +35,7 @@ rm -rf "$BUILD_DIR"
 cp -r .next/standalone "$BUILD_DIR"
 cp -r public           "$BUILD_DIR/"
 cp -r .next/static     "$BUILD_DIR/.next/"
+cp -r prisma           "$BUILD_DIR/"        # migratsiyalar server uchun
 
 SIZE=$(du -sh "$BUILD_DIR" | cut -f1)
 echo "→ Serverga yuborilmoqda ($SIZE) → $SERVER"

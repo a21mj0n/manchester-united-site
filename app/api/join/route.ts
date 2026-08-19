@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 import type { JoinRequest } from "@/lib/types";
 
 /**
  * POST /api/join — fan-klubga ariza.
- *
- * Hozircha ariza faqat tekshiriladi va serverga log qilinadi.
- * Baza ulaganda quyidagi TODO joyiga insert qo'shiladi.
+ * Ariza tekshiriladi va ma'lumotlar bazasiga yoziladi.
  */
 export async function POST(request: Request) {
   let body: Partial<JoinRequest>;
@@ -27,7 +26,7 @@ export async function POST(request: Request) {
     );
   }
 
-  if (name.length > 100 || contact.length > 100) {
+  if (name.length > 100 || contact.length > 100 || city.length > 100) {
     return NextResponse.json({ error: "Maydon juda uzun." }, { status: 400 });
   }
 
@@ -36,12 +35,24 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Yil noto'g'ri kiritilgan." }, { status: 400 });
   }
 
-  // TODO: bazaga yozish — masalan Prisma:
-  // await prisma.fanApplication.create({ data: { name, city, contact, since } })
-  console.log("[fan-klub arizasi]", { name, city, contact, since });
+  try {
+    const application = await prisma.fanApplication.create({
+      data: { name, city, contact, since },
+      select: { id: true },
+    });
 
-  return NextResponse.json(
-    { message: `Rahmat, ${name}! Arizangiz qabul qilindi. Glory Glory Man United! 🔴` },
-    { status: 201 },
-  );
+    return NextResponse.json(
+      {
+        id: application.id,
+        message: `Rahmat, ${name}! Arizangiz qabul qilindi. Glory Glory Man United! 🔴`,
+      },
+      { status: 201 },
+    );
+  } catch (error) {
+    console.error("[/api/join] bazaga yozishda xatolik:", error);
+    return NextResponse.json(
+      { error: "Arizani saqlab bo'lmadi. Birozdan so'ng qayta urinib ko'ring." },
+      { status: 500 },
+    );
+  }
 }
