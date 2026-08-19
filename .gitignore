@@ -12,3 +12,7 @@ tsconfig.tsbuildinfo
 .deploy-build
 
 /lib/generated/prisma
+
+# Lokal SQLite bazasi
+prisma/*.db
+prisma/*.db-journal
