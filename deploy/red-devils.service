@@ -1,0 +1,39 @@
+# Systemd unit — Next.js standalone serverni doimiy ishlatib turadi.
+# O'rnatish:
+#   sudo cp deploy/red-devils.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now red-devils
+
+[Unit]
+Description=Red Devils Uzbekistan (Next.js)
+Documentation=https://github.com/a21mj0n/manchester-united-site
+After=network.target
+
+[Service]
+Type=simple
+User=deploy
+Group=deploy
+WorkingDirectory=/var/www/manchester-united-site/current
+
+Environment=NODE_ENV=production
+Environment=PORT=3000
+# Faqat lokal interfeys — tashqariga nginx chiqaradi
+Environment=HOSTNAME=127.0.0.1
+
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=5
+
+# Xavfsizlik cheklovlari
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/manchester-united-site
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=red-devils
+
+[Install]
+WantedBy=multi-user.target

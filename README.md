@@ -81,6 +81,13 @@ Ariza formasi uchun ham joy tayyor — `app/api/join/route.ts` ichidagi `TODO` g
 3. Admin panel uchun `app/admin/` + autentifikatsiya (NextAuth / Clerk)
 4. Yangiliklar uchun CMS yoki `app/news/[slug]/page.tsx` dinamik route
 
+## Deploy
+
+Serverga (VPS) deploy qilish bo'yicha to'liq yo'riqnoma: [deploy/README.md](deploy/README.md)
+
+Qisqacha: nginx (80/443) → Next.js standalone (127.0.0.1:3000), systemd boshqaruvida,
+TLS — Let's Encrypt. Yangilash uchun serverda `./deploy/deploy.sh`.
+
 ## Ranglar
 
 `app/globals.css` boshidagi `:root` blokida:
