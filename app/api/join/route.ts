@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { buildApplicationMessage, sendTelegramMessage } from "@/lib/telegram";
 import type { JoinRequest } from "@/lib/types";
 
 /**
@@ -40,6 +41,12 @@ export async function POST(request: Request) {
       data: { name, city, contact, since },
       select: { id: true },
     });
+
+    // Bildirishnoma yuborilmasa ham ariza qabul qilingan hisoblanadi,
+    // shuning uchun natijasi tekshirilmaydi va xato tashlamaydi.
+    await sendTelegramMessage(
+      buildApplicationMessage({ id: application.id, name, city, contact, since }),
+    );
 
     return NextResponse.json(
       {

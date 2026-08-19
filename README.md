@@ -121,6 +121,26 @@ ssh root@SERVER "nano /etc/red-devils.env && systemctl restart red-devils"
 Sirlar git'da saqlanmaydi — ular faqat serverdagi `/etc/red-devils.env`
 faylida (`chmod 600`) va lokal `.env` da turadi.
 
+## Telegram bildirishnomalari
+
+Yangi ariza kelganda Telegramga xabar tushadi. Ixtiyoriy — sozlanmasa
+sayt baribir ishlayveradi, bildirishnoma shunchaki yuborilmaydi.
+
+Sozlash (token terminaldan o'qiladi, hech qayerga yozilmaydi):
+
+```bash
+./deploy/set-telegram.sh
+```
+
+Skript bot tokenini so'raydi, chat ID ni o'zi topadi, sinov xabari
+yuboradi va serverga o'rnatib servisni qayta ishga tushiradi.
+
+Oldin Telegramda **@BotFather** ga `/newbot` deb yozib bot yarating,
+so'ng o'sha botga istalgan xabar yuboring (chat ID shu orqali topiladi).
+
+Bildirishnoma yetkazilmasa ariza baribir bazaga yoziladi — Telegram
+xatosi foydalanuvchiga ko'rinmaydi, faqat server logiga tushadi.
+
 ## Backend qo'shish
 
 Ma'lumot qatlami allaqachon ajratilgan — barcha funksiyalar `async`:
