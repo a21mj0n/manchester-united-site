@@ -23,6 +23,8 @@ Environment=NODE_ENV=production
 Environment=PORT=3000
 # Baza fayli reliz papkasidan TASHQARIDA — deploy paytida almashmaydi
 Environment=DATABASE_URL=file:/var/www/manchester-united-site/data/app.db
+# Gerblar reliz papkasidan tashqarida saqlanadi, nginx ularni /badges/ da beradi
+Environment=BADGE_DIR=/var/www/manchester-united-site/data/badges
 # Faqat lokal interfeys — tashqariga nginx chiqaradi
 Environment=HOSTNAME=127.0.0.1
 

@@ -1,7 +1,7 @@
 import { prisma } from "../prisma";
 import { fetchSquad } from "../football-api";
 import { fetchFixtures, fetchResults, fetchStandings } from "../sportsdb";
-import { badgeFor, fetchBadgeMap } from "../badges";
+import { badgeFor, fetchBadgeMap, localizeBadges } from "../badges";
 import { fetchFeed } from "../rss";
 import { KEEP_IMPORTED, NEWS_SOURCES, PER_SOURCE_LIMIT } from "./sources";
 
@@ -149,12 +149,8 @@ function parseKickoff(date: string, time: string): Date | null {
   return kickoff;
 }
 
-async function syncMatches(): Promise<SectionResult> {
-  const [fixtures, results, badges] = await Promise.all([
-    fetchFixtures(),
-    fetchResults(),
-    fetchBadgeMap(),
-  ]);
+async function syncMatches(badges: Map<string, string>): Promise<SectionResult> {
+  const [fixtures, results] = await Promise.all([fetchFixtures(), fetchResults()]);
 
   if (!fixtures && !results) {
     return { section: "o'yinlar", ok: false, count: 0, message: "manba javob bermadi" };
@@ -212,14 +208,14 @@ async function syncMatches(): Promise<SectionResult> {
     section: "o'yinlar",
     ok: true,
     count: saved,
-    message: badges.size > 0 ? `${badges.size} ta gerb` : "gerblar olinmadi",
+    message: "",
   };
 }
 
 /* ---------------- Jadval ---------------- */
 
-async function syncStandings(): Promise<SectionResult> {
-  const [data, badges] = await Promise.all([fetchStandings(), fetchBadgeMap()]);
+async function syncStandings(badges: Map<string, string>): Promise<SectionResult> {
+  const data = await fetchStandings();
 
   if (!data || data.rows.length === 0) {
     return { section: "jadval", ok: false, count: 0, message: "manba javob bermadi" };
@@ -252,9 +248,7 @@ async function syncStandings(): Promise<SectionResult> {
     section: "jadval",
     ok: true,
     count: data.rows.length,
-    message:
-      `${data.season}${data.isPreviousSeason ? " (oldingi mavsum)" : ""}` +
-      ` · ${data.rows.filter((r) => badgeFor(badges, r.team)).length} ta gerb`,
+    message: `${data.season}${data.isPreviousSeason ? " (oldingi mavsum)" : ""}`,
   };
 }
 
@@ -324,14 +318,40 @@ async function syncNews(): Promise<SectionResult> {
 export async function runSync(): Promise<{ ok: boolean; sections: SectionResult[]; logId: number }> {
   const log = await prisma.syncLog.create({ data: {}, select: { id: true } });
 
+  // Gerblar bir marta olinadi va ikkala bo'limga beriladi
+  const sections: SectionResult[] = [];
+  let badges = new Map<string, string>();
+
+  try {
+    const remote = await fetchBadgeMap();
+    const local = await localizeBadges(remote);
+    badges = local.map;
+    sections.push({
+      section: "gerblar",
+      ok: remote.size > 0,
+      count: remote.size,
+      message: local.downloaded
+        ? `${local.downloaded} tasi yuklandi${local.failed ? `, ${local.failed} tasi yuklanmadi` : ""}`
+        : local.failed
+          ? `${local.failed} tasi yuklanmadi`
+          : "hammasi allaqachon serverda",
+    });
+  } catch (error) {
+    console.error("[sync] gerblar:", error);
+    sections.push({
+      section: "gerblar",
+      ok: false,
+      count: 0,
+      message: error instanceof Error ? error.message.slice(0, 120) : "noma'lum xato",
+    });
+  }
+
   const tasks: (() => Promise<SectionResult>)[] = [
     syncSquad,
-    syncMatches,
-    syncStandings,
+    () => syncMatches(badges),
+    () => syncStandings(badges),
     syncNews,
   ];
-
-  const sections: SectionResult[] = [];
 
   for (const task of tasks) {
     try {
@@ -339,7 +359,7 @@ export async function runSync(): Promise<{ ok: boolean; sections: SectionResult[
     } catch (error) {
       console.error("[sync] bo'lim yiqildi:", error);
       sections.push({
-        section: task.name,
+        section: task.name || "bo'lim",
         ok: false,
         count: 0,
         message: error instanceof Error ? error.message.slice(0, 150) : "noma'lum xato",

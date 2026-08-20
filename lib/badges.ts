@@ -102,3 +102,93 @@ export async function fetchBadgeMap(): Promise<Map<string, string>> {
 export function badgeFor(map: Map<string, string>, team: string): string | null {
   return map.get(normalizeTeam(team)) ?? null;
 }
+
+/* =========================================================
+   Gerblarni serverga yuklab olish
+   ========================================================= */
+
+/**
+ * Gerblar reliz papkasidan tashqarida saqlanadi — deploy paytida
+ * almashadigan `current/` ichida bo'lsa, har safar qaytadan yuklashga
+ * to'g'ri kelardi.
+ *
+ * Production: /var/www/manchester-united-site/data/badges (nginx beradi)
+ * Lokal:      ./public/badges (Next o'zi beradi)
+ */
+function badgeDir(): string {
+  return process.env.BADGE_DIR || "./public/badges";
+}
+
+/** Fayl nomi faqat "<raqam>.svg" bo'lishi mumkin. */
+function safeFileName(url: string): string | null {
+  const name = url.split("/").pop() ?? "";
+  return /^\d+\.svg$/.test(name) ? name : null;
+}
+
+/**
+ * Gerblarni yuklab olib, mahalliy havolalarga almashtiradi.
+ *
+ * Bor fayl qayta yuklanmaydi. Bitta gerb yuklanmasa — o'sha jamoa
+ * uchun tashqi havola qoladi, qolganlari mahalliy bo'ladi.
+ */
+export async function localizeBadges(
+  remote: Map<string, string>,
+): Promise<{ map: Map<string, string>; downloaded: number; failed: number }> {
+  const { mkdir, writeFile, access } = await import("node:fs/promises");
+  const { join } = await import("node:path");
+
+  const dir = badgeDir();
+  const map = new Map<string, string>();
+  let downloaded = 0;
+  let failed = 0;
+
+  try {
+    await mkdir(dir, { recursive: true });
+  } catch (error) {
+    console.error("[badges] papka yaratilmadi:", error);
+    return { map: remote, downloaded: 0, failed: remote.size };
+  }
+
+  for (const [team, url] of remote) {
+    const name = safeFileName(url);
+    if (!name) {
+      map.set(team, url);
+      continue;
+    }
+
+    const path = join(dir, name);
+    const localUrl = `/badges/${name}`;
+
+    // Allaqachon yuklangan bo'lsa qayta so'ramaymiz
+    try {
+      await access(path);
+      map.set(team, localUrl);
+      continue;
+    } catch {
+      // fayl yo'q — yuklaymiz
+    }
+
+    try {
+      const response = await fetch(url, { signal: AbortSignal.timeout(TIMEOUT_MS) });
+      if (!response.ok) throw new Error(`javob ${response.status}`);
+
+      const type = response.headers.get("content-type") ?? "";
+      if (!type.includes("svg")) throw new Error(`kutilmagan tur: ${type}`);
+
+      const body = await response.text();
+      if (!body.trimStart().startsWith("<svg") && !body.includes("<svg")) {
+        throw new Error("SVG emas");
+      }
+
+      await writeFile(path, body, "utf8");
+      map.set(team, localUrl);
+      downloaded++;
+    } catch (error) {
+      console.error(`[badges] ${name} yuklanmadi:`, error);
+      map.set(team, url); // tashqi havola zaxira sifatida qoladi
+      failed++;
+    }
+  }
+
+  return { map, downloaded, failed };
+}

@@ -16,3 +16,6 @@ tsconfig.tsbuildinfo
 # Lokal SQLite bazasi
 prisma/*.db
 prisma/*.db-journal
+
+# Sinxronizatsiya yuklab oladigan gerblar
+/public/badges
