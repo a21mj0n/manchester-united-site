@@ -9,6 +9,8 @@ interface Props {
 
 export default function Standings({ rows, season, isPreviousSeason }: Props) {
   const seasonLabel = season === "namunaviy" ? "namunaviy ko'rinish" : season.replace("-", "/");
+  // Manba bepul tarifda to'liq 20 talik jadvalni bermaydi
+  const isPartial = season !== "namunaviy" && rows.length < 18;
   return (
     <section className="section section--alt" id="table">
       <div className="container">
@@ -17,6 +19,7 @@ export default function Standings({ rows, season, isPreviousSeason }: Props) {
           <p className="section__sub">
             Angliya Premer-ligasi · {seasonLabel}
             {isPreviousSeason && " · yakuniy (yangi mavsum hali boshlanmadi)"}
+            {isPartial && ` · yuqori ${rows.length} o'rin`}
           </p>
         </div>
 

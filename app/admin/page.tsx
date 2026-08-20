@@ -44,6 +44,9 @@ export default async function AdminPage({
           <Link href="/admin/news" className="btn btn--ghost">
             Yangiliklar
           </Link>
+          <Link href="/admin/sync" className="btn btn--ghost">
+            Sinxronizatsiya
+          </Link>
           <Link href="/" className="btn btn--ghost">
             Saytga
           </Link>

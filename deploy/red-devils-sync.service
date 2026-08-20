@@ -1,0 +1,24 @@
+# Kunlik sinxronizatsiya — ochiq manbalardan bazani to'ldiradi.
+# Timer bilan birga ishlatiladi (red-devils-sync.timer).
+#
+#   sudo cp deploy/red-devils-sync.* /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now red-devils-sync.timer
+
+[Unit]
+Description=Red Devils Uzbekistan — kunlik sinxronizatsiya
+After=network-online.target red-devils.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/red-devils.env
+
+# Ilova o'zi sinxronizatsiyani bajaradi — biz faqat chaqiramiz
+ExecStart=/usr/bin/curl --fail --silent --show-error --max-time 180 \
+  -X POST http://127.0.0.1:3000/api/cron/sync \
+  -H "Authorization: Bearer ${CRON_SECRET}"
+
+# Tarmoq yoki manba vaqtincha ishlamasa qayta urinadi
+Restart=on-failure
+RestartSec=600

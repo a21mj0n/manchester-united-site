@@ -679,3 +679,46 @@ ul{list-style:none}
   margin-bottom:14px;
 }
 .player:hover .player__photo{border-color:var(--red)}
+
+/* Tashqi manbaga havola qiluvchi yangilik kartasi */
+.news--link{cursor:pointer;text-decoration:none;color:inherit}
+.news__source{
+  margin-top:auto;font-size:.78rem;color:var(--gold);letter-spacing:.3px;font-weight:600;
+}
+.news--link:hover .news__source{color:#fff}
+.news__note{
+  margin-top:18px;color:#6f6f7c;font-size:.8rem;text-align:center;
+}
+
+/* =========================================================
+   ADMIN — SINXRONIZATSIYA
+   ========================================================= */
+.sync-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.sync-stats div{
+  padding:18px;border-radius:var(--radius-sm);
+  background:rgba(255,255,255,.04);border:1px solid var(--line);text-align:center;
+}
+.sync-stats b{display:block;font-family:var(--font-display);font-size:1.9rem;color:var(--gold);line-height:1}
+.sync-stats span{font-size:.76rem;color:var(--muted)}
+
+.sync-logs{display:flex;flex-direction:column;gap:12px}
+.sync-log{
+  padding:16px 18px;border-radius:var(--radius-sm);
+  background:var(--panel);border:1px solid var(--line);
+}
+.sync-log.is-partial{border-color:rgba(218,41,28,.4)}
+.sync-log__head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.sync-log__time{color:var(--muted);font-size:.84rem}
+.sync-log__sections{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.sync-log__sections li{
+  display:flex;align-items:baseline;gap:6px;padding:6px 12px;border-radius:8px;
+  background:rgba(255,255,255,.04);font-size:.82rem;
+}
+.sync-log__sections li.is-failed{background:rgba(218,41,28,.14);color:#ff9d92}
+.sync-log__sections b{font-weight:700}
+.sync-log__sections span{color:var(--gold);font-weight:700}
+.sync-log__sections small{color:var(--muted);font-size:.76rem}
+
+@media (max-width:680px){
+  .sync-stats{grid-template-columns:repeat(2,1fr)}
+}

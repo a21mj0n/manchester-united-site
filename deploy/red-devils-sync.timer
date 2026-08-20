@@ -1,0 +1,14 @@
+[Unit]
+Description=Kuniga bir marta sinxronizatsiya (Toshkent vaqti bilan 06:30)
+
+[Timer]
+# Vaqt zonasi aniq ko'rsatilgan — server qaysi zonada bo'lishidan qat'i nazar
+# har kuni Toshkent vaqti bilan 06:30 da ishga tushadi.
+OnCalendar=*-*-* 06:30:00 Asia/Tashkent
+# Server o'chiq bo'lgan payt o'tkazib yuborilgan bo'lsa, yoqilganda bajaradi
+Persistent=true
+# Manbalarga aniq bir daqiqada urilmaslik uchun 0-10 daqiqa tasodifiy kechikish
+RandomizedDelaySec=600
+
+[Install]
+WantedBy=timers.target

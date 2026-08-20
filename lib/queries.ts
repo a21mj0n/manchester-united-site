@@ -1,4 +1,5 @@
 import { FIXTURES, LEGENDS, RESULTS, SQUAD, STANDINGS, TIMELINE } from "./data";
+import { readFixtures, readResults, readSquad, readStandings } from "./db-read";
 import { fetchSquad } from "./football-api";
 import { fetchFixtures, fetchResults, fetchStandings, type StandingsResult } from "./sportsdb";
 import type { Fixture, Legend, Player, Result, Standing, TimelineItem } from "./types";
@@ -6,10 +7,12 @@ import type { Fixture, Legend, Player, Result, Standing, TimelineItem } from "./
 /**
  * Ma'lumot qatlami (data layer).
  *
- * O'yinlar va turnir jadvali — TheSportsDB (kalit shart emas).
- * Jamoa tarkibi — API-Football (FOOTBALL_API_KEY kerak).
- * Har ikkalasi javob bermasa demo ma'lumotga tushadi, ya'ni sayt
- * baribir ishlayveradi. Tarix va afsonalar demo massivlarda qoladi.
+ * Uch bosqichli manba:
+ *   1. Baza — kunlik sinxronizatsiya to'ldiradi (lib/sync/run.ts)
+ *   2. Jonli API — baza hali bo'sh bo'lsa
+ *   3. Demo ma'lumot — hech biri ishlamasa
+ * Shu sababli sayt hech qachon bo'sh bo'lim ko'rsatmaydi.
+ * Tarix va afsonalar o'zgarmaydi — ular demo massivlarda qoladi.
  *
  * Barchasi `async` —
  * shuning uchun keyinchalik bazaga (Postgres/Prisma, Supabase, MongoDB…)
@@ -18,19 +21,20 @@ import type { Fixture, Legend, Player, Result, Standing, TimelineItem } from "./
  */
 
 export async function getSquad(): Promise<Player[]> {
-  return (await fetchSquad()) ?? SQUAD;
+  return (await readSquad()) ?? (await fetchSquad()) ?? SQUAD;
 }
 
 export async function getFixtures(): Promise<Fixture[]> {
-  return (await fetchFixtures()) ?? FIXTURES;
+  return (await readFixtures()) ?? (await fetchFixtures()) ?? FIXTURES;
 }
 
 export async function getResults(): Promise<Result[]> {
-  return (await fetchResults()) ?? RESULTS;
+  return (await readResults()) ?? (await fetchResults()) ?? RESULTS;
 }
 
 export async function getStandings(): Promise<StandingsResult> {
   return (
+    (await readStandings()) ??
     (await fetchStandings()) ?? {
       rows: STANDINGS,
       season: "namunaviy",

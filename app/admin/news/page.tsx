@@ -27,6 +27,9 @@ export default async function AdminNewsPage() {
         </div>
         <div className="admin__actions">
           <Link href="/admin" className="btn btn--ghost">Arizalar</Link>
+          <Link href="/admin/sync" className="btn btn--ghost">
+            Sinxronizatsiya
+          </Link>
           <Link href="/" className="btn btn--ghost">Saytga</Link>
           <LogoutButton />
         </div>

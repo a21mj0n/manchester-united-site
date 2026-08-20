@@ -10,7 +10,11 @@ export async function getPublishedNews(): Promise<NewsItem[]> {
   try {
     const posts = await prisma.newsPost.findMany({
       where: { published: true },
-      orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
+      orderBy: [
+        { featured: "desc" },
+        { publishedAt: { sort: "desc", nulls: "last" } },
+        { createdAt: "desc" },
+      ],
       take: 8,
     });
 
@@ -24,6 +28,8 @@ export async function getPublishedNews(): Promise<NewsItem[]> {
       image: p.image,
       meta: p.meta,
       featured: p.featured,
+      sourceName: p.sourceName ?? undefined,
+      sourceUrl: p.sourceUrl ?? undefined,
     }));
   } catch (error) {
     console.error("[news] bazadan o'qib bo'lmadi:", error);

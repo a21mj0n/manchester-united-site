@@ -11,6 +11,9 @@ export interface NewsItem {
   image: number;
   meta: string;
   featured: boolean;
+  /** Tashqi manbadan olingan bo'lsa — nomi va asl maqola havolasi */
+  sourceName?: string;
+  sourceUrl?: string;
 }
 
 export const TAG_COLORS = ["default", "red", "gold"] as const;

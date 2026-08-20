@@ -169,7 +169,40 @@ Bepul tarifda tekshirib ko'rilgan cheklovlar:
 Shu sababli o'yinlar va turnir jadvali TheSportsDB dan olinadi —
 u kalitsiz ishlaydi va joriy mavsumni beradi.
 
-## Yangiliklar
+## Kunlik sinxronizatsiya
+
+Har kuni **Toshkent vaqti bilan 06:30** da systemd timer ochiq manbalardan
+ma'lumot olib bazaga yozadi. Sayt esa bazadan o'qiydi.
+
+| Bo'lim | Manba |
+|---|---|
+| Tarkib | API-Football (`FOOTBALL_API_KEY`) |
+| Keyingi o'yin, o'yinlar | TheSportsDB |
+| Turnir jadvali | TheSportsDB |
+| Yangiliklar | Guardian va Manchester Evening News RSS |
+
+Har bir bo'lim mustaqil — biri yiqilsa qolganlari baribir bajariladi,
+natija `SyncLog` jadvaliga yoziladi va `/admin/sync` sahifasida ko'rinadi.
+
+Ma'lumot uch bosqichda olinadi: **baza → jonli API → demo ma'lumot**.
+Shu sababli sayt hech qachon bo'sh bo'lim ko'rsatmaydi.
+
+### Qo'lda ishga tushirish
+
+Admin panelda `/admin/sync` → "Hozir yangilash". Yoki serverda:
+
+```bash
+sudo systemctl start red-devils-sync.service
+journalctl -u red-devils-sync -n 30 --no-pager
+```
+
+### Yangiliklar va mualliflik huquqi
+
+Tashqi manbalardan **faqat sarlavha, qisqa tavsif va havola** olinadi.
+Maqola matni ko'chirilmaydi — karta bosilganda o'quvchi asl saytga o'tadi,
+manba nomi kartada ko'rsatiladi.
+
+## Yangiliklar (qo'lda)
 
 Yangiliklar bazada saqlanadi va `/admin/news` sahifasidan boshqariladi:
 qo'shish, tahrirlash, vaqtincha yashirish, o'chirish. Har bir karta uchun

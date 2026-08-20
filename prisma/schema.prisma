@@ -45,8 +45,86 @@ model NewsPost {
   /// Bosh sahifada katta karta sifatida ko'rsatilsinmi
   featured  Boolean  @default(false)
   published Boolean  @default(true)
+
+  /// Tashqi manbadan olingan bo'lsa: manba nomi va asl maqola havolasi.
+  /// Maqola matni ko'chirilmaydi — faqat sarlavha, qisqa tavsif va havola.
+  sourceName String?
+  sourceUrl  String?
+  /// Takrorlanmasligi uchun manbadagi guid
+  externalId String? @unique
+  /// Maqola manbada chop etilgan vaqt
+  publishedAt DateTime?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([published, createdAt])
+}
+
+/// Jamoa tarkibi — kunlik sinxronizatsiya to'ldiradi
+model Player {
+  id       Int     @id @default(autoincrement())
+  /// Tashqi API dagi identifikator
+  apiId    Int     @unique
+  num      Int
+  name     String
+  /// GK | DF | MF | FW
+  pos      String
+  posName  String
+  age      Int?
+  photo    String?
+  country  String?
+  updatedAt DateTime @updatedAt
+
+  @@index([pos, num])
+}
+
+/// O'yinlar — kelgusi va o'tgan. Hisob bo'sh bo'lsa o'yin hali bo'lmagan.
+model Match {
+  id        Int      @id @default(autoincrement())
+  /// Tashqi manbadagi identifikator
+  extId     String   @unique
+  kickoff   DateTime
+  homeTeam  String
+  awayTeam  String
+  homeScore Int?
+  awayScore Int?
+  competition String
+  venue     String?
+  updatedAt DateTime @updatedAt
+
+  @@index([kickoff])
+}
+
+/// Turnir jadvali
+model StandingRow {
+  id      Int     @id @default(autoincrement())
+  season  String
+  pos     Int
+  team    String
+  played  Int
+  won     Int
+  drawn   Int
+  lost    Int
+  gd      String
+  points  Int
+  isUnited Boolean @default(false)
+  /// Joriy mavsum hali boshlanmagani uchun oldingi mavsum ko'rsatilyaptimi
+  isPreviousSeason Boolean @default(false)
+  updatedAt DateTime @updatedAt
+
+  @@unique([season, team])
+  @@index([season, pos])
+}
+
+/// Har bir sinxronizatsiya yurishining natijasi
+model SyncLog {
+  id         Int      @id @default(autoincrement())
+  startedAt  DateTime @default(now())
+  finishedAt DateTime?
+  ok         Boolean  @default(false)
+  /// Qaysi bo'lim nima bilan tugadi (JSON matn)
+  details    String   @default("")
+
+  @@index([startedAt])
 }

@@ -12,6 +12,7 @@ import Footer from "@/components/Footer";
 import ToTop from "@/components/ToTop";
 import UnofficialNotice from "@/components/UnofficialNotice";
 import RevealProvider from "@/components/RevealProvider";
+import { readNextKickoff } from "@/lib/db-read";
 import { getPublishedNews } from "@/lib/news";
 import {
   getFixtures,
@@ -36,7 +37,7 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   // Server komponentida ma'lumot olinadi — backend qo'shilganda
   // faqat lib/queries.ts o'zgaradi, bu yer o'sha-o'shaligicha qoladi.
-  const [squad, fixtures, results, standingsData, timeline, legends, news] =
+  const [squad, fixtures, results, standingsData, timeline, legends, news, nextMatch] =
     await Promise.all([
       getSquad(),
       getFixtures(),
@@ -45,6 +46,7 @@ export default async function HomePage() {
       getTimeline(),
       getLegends(),
       getPublishedNews(),
+      readNextKickoff(),
     ]);
 
   return (
@@ -54,7 +56,19 @@ export default async function HomePage() {
       <main>
         <Hero />
         <UnofficialNotice />
-        <NextMatch kickoff={getNextKickoff().toISOString()} />
+        <NextMatch
+          kickoff={(nextMatch?.kickoff ?? getNextKickoff()).toISOString()}
+          match={
+            nextMatch
+              ? {
+                  home: nextMatch.home,
+                  away: nextMatch.away,
+                  competition: nextMatch.competition,
+                  venue: nextMatch.venue,
+                }
+              : undefined
+          }
+        />
         <News items={news} />
         <Matches fixtures={fixtures} results={results} />
         <Squad players={squad} />
