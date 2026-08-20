@@ -35,6 +35,7 @@ export async function readSquad(): Promise<Player[] | null> {
       age: r.age ?? undefined,
       photo: r.photo ?? undefined,
       country: r.country ?? undefined,
+      isAcademy: r.isAcademy,
     }))
     .sort((a, b) => {
       const byPos = ORDER.indexOf(a.pos) - ORDER.indexOf(b.pos);

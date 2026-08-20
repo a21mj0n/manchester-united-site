@@ -20,6 +20,42 @@ export interface SectionResult {
 
 /* ---------------- Tarkib ---------------- */
 
+/** Akademiya/zaxira o'yinchisini aniqlash chegarasi */
+const ACADEMY_MAX_AGE = 20;
+
+/**
+ * API "akademiya" degan maydon bermaydi, shuning uchun ikki belgidan
+ * foydalanamiz:
+ *   1. Yosh — 20 va undan kichik
+ *   2. Raqam takrorlanishi — bir xil raqamli o'yinchilar orasida
+ *      yoshi kichigi zaxira hisoblanadi (masalan #2: Kamason 19 va Dalot 26)
+ */
+function markAcademy(players: { id: number; num: number; age?: number }[]): Set<number> {
+  const academy = new Set<number>();
+
+  for (const p of players) {
+    if (p.age !== undefined && p.age <= ACADEMY_MAX_AGE) academy.add(p.id);
+  }
+
+  const byNumber = new Map<number, typeof players>();
+  for (const p of players) {
+    if (!p.num) continue;
+    const list = byNumber.get(p.num) ?? [];
+    list.push(p);
+    byNumber.set(p.num, list);
+  }
+
+  for (const list of byNumber.values()) {
+    if (list.length < 2) continue;
+    const oldest = Math.max(...list.map((p) => p.age ?? 0));
+    for (const p of list) {
+      if ((p.age ?? 0) < oldest) academy.add(p.id);
+    }
+  }
+
+  return academy;
+}
+
 async function syncSquad(): Promise<SectionResult> {
   const players = await fetchSquad();
 
@@ -28,6 +64,7 @@ async function syncSquad(): Promise<SectionResult> {
   }
 
   const apiIds = players.map((p) => p.id);
+  const academy = markAcademy(players);
 
   for (const p of players) {
     const data = {
@@ -38,6 +75,7 @@ async function syncSquad(): Promise<SectionResult> {
       age: p.age ?? null,
       photo: p.photo ?? null,
       country: p.country ?? null,
+      isAcademy: academy.has(p.id),
     };
     await prisma.player.upsert({
       where: { apiId: p.id },
@@ -49,11 +87,14 @@ async function syncSquad(): Promise<SectionResult> {
   // Jamoadan ketganlarni olib tashlaymiz
   const removed = await prisma.player.deleteMany({ where: { apiId: { notIn: apiIds } } });
 
+  const parts = [`${players.length - academy.size} asosiy, ${academy.size} akademiya`];
+  if (removed.count > 0) parts.push(`${removed.count} tasi ro'yxatdan chiqdi`);
+
   return {
     section: "tarkib",
     ok: true,
     count: players.length,
-    message: removed.count > 0 ? `${removed.count} ta o'yinchi ro'yxatdan chiqdi` : "",
+    message: parts.join(" · "),
   };
 }
 

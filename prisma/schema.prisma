@@ -74,6 +74,10 @@ model Player {
   age      Int?
   photo    String?
   country  String?
+  /// Akademiya yoki zaxira o'yinchisi.
+  /// API bunday maydon bermaydi — lib/sync/run.ts dagi qoida bo'yicha
+  /// hisoblanadi (yosh va raqam takrorlanishi asosida).
+  isAcademy Boolean @default(false)
   updatedAt DateTime @updatedAt
 
   @@index([pos, num])

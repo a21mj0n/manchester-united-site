@@ -11,6 +11,8 @@ export interface Player {
   /** API-Football dan keladi */
   age?: number;
   photo?: string;
+  /** Akademiya yoki zaxira o'yinchisi (hisoblanadi, API bermaydi) */
+  isAcademy?: boolean;
 }
 
 export interface Fixture {

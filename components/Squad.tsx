@@ -11,9 +11,40 @@ const FILTERS: { key: Position | "all"; label: string }[] = [
   { key: "FW", label: "Hujumchi" },
 ];
 
+function PlayerCard({ player, index }: { player: Player; index: number }) {
+  return (
+    <article className="player" style={{ animationDelay: `${index * 40}ms` }}>
+      <span className="player__num">{player.num || "—"}</span>
+
+      {player.photo ? (
+        /* Rasm optimizatsiyasi serverni yuklamasligi uchun oddiy img */
+        <img
+          className="player__photo"
+          src={player.photo}
+          alt=""
+          width={72}
+          height={72}
+          loading="lazy"
+        />
+      ) : (
+        <div className="player__shirt">{player.num || "—"}</div>
+      )}
+
+      <h3 className="player__name">{player.name}</h3>
+      <p className="player__pos">{player.posName}</p>
+      {player.country && <p className="player__country">🌍 {player.country}</p>}
+      {player.age !== undefined && <p className="player__country">{player.age} yosh</p>}
+    </article>
+  );
+}
+
 export default function Squad({ players }: { players: Player[] }) {
   const [pos, setPos] = useState<Position | "all">("all");
-  const list = pos === "all" ? players : players.filter((p) => p.pos === pos);
+  const [showAcademy, setShowAcademy] = useState(false);
+
+  const byPosition = pos === "all" ? players : players.filter((p) => p.pos === pos);
+  const first = byPosition.filter((p) => !p.isAcademy);
+  const academy = byPosition.filter((p) => p.isAcademy);
 
   return (
     <section className="section" id="squad">
@@ -21,7 +52,7 @@ export default function Squad({ players }: { players: Player[] }) {
         <div className="section__head reveal">
           <h2 className="section__title">Jamoa tarkibi</h2>
           <p className="section__sub">
-            Qizil futbolkani kiyib maydonga chiqadigan o'yinchilar
+            Qizil futbolkani kiyib maydonga chiqadigan o&apos;yinchilar
           </p>
         </div>
 
@@ -38,35 +69,45 @@ export default function Squad({ players }: { players: Player[] }) {
         </div>
 
         <div className="squad-grid">
-          {list.map((p, i) => (
-            <article
-              className="player"
-              key={p.id}
-              style={{ animationDelay: `${i * 45}ms` }}
-            >
-              <span className="player__num">{p.num || "—"}</span>
-
-              {p.photo ? (
-                /* Rasm optimizatsiyasi serverni yuklamasligi uchun oddiy img */
-                <img
-                  className="player__photo"
-                  src={p.photo}
-                  alt=""
-                  width={72}
-                  height={72}
-                  loading="lazy"
-                />
-              ) : (
-                <div className="player__shirt">{p.num || "—"}</div>
-              )}
-
-              <h3 className="player__name">{p.name}</h3>
-              <p className="player__pos">{p.posName}</p>
-              {p.country && <p className="player__country">🌍 {p.country}</p>}
-              {p.age !== undefined && <p className="player__country">{p.age} yosh</p>}
-            </article>
+          {first.map((p, i) => (
+            <PlayerCard key={p.id} player={p} index={i} />
           ))}
         </div>
+
+        {first.length === 0 && (
+          <p className="admin__empty">Bu pozitsiyada asosiy tarkibda o&apos;yinchi yo&apos;q.</p>
+        )}
+
+        {academy.length > 0 && (
+          <div className="squad-academy">
+            <button
+              className="squad-academy__toggle"
+              onClick={() => setShowAcademy((v) => !v)}
+              aria-expanded={showAcademy}
+            >
+              <span>
+                Akademiya va zaxira
+                <b>{academy.length}</b>
+              </span>
+              <span className="squad-academy__arrow">{showAcademy ? "▲" : "▼"}</span>
+            </button>
+
+            {showAcademy && (
+              <>
+                <p className="squad-academy__note">
+                  20 yoshgacha bo&apos;lgan hamda asosiy tarkib o&apos;yinchisi bilan bir xil
+                  raqam ostidagi futbolchilar. Manba rasmiy ajratma bermaydi —
+                  ro&apos;yxat shu ikki belgi asosida tuzilgan.
+                </p>
+                <div className="squad-grid">
+                  {academy.map((p, i) => (
+                    <PlayerCard key={p.id} player={p} index={i} />
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );
