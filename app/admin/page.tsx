@@ -41,6 +41,7 @@ export default async function AdminPage({
           </p>
         </div>
         <div className="admin__actions">
+          <Link href="/admin/squad" className="btn btn--ghost">Tarkib</Link>
           <Link href="/admin/news" className="btn btn--ghost">
             Yangiliklar
           </Link>

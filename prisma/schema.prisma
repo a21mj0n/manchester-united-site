@@ -64,8 +64,8 @@ model NewsPost {
 /// Jamoa tarkibi — kunlik sinxronizatsiya to'ldiradi
 model Player {
   id       Int     @id @default(autoincrement())
-  /// Tashqi API dagi identifikator
-  apiId    Int     @unique
+  /// Tashqi API dagi identifikator. Qo'lda qo'shilgan o'yinchida bo'lmaydi.
+  apiId    Int?    @unique
   num      Int
   name     String
   /// GK | DF | MF | FW
@@ -78,6 +78,15 @@ model Player {
   /// API bunday maydon bermaydi — lib/sync/run.ts dagi qoida bo'yicha
   /// hisoblanadi (yosh va raqam takrorlanishi asosida).
   isAcademy Boolean @default(false)
+
+  /// Admin qo'lda qo'shgan o'yinchi — sinxronizatsiya uni o'chirmaydi.
+  /// Manba tarkibni chala bergan holatlar uchun (masalan API 2026 mavsumida
+  /// de Ligt'ni ko'rsatmagan edi).
+  manual Boolean @default(false)
+  /// Admin guruhni qo'lda belgilagan bo'lsa shu qiymat ustun turadi
+  /// va kunlik sinxronizatsiya uni buzmaydi.
+  academyOverride Boolean?
+
   updatedAt DateTime @updatedAt
 
   @@index([pos, num])

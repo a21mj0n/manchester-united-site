@@ -41,6 +41,7 @@ export default async function AdminSyncPage() {
         </div>
         <div className="admin__actions">
           <Link href="/admin" className="btn btn--ghost">Arizalar</Link>
+          <Link href="/admin/squad" className="btn btn--ghost">Tarkib</Link>
           <Link href="/admin/news" className="btn btn--ghost">Yangiliklar</Link>
           <LogoutButton />
         </div>

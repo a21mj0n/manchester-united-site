@@ -741,3 +741,37 @@ ul{list-style:none}
   color:var(--muted);font-size:.84rem;margin:16px 0;max-width:640px;line-height:1.6;
 }
 .squad-academy .squad-grid{margin-top:16px}
+
+/* =========================================================
+   ADMIN — TARKIB
+   ========================================================= */
+.squad-admin__hint{
+  color:var(--muted);font-size:.86rem;max-width:680px;margin-bottom:20px;line-height:1.6;
+}
+.squad-admin__group{margin-top:28px}
+.squad-admin__title{
+  font-family:var(--font-display);font-size:1.2rem;letter-spacing:1px;
+  text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;
+}
+.squad-admin__title b{
+  padding:2px 10px;border-radius:999px;background:var(--red);color:#fff;
+  font-size:.75rem;font-family:var(--font);
+}
+.squad-admin__list{display:flex;flex-direction:column;gap:8px}
+.squad-admin__row{
+  display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:14px;
+  padding:12px 16px;border-radius:var(--radius-sm);
+  background:var(--panel);border:1px solid var(--line);transition:border-color .25s;
+}
+.squad-admin__row:hover{border-color:rgba(218,41,28,.45)}
+.squad-admin__num{
+  font-family:var(--font-display);font-size:1.2rem;color:var(--gold);text-align:center;
+}
+.squad-admin__info b{display:block;font-size:.98rem}
+.squad-admin__info small{color:var(--muted);font-size:.8rem}
+.squad-admin__actions{display:flex;gap:6px;flex-wrap:wrap}
+
+@media (max-width:680px){
+  .squad-admin__row{grid-template-columns:44px 1fr;row-gap:10px}
+  .squad-admin__actions{grid-column:1 / -1}
+}

@@ -72,6 +72,18 @@ async function syncSquad(): Promise<SectionResult> {
   const apiIds = players.map((p) => p.id);
   const academy = markAcademy(players);
 
+  // Admin qo'lda belgilagan guruhlar — ularni buzmaymiz
+  const overrides = new Map<number, boolean>();
+  const existing = await prisma.player.findMany({
+    where: { apiId: { in: apiIds }, academyOverride: { not: null } },
+    select: { apiId: true, academyOverride: true },
+  });
+  for (const row of existing) {
+    if (row.apiId !== null && row.academyOverride !== null) {
+      overrides.set(row.apiId, row.academyOverride);
+    }
+  }
+
   for (const p of players) {
     const data = {
       num: p.num,
@@ -81,7 +93,7 @@ async function syncSquad(): Promise<SectionResult> {
       age: p.age ?? null,
       photo: p.photo ?? null,
       country: p.country ?? null,
-      isAcademy: academy.has(p.id),
+      isAcademy: overrides.get(p.id) ?? academy.has(p.id),
     };
     await prisma.player.upsert({
       where: { apiId: p.id },
@@ -90,10 +102,15 @@ async function syncSquad(): Promise<SectionResult> {
     });
   }
 
-  // Jamoadan ketganlarni olib tashlaymiz
-  const removed = await prisma.player.deleteMany({ where: { apiId: { notIn: apiIds } } });
+  // Jamoadan ketganlarni olib tashlaymiz.
+  // Qo'lda qo'shilganlarga tegilmaydi — manba ularni bilmaydi.
+  const removed = await prisma.player.deleteMany({
+    where: { manual: false, apiId: { notIn: apiIds } },
+  });
 
+  const manual = await prisma.player.count({ where: { manual: true } });
   const parts = [`${players.length - academy.size} asosiy, ${academy.size} akademiya`];
+  if (manual > 0) parts.push(`${manual} tasi qo'lda qo'shilgan`);
   if (removed.count > 0) parts.push(`${removed.count} tasi ro'yxatdan chiqdi`);
 
   return {
