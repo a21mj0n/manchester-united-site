@@ -108,14 +108,16 @@ Kirish urinishlari cheklangan: bitta IP uchun 5 daqiqada 10 marta.
 ### Parolni o'zgartirish
 
 ```bash
-npm run admin:password
+./deploy/set-admin-password.sh
 ```
 
-Chiqqan xeshni serverda `/etc/red-devils.env` ichidagi `ADMIN_PASSWORD_HASH`
-ga qo'ying va servisni qayta ishga tushiring:
+Parol terminaldan o'qiladi, shu yerda xeshlanadi va faqat xesh serverga
+uzatiladi — parolning o'zi hech qayerga yozilmaydi.
+
+Faqat xesh kerak bo'lsa (masalan lokal `.env` uchun):
 
 ```bash
-ssh root@SERVER "nano /etc/red-devils.env && systemctl restart red-devils"
+npm run admin:password
 ```
 
 Sirlar git'da saqlanmaydi — ular faqat serverdagi `/etc/red-devils.env`
