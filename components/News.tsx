@@ -14,6 +14,8 @@ function tagClass(color: string): string {
  */
 export default function News({ items }: { items: NewsItem[] }) {
   const allowFeatured = items.length >= 3;
+  // Izoh faqat tashqi manbadan olingan karta bo'lsa kerak
+  const hasExternal = items.some((n) => n.sourceUrl);
 
   return (
     <section className="section" id="news">
@@ -66,10 +68,12 @@ export default function News({ items }: { items: NewsItem[] }) {
           })}
         </div>
 
-        <p className="news__note reveal">
-          Tashqi manbalardan olingan xabarlarda sarlavha va havola ko'rsatiladi —
-          maqolaning o'zi asl saytda o'qiladi.
-        </p>
+        {hasExternal && (
+          <p className="news__note reveal">
+            Tashqi manbadan olingan xabarlarda sarlavha va havola ko&apos;rsatiladi —
+            maqolaning o&apos;zi asl saytda o&apos;qiladi.
+          </p>
+        )}
       </div>
     </section>
   );

@@ -179,7 +179,10 @@ ma'lumot olib bazaga yozadi. Sayt esa bazadan o'qiydi.
 | Tarkib | API-Football (`FOOTBALL_API_KEY`) |
 | Keyingi o'yin, o'yinlar | TheSportsDB |
 | Turnir jadvali | TheSportsDB |
-| Yangiliklar | Guardian va Manchester Evening News RSS |
+| Jamoa gerblari | Premer-liga (bir marta yuklab olinadi) |
+
+Yangiliklar sinxronizatsiyaga kirmaydi — ular admin panelda qo'lda
+yoziladi (`/admin/news`).
 
 Har bir bo'lim mustaqil — biri yiqilsa qolganlari baribir bajariladi,
 natija `SyncLog` jadvaliga yoziladi va `/admin/sync` sahifasida ko'rinadi.
@@ -196,30 +199,7 @@ sudo systemctl start red-devils-sync.service
 journalctl -u red-devils-sync -n 30 --no-pager
 ```
 
-### Yangiliklar o'zbek tilida
-
-Manbalar ingliz tilida, sayt esa o'zbekcha. Sinxronizatsiya sarlavhalarni
-Claude API orqali o'zbekchaga o'giradi (`lib/translate.ts`).
-
-Kerak: `ANTHROPIC_API_KEY`. O'rnatilmagan bo'lsa sarlavhalar asl tilida
-qoladi — sayt baribir ishlayveradi.
-
-```bash
-./deploy/set-anthropic-key.sh
-```
-
-Bir so'rovda 20 tagacha sarlavha o'giriladi, kuniga bir marta — sarfi
-oyiga bir necha dollardan oshmaydi. Sarlavha so'zma-so'z tarjima
-qilinmaydi, o'z so'zlarimiz bilan qayta yoziladi; asl sarlavha
-`originalTitle` maydonida saqlanadi.
-
-### Yangiliklar va mualliflik huquqi
-
-Tashqi manbalardan **faqat sarlavha, qisqa tavsif va havola** olinadi.
-Maqola matni ko'chirilmaydi — karta bosilganda o'quvchi asl saytga o'tadi,
-manba nomi kartada ko'rsatiladi.
-
-## Yangiliklar (qo'lda)
+## Yangiliklar
 
 Yangiliklar bazada saqlanadi va `/admin/news` sahifasidan boshqariladi:
 qo'shish, tahrirlash, vaqtincha yashirish, o'chirish. Har bir karta uchun
@@ -227,6 +207,10 @@ yorliq, yorliq rangi, fon naqshi (1-4) va "katta karta" belgisi tanlanadi.
 
 Baza bo'sh bo'lsa bosh sahifa bo'm-bo'sh qolmaydi — `lib/news-defaults.ts`
 dagi standart kartalar ko'rsatiladi.
+
+Yangiliklar avtomatik olinmaydi: avval RSS orqali import qilinardi,
+lekin bu olib tashlandi. Bazadagi eski import qilingan yozuvlar
+(`sourceUrl` bilan) asl maqolaga havola qilib turaveradi.
 
 ## Telegram bildirishnomalari
 

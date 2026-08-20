@@ -2,12 +2,12 @@ import { prisma } from "../prisma";
 import { fetchSquad } from "../football-api";
 import { fetchFixtures, fetchResults, fetchStandings } from "../sportsdb";
 import { badgeFor, fetchBadgeMap, localizeBadges } from "../badges";
-import { fetchFeed } from "../rss";
-import { translateNews } from "../translate";
-import { KEEP_IMPORTED, NEWS_SOURCES, PER_SOURCE_LIMIT } from "./sources";
 
 /**
  * Kunlik sinxronizatsiya: ochiq manbalardan ma'lumot olib bazaga yozadi.
+ *
+ * Yangiliklar bu yerga kirmaydi — ular admin panelda qo'lda yoziladi
+ * (/admin/news).
  *
  * Har bir bo'lim mustaqil — biri yiqilsa qolganlari baribir bajariladi.
  * Natija SyncLog jadvaliga yoziladi.
@@ -253,109 +253,6 @@ async function syncStandings(badges: Map<string, string>): Promise<SectionResult
   };
 }
 
-/* ---------------- Yangiliklar ---------------- */
-
-async function syncNews(): Promise<SectionResult> {
-  let added = 0;
-  const failed: string[] = [];
-
-  for (const source of NEWS_SOURCES) {
-    try {
-      const items = (await fetchFeed(source.url)).slice(0, PER_SOURCE_LIMIT);
-
-      for (const item of items) {
-        const existing = await prisma.newsPost.findUnique({
-          where: { externalId: item.guid },
-          select: { id: true },
-        });
-        if (existing) continue;
-
-        await prisma.newsPost.create({
-          data: {
-            originalTitle: item.title.slice(0, 200),
-            title: item.title.slice(0, 200),
-            excerpt: item.description.slice(0, 300),
-            tag: source.name,
-            tagColor: "default",
-            image: (added % 4) + 1,
-            meta: "",
-            featured: false,
-            published: true,
-            sourceName: source.name,
-            sourceUrl: item.link,
-            externalId: item.guid,
-            publishedAt: item.publishedAt,
-          },
-        });
-        added++;
-      }
-    } catch (error) {
-      console.error(`[sync] ${source.name}:`, error);
-      failed.push(source.name);
-    }
-  }
-
-  // Eskilarini olib tashlaymiz — faqat import qilinganlar,
-  // qo'lda yozilgan yangiliklarga tegilmaydi
-  const imported = await prisma.newsPost.findMany({
-    where: { externalId: { not: null } },
-    orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
-    select: { id: true },
-    skip: KEEP_IMPORTED,
-  });
-  if (imported.length > 0) {
-    await prisma.newsPost.deleteMany({ where: { id: { in: imported.map((p) => p.id) } } });
-  }
-
-  const parts: string[] = [];
-  if (failed.length) parts.push(`ishlamadi: ${failed.join(", ")}`);
-
-  const translated = await translatePending();
-  if (translated > 0) parts.push(`${translated} tasi o'zbekchaga o'girildi`);
-
-  return {
-    section: "yangiliklar",
-    ok: failed.length < NEWS_SOURCES.length,
-    count: added,
-    message: parts.join(" · "),
-  };
-}
-
-/**
- * Hali o'girilmagan yangiliklarni o'zbekchaga o'giradi.
- *
- * Yangi kelganlar ham, avval ingliz tilida saqlangan eskilari ham
- * shu yerda o'giriladi — bir so'rovda 20 tagacha.
- */
-async function translatePending(): Promise<number> {
-  const pending = await prisma.newsPost.findMany({
-    where: { externalId: { not: null }, translated: false },
-    orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
-    take: 20,
-    select: { id: true, title: true, excerpt: true },
-  });
-
-  if (pending.length === 0) return 0;
-
-  const translated = await translateNews(
-    pending.map((p) => ({ title: p.title, excerpt: p.excerpt })),
-  );
-  if (!translated) return 0;
-
-  let saved = 0;
-  for (const [i, post] of pending.entries()) {
-    const next = translated[i];
-    if (!next) continue;
-    await prisma.newsPost.update({
-      where: { id: post.id },
-      data: { title: next.title, excerpt: next.excerpt, translated: true },
-    });
-    saved++;
-  }
-
-  return saved;
-}
-
 /* ---------------- Umumiy yurish ---------------- */
 
 export async function runSync(): Promise<{ ok: boolean; sections: SectionResult[]; logId: number }> {
@@ -393,7 +290,6 @@ export async function runSync(): Promise<{ ok: boolean; sections: SectionResult[
     syncSquad,
     () => syncMatches(badges),
     () => syncStandings(badges),
-    syncNews,
   ];
 
   for (const task of tasks) {
