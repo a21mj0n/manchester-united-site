@@ -23,6 +23,8 @@ export interface Fixture {
   away: string;
   comp: string;
   venue: string;
+  homeBadge?: string | null;
+  awayBadge?: string | null;
 }
 
 export interface Result {
@@ -33,6 +35,8 @@ export interface Result {
   homeScore: number;
   awayScore: number;
   comp: string;
+  homeBadge?: string | null;
+  awayBadge?: string | null;
 }
 
 export interface Standing {
@@ -45,6 +49,7 @@ export interface Standing {
   gd: string;
   points: number;
   isUnited?: boolean;
+  badge?: string | null;
 }
 
 export interface TimelineItem {

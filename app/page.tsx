@@ -65,6 +65,8 @@ export default async function HomePage() {
                   away: nextMatch.away,
                   competition: nextMatch.competition,
                   venue: nextMatch.venue,
+                  homeBadge: nextMatch.homeBadge,
+                  awayBadge: nextMatch.awayBadge,
                 }
               : undefined
           }

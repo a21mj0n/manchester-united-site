@@ -1,11 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import TeamBadge from "./TeamBadge";
 import { MU } from "@/lib/data";
 import type { Fixture, Result } from "@/lib/types";
 
-function TeamName({ name }: { name: string }) {
-  return <span className={name === MU ? "mu" : undefined}>{name}</span>;
+function TeamName({ name, badge }: { name: string; badge?: string | null }) {
+  return (
+    <span className={`match__team${name === MU ? " mu" : ""}`}>
+      <TeamBadge badge={badge} team={name} size={22} />
+      {name}
+    </span>
+  );
 }
 
 function outcome(result: Result): { cls: string; label: string } {
@@ -62,9 +68,9 @@ export default function Matches({ fixtures, results }: Props) {
                     {m.time}
                   </div>
                   <div className="match__teams">
-                    <TeamName name={m.home} />
+                    <TeamName name={m.home} badge={m.homeBadge} />
                     <span className="match__score">—</span>
-                    <TeamName name={m.away} />
+                    <TeamName name={m.away} badge={m.awayBadge} />
                   </div>
                   <div className="match__meta">
                     <span className="match__comp">{m.comp}</span>
@@ -86,11 +92,11 @@ export default function Matches({ fixtures, results }: Props) {
                       {m.comp}
                     </div>
                     <div className="match__teams">
-                      <TeamName name={m.home} />
+                      <TeamName name={m.home} badge={m.homeBadge} />
                       <span className="match__score">
                         {m.homeScore} : {m.awayScore}
                       </span>
-                      <TeamName name={m.away} />
+                      <TeamName name={m.away} badge={m.awayBadge} />
                     </div>
                     <div className="match__meta">
                       <span className={`pill ${o.cls}`}>{o.label}</span>

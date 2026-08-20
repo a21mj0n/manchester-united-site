@@ -17,6 +17,8 @@ interface Props {
     away: string;
     competition: string;
     venue: string | null;
+    homeBadge: string | null;
+    awayBadge: string | null;
   };
 }
 
@@ -66,11 +68,15 @@ export default function NextMatch({ kickoff, match }: Props) {
 
           <div className="next__teams">
             <div className="team">
-              <div
-                className={`team__logo${(match?.home ?? MU) === MU ? " team__logo--mu" : ""}`}
-              >
-                {initials(match?.home ?? MU)}
-              </div>
+              {match?.homeBadge ? (
+                <img className="team__badge" src={match.homeBadge} alt="" width={74} height={74} />
+              ) : (
+                <div
+                  className={`team__logo${(match?.home ?? MU) === MU ? " team__logo--mu" : ""}`}
+                >
+                  {initials(match?.home ?? MU)}
+                </div>
+              )}
               <span>{match?.home ?? MU}</span>
             </div>
             <div className="next__vs">
@@ -81,11 +87,13 @@ export default function NextMatch({ kickoff, match }: Props) {
               </small>
             </div>
             <div className="team">
-              <div
-                className={`team__logo${match?.away === MU ? " team__logo--mu" : ""}`}
-              >
-                {initials(match?.away ?? "Arsenal")}
-              </div>
+              {match?.awayBadge ? (
+                <img className="team__badge" src={match.awayBadge} alt="" width={74} height={74} />
+              ) : (
+                <div className={`team__logo${match?.away === MU ? " team__logo--mu" : ""}`}>
+                  {initials(match?.away ?? "Arsenal")}
+                </div>
+              )}
               <span>{match?.away ?? "Arsenal"}</span>
             </div>
           </div>

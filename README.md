@@ -267,6 +267,24 @@ Serverga (VPS) deploy qilish bo'yicha to'liq yo'riqnoma: [deploy/README.md](depl
 Qisqacha: nginx (80/443) → Next.js standalone (127.0.0.1:3000), systemd boshqaruvida,
 TLS — Let's Encrypt. Yangilash uchun serverda `./deploy/deploy.sh`.
 
+## Jamoa gerblari
+
+Manba: Premer-liganing rasmiy SVG fayllari —
+`resources.premierleague.com/premierleague25/badges-alt/{opta_id}.svg`
+
+Fayl raqami jamoaning **Opta identifikatoriga** teng (Arsenal `t3` → `3.svg`).
+Ro'yxat Premer-liga API sidan olinadi (`lib/badges.ts`), shuning uchun mavsum
+almashib liga tarkibi o'zgarsa ham o'zi yangilanadi.
+
+Nomlar turli manbalarda turlicha yoziladi ("Spurs", "Nott'm Forest",
+"AFC Bournemouth") — `normalizeTeam()` ularni bir ko'rinishga keltiradi.
+Gerb topilmasa nom bosh harflari ko'rsatiladi, ya'ni Premer-ligadan
+tashqari jamoalar ham chiroyli chiqadi.
+
+Gerblar klublarning savdo belgisi. Ular jadval va o'yinlar yonida tanish
+belgisi sifatida ishlatiladi; sayt rasmiy emasligi bosh sahifada va
+footerda ochiq yozilgan.
+
 ## Ikonkalar
 
 - **lucide-react** (MIT) — interfeys ikonkalari. Faqat ishlatilganlari

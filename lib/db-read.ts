@@ -61,6 +61,8 @@ export async function readFixtures(): Promise<Fixture[] | null> {
       away: r.awayTeam,
       comp: r.competition,
       venue: r.venue ?? "",
+      homeBadge: r.homeBadge,
+      awayBadge: r.awayBadge,
     };
   });
 }
@@ -81,6 +83,8 @@ export async function readResults(): Promise<Result[] | null> {
     homeScore: r.homeScore ?? 0,
     awayScore: r.awayScore ?? 0,
     comp: r.competition,
+    homeBadge: r.homeBadge,
+    awayBadge: r.awayBadge,
   }));
 }
 
@@ -98,6 +102,7 @@ export async function readStandings(): Promise<StandingsResult | null> {
     gd: r.gd,
     points: r.points,
     isUnited: r.isUnited,
+    badge: r.badge,
   }));
 
   return {
@@ -108,7 +113,15 @@ export async function readStandings(): Promise<StandingsResult | null> {
 }
 
 /** Eng yaqin kelgusi o'yin — sanoq uchun. */
-export async function readNextKickoff(): Promise<{ kickoff: Date; home: string; away: string; competition: string; venue: string | null } | null> {
+export async function readNextKickoff(): Promise<{
+  kickoff: Date;
+  home: string;
+  away: string;
+  competition: string;
+  venue: string | null;
+  homeBadge: string | null;
+  awayBadge: string | null;
+} | null> {
   const match = await prisma.match.findFirst({
     where: { kickoff: { gte: new Date(Date.now() - 3 * 3600 * 1000) } },
     orderBy: { kickoff: "asc" },
@@ -121,5 +134,7 @@ export async function readNextKickoff(): Promise<{ kickoff: Date; home: string; 
     away: match.awayTeam,
     competition: match.competition,
     venue: match.venue,
+    homeBadge: match.homeBadge,
+    awayBadge: match.awayBadge,
   };
 }

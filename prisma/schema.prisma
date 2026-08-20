@@ -104,6 +104,9 @@ model Match {
   awayScore Int?
   competition String
   venue     String?
+  /// Jamoa gerblari (Premer-liga SVG havolasi)
+  homeBadge String?
+  awayBadge String?
   updatedAt DateTime @updatedAt
 
   @@index([kickoff])
@@ -122,6 +125,8 @@ model StandingRow {
   gd      String
   points  Int
   isUnited Boolean @default(false)
+  /// Jamoa gerbi (Premer-liga SVG havolasi)
+  badge   String?
   /// Joriy mavsum hali boshlanmagani uchun oldingi mavsum ko'rsatilyaptimi
   isPreviousSeason Boolean @default(false)
   updatedAt DateTime @updatedAt

@@ -1,3 +1,4 @@
+import TeamBadge from "./TeamBadge";
 import type { Standing } from "@/lib/types";
 
 interface Props {
@@ -38,7 +39,7 @@ export default function Standings({ rows, season, isPreviousSeason }: Props) {
                   <td className="rank">{r.pos}</td>
                   <td>
                     <div className="team-cell">
-                      <i>{r.team.slice(0, 3).toUpperCase()}</i>
+                      <TeamBadge badge={r.badge} team={r.team} size={26} />
                       {r.team}
                     </div>
                   </td>

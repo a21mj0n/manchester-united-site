@@ -1,6 +1,7 @@
 import { prisma } from "../prisma";
 import { fetchSquad } from "../football-api";
 import { fetchFixtures, fetchResults, fetchStandings } from "../sportsdb";
+import { badgeFor, fetchBadgeMap } from "../badges";
 import { fetchFeed } from "../rss";
 import { KEEP_IMPORTED, NEWS_SOURCES, PER_SOURCE_LIMIT } from "./sources";
 
@@ -149,7 +150,11 @@ function parseKickoff(date: string, time: string): Date | null {
 }
 
 async function syncMatches(): Promise<SectionResult> {
-  const [fixtures, results] = await Promise.all([fetchFixtures(), fetchResults()]);
+  const [fixtures, results, badges] = await Promise.all([
+    fetchFixtures(),
+    fetchResults(),
+    fetchBadgeMap(),
+  ]);
 
   if (!fixtures && !results) {
     return { section: "o'yinlar", ok: false, count: 0, message: "manba javob bermadi" };
@@ -169,6 +174,8 @@ async function syncMatches(): Promise<SectionResult> {
       awayScore: null,
       competition: f.comp,
       venue: f.venue,
+      homeBadge: badgeFor(badges, f.home),
+      awayBadge: badgeFor(badges, f.away),
     };
     await prisma.match.upsert({
       where: { extId: String(f.id) },
@@ -190,6 +197,8 @@ async function syncMatches(): Promise<SectionResult> {
       awayScore: r.awayScore,
       competition: r.comp,
       venue: null,
+      homeBadge: badgeFor(badges, r.home),
+      awayBadge: badgeFor(badges, r.away),
     };
     await prisma.match.upsert({
       where: { extId: String(r.id) },
@@ -199,13 +208,18 @@ async function syncMatches(): Promise<SectionResult> {
     saved++;
   }
 
-  return { section: "o'yinlar", ok: true, count: saved, message: "" };
+  return {
+    section: "o'yinlar",
+    ok: true,
+    count: saved,
+    message: badges.size > 0 ? `${badges.size} ta gerb` : "gerblar olinmadi",
+  };
 }
 
 /* ---------------- Jadval ---------------- */
 
 async function syncStandings(): Promise<SectionResult> {
-  const data = await fetchStandings();
+  const [data, badges] = await Promise.all([fetchStandings(), fetchBadgeMap()]);
 
   if (!data || data.rows.length === 0) {
     return { section: "jadval", ok: false, count: 0, message: "manba javob bermadi" };
@@ -225,6 +239,7 @@ async function syncStandings(): Promise<SectionResult> {
       points: row.points,
       isUnited: row.isUnited ?? false,
       isPreviousSeason: data.isPreviousSeason,
+      badge: badgeFor(badges, row.team),
     };
     await prisma.standingRow.upsert({
       where: { season_team: { season: data.season, team: row.team } },
@@ -237,7 +252,9 @@ async function syncStandings(): Promise<SectionResult> {
     section: "jadval",
     ok: true,
     count: data.rows.length,
-    message: `${data.season}${data.isPreviousSeason ? " (oldingi mavsum)" : ""}`,
+    message:
+      `${data.season}${data.isPreviousSeason ? " (oldingi mavsum)" : ""}` +
+      ` · ${data.rows.filter((r) => badgeFor(badges, r.team)).length} ta gerb`,
   };
 }
 
