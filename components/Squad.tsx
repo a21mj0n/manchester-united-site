@@ -95,9 +95,10 @@ export default function Squad({ players }: { players: Player[] }) {
             {showAcademy && (
               <>
                 <p className="squad-academy__note">
-                  20 yoshgacha bo&apos;lgan hamda asosiy tarkib o&apos;yinchisi bilan bir xil
+                  18 yoshgacha bo&apos;lgan hamda asosiy tarkib o&apos;yinchisi bilan bir xil
                   raqam ostidagi futbolchilar. Manba rasmiy ajratma bermaydi —
-                  ro&apos;yxat shu ikki belgi asosida tuzilgan.
+                  ro&apos;yxat shu ikki belgi asosida tuzilgan, shuning uchun
+                  ayrim nomlar noto&apos;g&apos;ri guruhda bo&apos;lishi mumkin.
                 </p>
                 <div className="squad-grid">
                   {academy.map((p, i) => (

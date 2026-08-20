@@ -20,13 +20,19 @@ export interface SectionResult {
 
 /* ---------------- Tarkib ---------------- */
 
-/** Akademiya/zaxira o'yinchisini aniqlash chegarasi */
-const ACADEMY_MAX_AGE = 20;
+/**
+ * Akademiya/zaxira o'yinchisini aniqlash yosh chegarasi.
+ *
+ * 18 tanlangan, 20 emas: 19-20 yoshda allaqachon asosiy tarkibda
+ * muntazam o'ynaydigan futbolchilar bo'ladi (masalan Mainoo, Yoro).
+ * Ular orasidan zaxiradagilarini raqam takrorlanishi qoidasi ajratadi.
+ */
+const ACADEMY_MAX_AGE = 18;
 
 /**
  * API "akademiya" degan maydon bermaydi, shuning uchun ikki belgidan
  * foydalanamiz:
- *   1. Yosh — 20 va undan kichik
+ *   1. Yosh — 18 va undan kichik
  *   2. Raqam takrorlanishi — bir xil raqamli o'yinchilar orasida
  *      yoshi kichigi zaxira hisoblanadi (masalan #2: Kamason 19 va Dalot 26)
  */
