@@ -267,6 +267,25 @@ Serverga (VPS) deploy qilish bo'yicha to'liq yo'riqnoma: [deploy/README.md](depl
 Qisqacha: nginx (80/443) → Next.js standalone (127.0.0.1:3000), systemd boshqaruvida,
 TLS — Let's Encrypt. Yangilash uchun serverda `./deploy/deploy.sh`.
 
+## Ikonkalar
+
+- **lucide-react** (MIT) — interfeys ikonkalari. Faqat ishlatilganlari
+  bundlega tushadi (tree-shaking).
+- **components/icons/Brands.tsx** — ijtimoiy tarmoq logotiplari.
+  Yo'llar [Simple Icons](https://simpleicons.org) (CC0-1.0) dan bir marta
+  chiqarib olingan, shuning uchun ishlash paytida qo'shimcha kutubxona
+  yuklanmaydi.
+
+Brend logotiplarini yangilash kerak bo'lsa:
+
+```bash
+npm i -D simple-icons
+# components/icons/Brands.tsx ni qayta yaratish
+npm uninstall simple-icons
+```
+
+Barcha ikonkalar `currentColor` ishlatadi — rangni ota element belgilaydi.
+
 ## Ranglar
 
 `app/globals.css` boshidagi `:root` blokida:

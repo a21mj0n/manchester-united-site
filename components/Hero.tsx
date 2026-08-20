@@ -1,3 +1,4 @@
+import { CalendarDays, UserPlus } from "lucide-react";
 import Image from "next/image";
 import Counter from "./Counter";
 
@@ -33,9 +34,11 @@ export default function Hero() {
           </p>
           <div className="hero__actions reveal">
             <a href="#fanclub" className="btn btn--primary">
+              <UserPlus size={18} aria-hidden="true" />
               Fan-klubga qo'shilish
             </a>
             <a href="#matches" className="btn btn--ghost">
+              <CalendarDays size={18} aria-hidden="true" />
               Keyingi o'yin
             </a>
           </div>

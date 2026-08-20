@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronDown, ChevronUp, Globe, GraduationCap } from "lucide-react";
 import { useState } from "react";
 import type { Player, Position } from "@/lib/types";
 
@@ -32,7 +33,12 @@ function PlayerCard({ player, index }: { player: Player; index: number }) {
 
       <h3 className="player__name">{player.name}</h3>
       <p className="player__pos">{player.posName}</p>
-      {player.country && <p className="player__country">🌍 {player.country}</p>}
+      {player.country && (
+        <p className="player__country">
+          <Globe size={13} aria-hidden="true" />
+          {player.country}
+        </p>
+      )}
       {player.age !== undefined && <p className="player__country">{player.age} yosh</p>}
     </article>
   );
@@ -86,10 +92,13 @@ export default function Squad({ players }: { players: Player[] }) {
               aria-expanded={showAcademy}
             >
               <span>
+                <GraduationCap size={18} aria-hidden="true" />
                 Akademiya va zaxira
                 <b>{academy.length}</b>
               </span>
-              <span className="squad-academy__arrow">{showAcademy ? "▲" : "▼"}</span>
+              <span className="squad-academy__arrow">
+                {showAcademy ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              </span>
             </button>
 
             {showAcademy && (

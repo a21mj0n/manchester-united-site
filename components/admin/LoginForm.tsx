@@ -1,5 +1,6 @@
 "use client";
 
+import { LogIn } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 
@@ -45,6 +46,7 @@ function Form() {
         <input type="password" name="password" autoFocus autoComplete="current-password" />
       </label>
       <button type="submit" className="btn btn--primary btn--full" disabled={pending}>
+        <LogIn size={17} aria-hidden="true" />
         {pending ? "Tekshirilmoqda…" : "Kirish"}
       </button>
       {error && <p className="form__msg err">{error}</p>}

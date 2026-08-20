@@ -1,5 +1,6 @@
 "use client";
 
+import { Check, RotateCcw, Search, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { formatTashkentDate } from "@/lib/format";
@@ -59,6 +60,8 @@ export default function ApplicationsTable({
 
   return (
     <>
+      <div className="admin__search-wrap">
+        <Search size={16} aria-hidden="true" />
       <input
         type="search"
         className="admin__search"
@@ -66,6 +69,7 @@ export default function ApplicationsTable({
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
+      </div>
 
       {error && <p className="form__msg err">{error}</p>}
 
@@ -107,7 +111,7 @@ export default function ApplicationsTable({
                         onClick={() => changeStatus(a.id, "approved")}
                         disabled={busyId === a.id}
                       >
-                        Qabul
+                        <Check size={13} aria-hidden="true" /> Qabul
                       </button>
                     )}
                     {a.status !== "rejected" && (
@@ -116,7 +120,7 @@ export default function ApplicationsTable({
                         onClick={() => changeStatus(a.id, "rejected")}
                         disabled={busyId === a.id}
                       >
-                        Rad
+                        <X size={13} aria-hidden="true" /> Rad
                       </button>
                     )}
                     {a.status !== "new" && (
@@ -125,7 +129,7 @@ export default function ApplicationsTable({
                         onClick={() => changeStatus(a.id, "new")}
                         disabled={busyId === a.id}
                       >
-                        Qaytarish
+                        <RotateCcw size={13} aria-hidden="true" /> Qaytarish
                       </button>
                     )}
                   </div>

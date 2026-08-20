@@ -1,3 +1,4 @@
+import { ExternalLink } from "lucide-react";
 import type { NewsItem } from "@/lib/news-defaults";
 
 function tagClass(color: string): string {
@@ -35,7 +36,8 @@ export default function News({ items }: { items: NewsItem[] }) {
                   <p>{n.excerpt}</p>
                   {n.sourceUrl ? (
                     <span className="news__source">
-                      {n.sourceName} · asl maqolaga o'tish ↗
+                      {n.sourceName} · asl maqolaga o&apos;tish
+                      <ExternalLink size={13} aria-hidden="true" />
                     </span>
                   ) : (
                     n.meta && <span className="news__date">{n.meta}</span>

@@ -1,5 +1,6 @@
 "use client";
 
+import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -16,6 +17,7 @@ export default function LogoutButton() {
 
   return (
     <button className="btn btn--ghost" onClick={logout} disabled={pending}>
+      <LogOut size={16} aria-hidden="true" />
       {pending ? "…" : "Chiqish"}
     </button>
   );

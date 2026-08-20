@@ -1,5 +1,6 @@
 "use client";
 
+import { Eye, EyeOff, Pencil, Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -98,7 +99,7 @@ export default function NewsManager({ posts }: { posts: Post[] }) {
     <>
       <div className="news-admin__bar">
         <button className="btn btn--primary" onClick={startNew}>
-          + Yangilik qo'shish
+          <Plus size={17} aria-hidden="true" /> Yangilik qo'shish
         </button>
       </div>
 
@@ -225,11 +226,16 @@ export default function NewsManager({ posts }: { posts: Post[] }) {
                 {p.meta && <span className="news__date">{p.meta}</span>}
               </div>
               <div className="news-admin__actions">
-                <button className="mini" onClick={() => startEdit(p)}>Tahrirlash</button>
+                <button className="mini" onClick={() => startEdit(p)}>
+                  <Pencil size={13} aria-hidden="true" /> Tahrirlash
+                </button>
                 <button className="mini" onClick={() => togglePublished(p)}>
+                  {p.published ? <EyeOff size={13} aria-hidden="true" /> : <Eye size={13} aria-hidden="true" />}
                   {p.published ? "Yashirish" : "Ko'rsatish"}
                 </button>
-                <button className="mini mini--no" onClick={() => remove(p)}>O'chirish</button>
+                <button className="mini mini--no" onClick={() => remove(p)}>
+                  <Trash2 size={13} aria-hidden="true" /> O&apos;chirish
+                </button>
               </div>
             </article>
           ))}

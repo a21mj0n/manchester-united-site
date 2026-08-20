@@ -1,5 +1,6 @@
 "use client";
 
+import { RefreshCw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { formatTashkentDate } from "@/lib/format";
@@ -54,6 +55,7 @@ export default function SyncPanel({ logs }: { logs: LogRow[] }) {
     <>
       <div className="news-admin__bar">
         <button className="btn btn--primary" onClick={runNow} disabled={pending}>
+          <RefreshCw size={17} className={pending ? "is-spinning" : ""} aria-hidden="true" />
           {pending ? "Yangilanmoqda… (1 daqiqagacha)" : "Hozir yangilash"}
         </button>
         {error && <p className="form__msg err">{error}</p>}

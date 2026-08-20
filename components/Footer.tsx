@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Facebook, Instagram, Telegram, XLogo, YouTube } from "./icons/Brands";
 
 const LINKS = [
   { href: "#news", label: "Yangiliklar" },
@@ -8,7 +9,13 @@ const LINKS = [
   { href: "#fanclub", label: "Fan-klub" },
 ];
 
-const SOCIAL = ["TG", "IG", "YT", "X"];
+const SOCIAL = [
+  { label: "Telegram", href: "#", Icon: Telegram },
+  { label: "Instagram", href: "#", Icon: Instagram },
+  { label: "YouTube", href: "#", Icon: YouTube },
+  { label: "Facebook", href: "#", Icon: Facebook },
+  { label: "X", href: "#", Icon: XLogo },
+];
 
 export default function Footer() {
   return (
@@ -25,7 +32,7 @@ export default function Footer() {
           />
           <div>
             <strong>RED DEVILS UZBEKISTAN</strong>
-            <p>O'zbekistondagi Manchester United muxlislari jamoasi</p>
+            <p>O&apos;zbekistondagi Manchester United muxlislari jamoasi</p>
           </div>
         </div>
 
@@ -38,19 +45,22 @@ export default function Footer() {
         </nav>
 
         <div className="footer__social">
-          {SOCIAL.map((s) => (
-            <a key={s} href="#" aria-label={s}>
-              {s}
+          {SOCIAL.map(({ label, href, Icon }) => (
+            <a key={label} href={href} aria-label={label} title={label}>
+              <Icon size={18} />
             </a>
           ))}
         </div>
       </div>
 
       <div className="container footer__bottom">
-        <p>© {new Date().getFullYear()} Red Devils Uzbekistan — muxlislar tomonidan yaratilgan.</p>
+        <p>
+          © {new Date().getFullYear()} Red Devils Uzbekistan — muxlislar tomonidan
+          yaratilgan.
+        </p>
         <p className="footer__disc">
-          Rasmiy bo'lmagan sayt. Manchester United FC bilan bog'liq emas. Saytdagi
-          statistika va o'yin jadvali namunaviy (demo) ma'lumotlardir.
+          Rasmiy bo&apos;lmagan sayt. Manchester United FC bilan bog&apos;liq emas.
+          Saytdagi statistika va o&apos;yin jadvali tashqi ochiq manbalardan olinadi.
         </p>
       </div>
     </footer>

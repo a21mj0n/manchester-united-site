@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowLeftRight, Pencil, Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -144,13 +145,16 @@ export default function SquadManager({ players }: { players: Row[] }) {
               </div>
               <div className="squad-admin__actions">
                 <button className="mini" onClick={() => move(p)} disabled={busy === p.id}>
+                  <ArrowLeftRight size={13} aria-hidden="true" />
                   {p.isAcademy ? "Asosiyga" : "Akademiyaga"}
                 </button>
                 {p.manual && (
                   <>
-                    <button className="mini" onClick={() => startEdit(p)}>Tahrirlash</button>
+                    <button className="mini" onClick={() => startEdit(p)}>
+                      <Pencil size={13} aria-hidden="true" /> Tahrirlash
+                    </button>
                     <button className="mini mini--no" onClick={() => remove(p)} disabled={busy === p.id}>
-                      O&apos;chirish
+                      <Trash2 size={13} aria-hidden="true" /> O&apos;chirish
                     </button>
                   </>
                 )}
@@ -173,7 +177,7 @@ export default function SquadManager({ players }: { players: Row[] }) {
             setOpen(true);
           }}
         >
-          + O&apos;yinchi qo&apos;shish
+          <Plus size={17} aria-hidden="true" /> O&apos;yinchi qo&apos;shish
         </button>
       </div>
 

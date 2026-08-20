@@ -1,14 +1,15 @@
 "use client";
 
+import { HandHeart, Send, Shirt, Ticket, Trophy } from "lucide-react";
 import { useState } from "react";
 
 const CITIES = ["Toshkent","Samarqand","Buxoro","Farg'ona","Namangan","Andijon","Nukus","Qarshi","Boshqa"];
 
 const PERKS = [
-  { icon: "⚽", title: "Birgalikda tomosha", text: "Toshkent, Samarqand, Farg'ona va boshqa shaharlarda" },
-  { icon: "👕", title: "Klub atributikasi", text: "Sharf, futbolka va fan-klub kartasi" },
-  { icon: "🏟️", title: "Mini-futbol turnirlari", text: "Har oyda muxlislar o'rtasida musobaqa" },
-  { icon: "❤️", title: "Xayriya", text: "Bolalar uyiga sport anjomlari yetkazish" },
+  { Icon: Ticket, title: "Birgalikda tomosha", text: "Toshkent, Samarqand, Farg'ona va boshqa shaharlarda" },
+  { Icon: Shirt, title: "Klub atributikasi", text: "Sharf, futbolka va fan-klub kartasi" },
+  { Icon: Trophy, title: "Mini-futbol turnirlari", text: "Har oyda muxlislar o'rtasida musobaqa" },
+  { Icon: HandHeart, title: "Xayriya", text: "Bolalar uyiga sport anjomlari yetkazish" },
 ];
 
 type Status = { type: "ok" | "err"; text: string } | null;
@@ -80,7 +81,9 @@ export default function FanClub() {
           <ul className="perks">
             {PERKS.map((p) => (
               <li key={p.title}>
-                <span>{p.icon}</span>
+                <span className="perks__icon">
+                  <p.Icon size={20} aria-hidden="true" />
+                </span>
                 <div>
                   <b>{p.title}</b>
                   <small>{p.text}</small>
@@ -119,6 +122,7 @@ export default function FanClub() {
           </label>
 
           <button type="submit" className="btn btn--primary btn--full" disabled={pending}>
+            <Send size={17} aria-hidden="true" />
             {pending ? "Yuborilmoqda…" : "Arizani yuborish"}
           </button>
 

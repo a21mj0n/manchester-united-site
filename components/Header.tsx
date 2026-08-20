@@ -1,5 +1,6 @@
 "use client";
 
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -83,14 +84,12 @@ export default function Header() {
         </nav>
 
         <button
-          className={`burger${open ? " is-open" : ""}`}
-          aria-label="Menyu"
+          className="burger"
+          aria-label={open ? "Menyuni yopish" : "Menyu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
         >
-          <span />
-          <span />
-          <span />
+          {open ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
     </header>

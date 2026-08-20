@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowUp } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function ToTop() {
@@ -18,7 +19,7 @@ export default function ToTop() {
       aria-label="Yuqoriga"
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
     >
-      ↑
+      <ArrowUp size={20} aria-hidden="true" />
     </button>
   );
 }

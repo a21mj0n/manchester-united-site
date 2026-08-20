@@ -1,5 +1,6 @@
 "use client";
 
+import { MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { getNextKickoff } from "@/lib/schedule";
@@ -99,7 +100,8 @@ export default function NextMatch({ kickoff, match }: Props) {
           </div>
 
           <p className="next__note">
-            📍 {match?.venue || (match?.home === MU ? "Old Trafford" : "Mehmonda")} ·
+            <MapPin size={15} aria-hidden="true" />
+            {match?.venue || (match?.home === MU ? "Old Trafford" : "Mehmonda")} ·
             Toshkent vaqti bilan
           </p>
         </div>
