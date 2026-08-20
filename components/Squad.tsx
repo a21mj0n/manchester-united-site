@@ -44,11 +44,26 @@ export default function Squad({ players }: { players: Player[] }) {
               key={p.id}
               style={{ animationDelay: `${i * 45}ms` }}
             >
-              <span className="player__num">{p.num}</span>
-              <div className="player__shirt">{p.num}</div>
+              <span className="player__num">{p.num || "—"}</span>
+
+              {p.photo ? (
+                /* Rasm optimizatsiyasi serverni yuklamasligi uchun oddiy img */
+                <img
+                  className="player__photo"
+                  src={p.photo}
+                  alt=""
+                  width={72}
+                  height={72}
+                  loading="lazy"
+                />
+              ) : (
+                <div className="player__shirt">{p.num || "—"}</div>
+              )}
+
               <h3 className="player__name">{p.name}</h3>
               <p className="player__pos">{p.posName}</p>
-              <p className="player__country">🌍 {p.country}</p>
+              {p.country && <p className="player__country">🌍 {p.country}</p>}
+              {p.age !== undefined && <p className="player__country">{p.age} yosh</p>}
             </article>
           ))}
         </div>

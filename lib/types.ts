@@ -6,7 +6,11 @@ export interface Player {
   name: string;
   pos: Position;
   posName: string;
-  country: string;
+  /** Demo ma'lumotda bor, API dan kelganda bo'lmaydi */
+  country?: string;
+  /** API-Football dan keladi */
+  age?: number;
+  photo?: string;
 }
 
 export interface Fixture {

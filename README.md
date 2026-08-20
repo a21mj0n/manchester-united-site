@@ -139,6 +139,34 @@ Ikki bosqichli zaxira:
 2. API umuman javob bermasa — `lib/data.ts` dagi demo ma'lumot ishlatiladi,
    ya'ni sayt baribir ochiladi
 
+## Jamoa tarkibi — real ma'lumot
+
+Manba: [API-Football](https://www.api-football.com) — `FOOTBALL_API_KEY` kerak.
+Beradi: joriy ro'yxat, o'yinchi raqami, pozitsiyasi, yoshi va rasmi.
+Javob **24 soat keshlanadi** (bepul tarifda kuniga 100 so'rov).
+
+Kalitni o'rnatish (terminaldan o'qiladi, git'ga tushmaydi):
+
+```bash
+./deploy/set-football-key.sh
+```
+
+Kalit yo'q bo'lsa `lib/data.ts` dagi demo tarkib ko'rsatiladi.
+
+### Nega o'yinlar va jadval bu API dan olinmaydi
+
+Bepul tarifda tekshirib ko'rilgan cheklovlar:
+
+| Imkoniyat | Holat |
+|---|---|
+| Jamoa tarkibi | ✅ ishlaydi |
+| Joriy mavsum jadvali | ❌ faqat 2022-2024 mavsumlari |
+| `next` / `last` parametrlari | ❌ yopiq |
+| Sana bo'yicha so'rov | ❌ faqat bugundan +2 kungacha |
+
+Shu sababli o'yinlar va turnir jadvali TheSportsDB dan olinadi —
+u kalitsiz ishlaydi va joriy mavsumni beradi.
+
 ## Yangiliklar
 
 Yangiliklar bazada saqlanadi va `/admin/news` sahifasidan boshqariladi:

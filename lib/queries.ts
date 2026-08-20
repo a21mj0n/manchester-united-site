@@ -1,13 +1,15 @@
 import { FIXTURES, LEGENDS, RESULTS, SQUAD, STANDINGS, TIMELINE } from "./data";
+import { fetchSquad } from "./football-api";
 import { fetchFixtures, fetchResults, fetchStandings, type StandingsResult } from "./sportsdb";
 import type { Fixture, Legend, Player, Result, Standing, TimelineItem } from "./types";
 
 /**
  * Ma'lumot qatlami (data layer).
  *
- * O'yinlar va turnir jadvali TheSportsDB dan olinadi; API javob
- * bermasa demo ma'lumotga tushadi, ya'ni sayt baribir ishlayveradi.
- * Tarkib, tarix va afsonalar hozircha demo massivlarda.
+ * O'yinlar va turnir jadvali — TheSportsDB (kalit shart emas).
+ * Jamoa tarkibi — API-Football (FOOTBALL_API_KEY kerak).
+ * Har ikkalasi javob bermasa demo ma'lumotga tushadi, ya'ni sayt
+ * baribir ishlayveradi. Tarix va afsonalar demo massivlarda qoladi.
  *
  * Barchasi `async` —
  * shuning uchun keyinchalik bazaga (Postgres/Prisma, Supabase, MongoDB…)
@@ -16,7 +18,7 @@ import type { Fixture, Legend, Player, Result, Standing, TimelineItem } from "./
  */
 
 export async function getSquad(): Promise<Player[]> {
-  return SQUAD;
+  return (await fetchSquad()) ?? SQUAD;
 }
 
 export async function getFixtures(): Promise<Fixture[]> {

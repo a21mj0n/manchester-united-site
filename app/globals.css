@@ -671,3 +671,11 @@ ul{list-style:none}
   .news-admin__thumb{height:120px}
   .news-admin__actions{flex-direction:row;flex-wrap:wrap}
 }
+
+/* O'yinchi rasmi (API-Football dan) */
+.player__photo{
+  width:72px;height:72px;border-radius:50%;object-fit:cover;
+  background:var(--red-soft);border:2px solid rgba(218,41,28,.45);
+  margin-bottom:14px;
+}
+.player:hover .player__photo{border-color:var(--red)}
