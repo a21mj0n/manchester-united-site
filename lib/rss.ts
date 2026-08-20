@@ -17,16 +17,28 @@ export interface FeedItem {
 const TIMEOUT_MS = 15000;
 
 /** HTML/XML belgilarini oddiy matnga aylantiradi. */
-function decode(value: string): string {
+function entities(value: string): string {
   return value
-    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1")
-    .replace(/<[^>]+>/g, "")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"')
     .replace(/&apos;|&#0?39;|&#x27;/g, "'")
     .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
+    .replace(/&amp;/g, "&");
+}
+
+/**
+ * Teglarni ikki bosqichda olib tashlaymiz.
+ *
+ * Ba'zi feed'larda HTML belgilangan holda keladi (&lt;p&gt;), shuning
+ * uchun avval teglarni olib, keyin belgilarni ochib, yana teglarni
+ * olib tashlash kerak — aks holda "<p>" matn bo'lib qolib ketadi.
+ */
+function decode(value: string): string {
+  const withoutCdata = value.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1");
+  const firstPass = entities(withoutCdata.replace(/<[^>]+>/g, " "));
+  return firstPass
+    .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
