@@ -54,6 +54,10 @@ model NewsPost {
   externalId String? @unique
   /// Maqola manbada chop etilgan vaqt
   publishedAt DateTime?
+  /// Sarlavha o'zbekchaga o'girilganmi
+  translated Boolean @default(false)
+  /// Manbadagi asl sarlavha (tekshirish va qayta o'girish uchun)
+  originalTitle String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -71,14 +71,14 @@ export default async function HomePage() {
               : undefined
           }
         />
-        <News items={news} />
+        <Standings
+          rows={standingsData.rows}
+          season={standingsData.season}
+          isPreviousSeason={standingsData.isPreviousSeason}
+        />
         <Matches fixtures={fixtures} results={results} />
         <Squad players={squad} />
-        <Standings
-        rows={standingsData.rows}
-        season={standingsData.season}
-        isPreviousSeason={standingsData.isPreviousSeason}
-      />
+        <News items={news} />
         <Timeline items={timeline} />
         <Legends items={legends} />
         <FanClub />

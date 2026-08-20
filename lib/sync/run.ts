@@ -3,6 +3,7 @@ import { fetchSquad } from "../football-api";
 import { fetchFixtures, fetchResults, fetchStandings } from "../sportsdb";
 import { badgeFor, fetchBadgeMap, localizeBadges } from "../badges";
 import { fetchFeed } from "../rss";
+import { translateNews } from "../translate";
 import { KEEP_IMPORTED, NEWS_SOURCES, PER_SOURCE_LIMIT } from "./sources";
 
 /**
@@ -271,6 +272,7 @@ async function syncNews(): Promise<SectionResult> {
 
         await prisma.newsPost.create({
           data: {
+            originalTitle: item.title.slice(0, 200),
             title: item.title.slice(0, 200),
             excerpt: item.description.slice(0, 300),
             tag: source.name,
@@ -305,12 +307,53 @@ async function syncNews(): Promise<SectionResult> {
     await prisma.newsPost.deleteMany({ where: { id: { in: imported.map((p) => p.id) } } });
   }
 
+  const parts: string[] = [];
+  if (failed.length) parts.push(`ishlamadi: ${failed.join(", ")}`);
+
+  const translated = await translatePending();
+  if (translated > 0) parts.push(`${translated} tasi o'zbekchaga o'girildi`);
+
   return {
     section: "yangiliklar",
     ok: failed.length < NEWS_SOURCES.length,
     count: added,
-    message: failed.length ? `ishlamadi: ${failed.join(", ")}` : "",
+    message: parts.join(" · "),
   };
+}
+
+/**
+ * Hali o'girilmagan yangiliklarni o'zbekchaga o'giradi.
+ *
+ * Yangi kelganlar ham, avval ingliz tilida saqlangan eskilari ham
+ * shu yerda o'giriladi — bir so'rovda 20 tagacha.
+ */
+async function translatePending(): Promise<number> {
+  const pending = await prisma.newsPost.findMany({
+    where: { externalId: { not: null }, translated: false },
+    orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
+    take: 20,
+    select: { id: true, title: true, excerpt: true },
+  });
+
+  if (pending.length === 0) return 0;
+
+  const translated = await translateNews(
+    pending.map((p) => ({ title: p.title, excerpt: p.excerpt })),
+  );
+  if (!translated) return 0;
+
+  let saved = 0;
+  for (const [i, post] of pending.entries()) {
+    const next = translated[i];
+    if (!next) continue;
+    await prisma.newsPost.update({
+      where: { id: post.id },
+      data: { title: next.title, excerpt: next.excerpt, translated: true },
+    });
+    saved++;
+  }
+
+  return saved;
 }
 
 /* ---------------- Umumiy yurish ---------------- */

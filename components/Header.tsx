@@ -4,11 +4,12 @@ import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+// Tartib sahifadagi bo'limlar ketma-ketligiga mos
 const LINKS = [
-  { href: "#news", label: "Yangiliklar" },
+  { href: "#table", label: "Jadval" },
   { href: "#matches", label: "O'yinlar" },
   { href: "#squad", label: "Tarkib" },
-  { href: "#table", label: "Jadval" },
+  { href: "#news", label: "Yangiliklar" },
   { href: "#history", label: "Tarix" },
   { href: "#legends", label: "Afsonalar" },
 ];
