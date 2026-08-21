@@ -37,7 +37,7 @@ export default function Hero() {
               <UserPlus size={18} aria-hidden="true" />
               Fan-klubga qo'shilish
             </a>
-            <a href="#matches" className="btn btn--ghost">
+            <a href="#next" className="btn btn--ghost">
               <CalendarDays size={18} aria-hidden="true" />
               Keyingi o'yin
             </a>

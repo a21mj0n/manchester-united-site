@@ -1,6 +1,7 @@
 "use client";
 
-import { MapPin } from "lucide-react";
+import { MapPin, Tv } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { getNextKickoff } from "@/lib/schedule";
@@ -112,6 +113,11 @@ export default function NextMatch({ kickoff, match }: Props) {
             {match?.venue || (match?.home === MU ? "Old Trafford" : "Mehmonda")} ·
             Toshkent vaqti bilan
           </p>
+
+          <Link href="/tomosha" className="next__watch">
+            <Tv size={16} aria-hidden="true" />
+            Tomosha qilish uchun telekanallar yoki saytlar
+          </Link>
         </div>
       </div>
     </section>
