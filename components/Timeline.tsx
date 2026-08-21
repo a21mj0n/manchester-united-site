@@ -7,7 +7,7 @@ export default function Timeline({ items }: { items: TimelineItem[] }) {
         <div className="section__head reveal">
           <h2 className="section__title">Klub tarixi</h2>
           <p className="section__sub">
-            1878 yildan bugungi kungacha — Qizil shaytonlar yo'li
+            1878 yildan bugungi kungacha — Qizil iblislar yo'li
           </p>
         </div>
 

@@ -29,7 +29,7 @@ export default function Hero() {
           </h1>
           <p className="hero__text reveal">
             Old Traffordgacha 5 700 km. Lekin yurak masofani tanimaydi. Bu sayt —
-            O'zbekistondagi barcha «Qizil shaytonlar» muxlislari uchun: o'yinlar,
+            O'zbekistondagi barcha «Qizil iblislar» muxlislari uchun: o'yinlar,
             tarkib, tarix va birgalikda o'tkaziladigan tomoshalar.
           </p>
           <div className="hero__actions reveal">
