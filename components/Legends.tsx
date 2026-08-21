@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Legend } from "@/lib/types";
 
 export default function Legends({ items }: { items: Legend[] }) {
@@ -14,7 +15,13 @@ export default function Legends({ items }: { items: Legend[] }) {
         <div className="legends">
           {items.map((l) => (
             <article className="legend reveal" key={l.name}>
-              <div className="legend__init">{l.init}</div>
+              {l.img ? (
+                <div className="legend__photo">
+                  <Image src={l.img} alt={l.name} width={96} height={96} />
+                </div>
+              ) : (
+                <div className="legend__init">{l.init}</div>
+              )}
               <h3>{l.name}</h3>
               <p className="role">{l.role}</p>
               <p>{l.text}</p>

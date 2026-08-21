@@ -67,14 +67,14 @@ export const TIMELINE: TimelineItem[] = [
 ];
 
 export const LEGENDS: Legend[] = [
-  { init: "SAF", name: "Ser Aleks Ferguson", role: "Bosh murabbiy",   text: "26 yil, 38 trofey. Klubni dunyodagi eng buyuk brendga aylantirgan inson." },
-  { init: "BC",  name: "Ser Bobbi Charlton", role: "Yarim himoyachi", text: "Myunxendan omon qolgan, 1966-yilgi jahon chempioni va klub ramzi." },
-  { init: "GB",  name: "Jorj Best",          role: "Qanot",           text: "Futbolning birinchi superyulduzi. Beshinchi Bitl deb atalgan." },
-  { init: "EC",  name: "Erik Kantona",       role: "Hujumchi",        text: "Yoqasi ko'tarilgan qirol. Chempionlik ruhini olib kelgan fransuz." },
-  { init: "RG",  name: "Rayan Gigs",         role: "Qanot",           text: "963 o'yin — klub rekordi. 13 marta Angliya chempioni." },
-  { init: "PS",  name: "Pol Skoulz",         role: "Yarim himoyachi", text: "Zidan «eng kuchli raqibim» degan uzatishlar ustasi." },
-  { init: "CR7", name: "Kristiano Ronaldu",  role: "Hujumchi",        text: "Madeyra yigitchasi Old Traffordda Oltin to'pgacha o'sdi." },
-  { init: "WR",  name: "Ueyn Runi",          role: "Hujumchi",        text: "253 gol — klub tarixidagi eng ko'p gol urgan futbolchi." },
+  { init: "SAF", name: "Ser Aleks Ferguson", role: "Bosh murabbiy",   text: "26 yil, 38 trofey. Klubni dunyodagi eng buyuk brendga aylantirgan inson.",      img: "/legends/ferguson.jpg" },
+  { init: "BC",  name: "Ser Bobbi Charlton", role: "Yarim himoyachi", text: "Myunxendan omon qolgan, 1966-yilgi jahon chempioni va klub ramzi.",             img: "/legends/charlton.jpg" },
+  { init: "GB",  name: "Jorj Best",          role: "Qanot",           text: "Futbolning birinchi superyulduzi. Beshinchi Bitl deb atalgan.",                 img: "/legends/best.jpg" },
+  { init: "EC",  name: "Erik Kantona",       role: "Hujumchi",        text: "Yoqasi ko'tarilgan qirol. Chempionlik ruhini olib kelgan fransuz.",             img: "/legends/cantona.jpg" },
+  { init: "RG",  name: "Rayan Gigs",         role: "Qanot",           text: "963 o'yin — klub rekordi. 13 marta Angliya chempioni.",                         img: "/legends/giggs.jpg" },
+  { init: "PS",  name: "Pol Skoulz",         role: "Yarim himoyachi", text: "Zidan «eng kuchli raqibim» degan uzatishlar ustasi.",                           img: "/legends/scholes.jpg" },
+  { init: "CR7", name: "Kristiano Ronaldu",  role: "Hujumchi",        text: "Madeyra yigitchasi Old Traffordda Oltin to'pgacha o'sdi.",                      img: "/legends/ronaldo.jpg" },
+  { init: "WR",  name: "Ueyn Runi",          role: "Hujumchi",        text: "253 gol — klub tarixidagi eng ko'p gol urgan futbolchi.",                       img: "/legends/rooney.jpg" },
 ];
 
 export const MU = "Manchester United";

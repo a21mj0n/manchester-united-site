@@ -63,6 +63,7 @@ export interface Legend {
   name: string;
   role: string;
   text: string;
+  img?: string;
 }
 
 export interface JoinRequest {
