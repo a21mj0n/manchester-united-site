@@ -48,6 +48,9 @@ export default async function AdminPage({
           <Link href="/admin/sync" className="btn btn--ghost">
             Sinxronizatsiya
           </Link>
+          <Link href="/admin/stream" className="btn btn--ghost">
+            Efir
+          </Link>
           <Link href="/" className="btn btn--ghost">
             Saytga
           </Link>

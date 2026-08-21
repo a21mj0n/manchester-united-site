@@ -4,10 +4,10 @@ import { ExternalLink } from "lucide-react";
 import { useState } from "react";
 
 // Yashirin jonli efir — faqat o'z bilganlar uchun :)
-const SECRET_URL = "https://liveball.sx/match/1557368";
+// Havola bazadagi sozlamadan keladi (admin: /admin/stream).
 const NEEDED = 5;
 
-export default function SecretStream() {
+export default function SecretStream({ url }: { url: string }) {
   const [taps, setTaps] = useState(0);
   const revealed = taps >= NEEDED;
 
@@ -19,7 +19,7 @@ export default function SecretStream() {
           <h3>Jonli efir topildi 🤫</h3>
           <p>Bu havola faqat o'z bilganlar uchun. Hech kimga aytmang!</p>
           <a
-            href={SECRET_URL}
+            href={url}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn--primary"

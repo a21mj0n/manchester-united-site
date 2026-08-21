@@ -139,6 +139,13 @@ model StandingRow {
   @@index([season, pos])
 }
 
+/// Kalit-qiymat sozlamalar (masalan yashirin efir havolasi)
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
 /// Har bir sinxronizatsiya yurishining natijasi
 model SyncLog {
   id         Int      @id @default(autoincrement())

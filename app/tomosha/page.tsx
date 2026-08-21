@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import SecretStream from "@/components/SecretStream";
+import { getSecretStreamUrl } from "@/lib/settings";
 
 export const metadata: Metadata = {
   title: "Tomosha qilish — Red Devils Uzbekistan",
@@ -11,13 +12,10 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// Yashirin efir havolasi bazadan o'qiladi — admin o'zgartirsa darhol ko'rinsin
+export const dynamic = "force-dynamic";
+
 const SOURCES = [
-  {
-    name: "FUTBOL TV / UZREPORT TV",
-    type: "Telekanal",
-    url: "https://uzreport.tv",
-    desc: "Angliya Premyer-ligasini O'zbekistonda rasmiy translyatsiya qiluvchi milliy telekanallar.",
-  },
   {
     name: "Setanta Sports",
     type: "Sayt",
@@ -38,7 +36,9 @@ const SOURCES = [
   },
 ];
 
-export default function TomoshaPage() {
+export default async function TomoshaPage() {
+  const secretUrl = await getSecretStreamUrl();
+
   return (
     <main className="watch">
       <div className="container">
@@ -83,7 +83,7 @@ export default function TomoshaPage() {
           ))}
         </div>
 
-        <SecretStream />
+        <SecretStream url={secretUrl} />
 
         <p className="note">
           Barcha havolalar tashqi saytlarga olib boradi. Translyatsiya huquqlari
