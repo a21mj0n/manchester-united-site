@@ -34,12 +34,21 @@ export async function getSquad(): Promise<Player[]> {
   return (await readSquad()) ?? (await fetchSquad()) ?? SQUAD;
 }
 
+/**
+ * Musobaqa nomi manbaga qarab turlicha keladi ("English Premier
+ * League", "Premier League") — foydalanuvchiga har doim o'zbekcha
+ * ko'rinishi chiqsin.
+ */
+function withLabel<T extends { comp: string }>(items: T[]): T[] {
+  return items.map((item) => ({ ...item, comp: competitionLabel(item.comp) }));
+}
+
 export async function getFixtures(): Promise<Fixture[]> {
-  return (await readFixtures()) ?? (await fetchFixtures()) ?? FIXTURES;
+  return withLabel((await readFixtures()) ?? (await fetchFixtures()) ?? FIXTURES);
 }
 
 export async function getResults(): Promise<Result[]> {
-  return (await readResults()) ?? (await fetchResults()) ?? RESULTS;
+  return withLabel((await readResults()) ?? (await fetchResults()) ?? RESULTS);
 }
 
 /**
