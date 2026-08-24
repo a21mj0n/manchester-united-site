@@ -1,7 +1,11 @@
 import { prisma } from "../prisma";
-import { fetchSquad } from "../football-api";
+import { fetchSquad } from "../football/players";
 import { fetchFixtures, fetchResults, fetchStandings } from "../sportsdb";
 import { badgeFor, fetchBadgeMap, localizeBadges } from "../badges";
+import { hasFootballKey } from "../football/client";
+import { fetchLeagueStandings } from "../football/standings";
+import { fetchSeasonFixtures } from "../football/fixtures";
+import { verifyTeamId } from "../football/teams";
 
 /**
  * Kunlik sinxronizatsiya: ochiq manbalardan ma'lumot olib bazaga yozadi.
@@ -150,7 +154,65 @@ function parseKickoff(date: string, time: string): Date | null {
   return kickoff;
 }
 
+/**
+ * `extId` manba prefiksi bilan saqlanadi: "af:1557368" (API-Football)
+ * yoki "sdb:2052641" (TheSportsDB). Shu bois raqamni ko'rib qaysi
+ * manbadan kelganini bilamiz — API-Football id'si bo'lsa saytda
+ * o'yin tafsilotlari sahifasiga havola qilish mumkin, TheSportsDB
+ * id'si bilan esa bunday sahifa ochilmaydi.
+ */
+const API_PREFIX = "af:";
+const SPORTSDB_PREFIX = "sdb:";
+
+/** API-Football: mavsumning barcha o'yinlari, haqiqiy fixture id bilan. */
+async function syncMatchesFromApi(
+  badges: Map<string, string>,
+): Promise<SectionResult | null> {
+  const matches = await fetchSeasonFixtures();
+  if (!matches || matches.length === 0) return null;
+
+  const extIds: string[] = [];
+
+  for (const m of matches) {
+    const extId = `${API_PREFIX}${m.id}`;
+    extIds.push(extId);
+
+    const data = {
+      kickoff: new Date(m.utcDate),
+      homeTeam: m.home,
+      awayTeam: m.away,
+      homeScore: m.homeScore,
+      awayScore: m.awayScore,
+      competition: m.competition,
+      venue: m.venue,
+      // Mahalliy Premer-liga gerbi ustun, bo'lmasa API logotipi
+      homeBadge: badgeFor(badges, m.home) ?? m.homeLogo,
+      awayBadge: badgeFor(badges, m.away) ?? m.awayLogo,
+    };
+    await prisma.match.upsert({
+      where: { extId },
+      create: { extId, ...data },
+      update: data,
+    });
+  }
+
+  // Eski manbadan qolgan va mavsumdan tushib qolgan yozuvlarni tozalaymiz
+  const removed = await prisma.match.deleteMany({ where: { extId: { notIn: extIds } } });
+
+  return {
+    section: "o'yinlar",
+    ok: true,
+    count: matches.length,
+    message: `API-Football${removed.count > 0 ? ` · ${removed.count} eski yozuv o'chirildi` : ""}`,
+  };
+}
+
 async function syncMatches(badges: Map<string, string>): Promise<SectionResult> {
+  // Asosiy manba — API-Football: u fixture id beradi, ya'ni saytda
+  // har bir o'yin uchun tafsilot sahifasi ochiladi
+  const fromApi = await syncMatchesFromApi(badges);
+  if (fromApi) return fromApi;
+
   const [fixtures, results] = await Promise.all([fetchFixtures(), fetchResults()]);
 
   if (!fixtures && !results) {
@@ -174,9 +236,10 @@ async function syncMatches(badges: Map<string, string>): Promise<SectionResult> 
       homeBadge: badgeFor(badges, f.home),
       awayBadge: badgeFor(badges, f.away),
     };
+    const extId = `${SPORTSDB_PREFIX}${f.id}`;
     await prisma.match.upsert({
-      where: { extId: String(f.id) },
-      create: { extId: String(f.id), ...data },
+      where: { extId },
+      create: { extId, ...data },
       update: data,
     });
     saved++;
@@ -197,9 +260,10 @@ async function syncMatches(badges: Map<string, string>): Promise<SectionResult> 
       homeBadge: badgeFor(badges, r.home),
       awayBadge: badgeFor(badges, r.away),
     };
+    const extId = `${SPORTSDB_PREFIX}${r.id}`;
     await prisma.match.upsert({
-      where: { extId: String(r.id) },
-      create: { extId: String(r.id), ...data },
+      where: { extId },
+      create: { extId, ...data },
       update: data,
     });
     saved++;
@@ -209,14 +273,16 @@ async function syncMatches(badges: Map<string, string>): Promise<SectionResult> 
     section: "o'yinlar",
     ok: true,
     count: saved,
-    message: "",
+    message: "TheSportsDB (zaxira manba)",
   };
 }
 
 /* ---------------- Jadval ---------------- */
 
 async function syncStandings(badges: Map<string, string>): Promise<SectionResult> {
-  const data = await fetchStandings();
+  // API-Football to'liq 20 talik jadvalni beradi; kalit yo'q yoki tarif
+  // yopiq bo'lsa TheSportsDB ga tushamiz (u faqat yuqori o'rinlarni biladi)
+  const data = (await fetchLeagueStandings()) ?? (await fetchStandings());
 
   if (!data || data.rows.length === 0) {
     return { section: "jadval", ok: false, count: 0, message: "manba javob bermadi" };
@@ -236,7 +302,7 @@ async function syncStandings(badges: Map<string, string>): Promise<SectionResult
       points: row.points,
       isUnited: row.isUnited ?? false,
       isPreviousSeason: data.isPreviousSeason,
-      badge: badgeFor(badges, row.team),
+      badge: badgeFor(badges, row.team) ?? row.badge ?? null,
     };
     await prisma.standingRow.upsert({
       where: { season_team: { season: data.season, team: row.team } },
@@ -284,6 +350,18 @@ export async function runSync(): Promise<{ ok: boolean; sections: SectionResult[
       count: 0,
       message: error instanceof Error ? error.message.slice(0, 120) : "noma'lum xato",
     });
+  }
+
+  // Konfiguratsiyadagi team ID to'g'riligini API orqali tasdiqlaymiz —
+  // kalit bo'lmasa bo'lim shunchaki o'tkazib yuboriladi
+  if (hasFootballKey()) {
+    try {
+      const check = await verifyTeamId();
+      sections.push({ section: "team ID", ok: check.ok, count: check.ok ? 1 : 0, message: check.message });
+    } catch (error) {
+      console.error("[sync] team ID:", error);
+      sections.push({ section: "team ID", ok: false, count: 0, message: "tekshirib bo'lmadi" });
+    }
   }
 
   const tasks: (() => Promise<SectionResult>)[] = [

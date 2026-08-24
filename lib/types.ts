@@ -2,6 +2,8 @@ export type Position = "GK" | "DF" | "MF" | "FW";
 
 export interface Player {
   id: number;
+  /** API-Football'dagi identifikator — statistika sahifasi havolasi uchun */
+  apiId?: number;
   num: number;
   name: string;
   pos: Position;
@@ -17,6 +19,8 @@ export interface Player {
 
 export interface Fixture {
   id: number;
+  /** API-Football fixture id — bo'lsa tafsilot sahifasi ochiladi */
+  fixtureId?: number;
   date: string;
   time: string;
   home: string;
@@ -29,6 +33,8 @@ export interface Fixture {
 
 export interface Result {
   id: number;
+  /** API-Football fixture id — bo'lsa tafsilot sahifasi ochiladi */
+  fixtureId?: number;
   date: string;
   home: string;
   away: string;

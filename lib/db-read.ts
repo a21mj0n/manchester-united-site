@@ -1,3 +1,4 @@
+import { apiFixtureId } from "./match-id";
 import { prisma } from "./prisma";
 import type { Fixture, Player, Result, Standing } from "./types";
 import type { StandingsResult } from "./sportsdb";
@@ -28,6 +29,7 @@ export async function readSquad(): Promise<Player[] | null> {
   return rows
     .map((r) => ({
       id: r.id,
+      apiId: r.apiId ?? undefined,
       num: r.num,
       name: r.name,
       pos: r.pos as Player["pos"],
@@ -55,6 +57,7 @@ export async function readFixtures(): Promise<Fixture[] | null> {
     const { date, time } = formatDate(r.kickoff);
     return {
       id: r.id,
+      fixtureId: apiFixtureId(r.extId) ?? undefined,
       date,
       time,
       home: r.homeTeam,
@@ -77,6 +80,7 @@ export async function readResults(): Promise<Result[] | null> {
 
   return rows.map((r) => ({
     id: r.id,
+    fixtureId: apiFixtureId(r.extId) ?? undefined,
     date: formatDate(r.kickoff).date,
     home: r.homeTeam,
     away: r.awayTeam,
@@ -110,6 +114,14 @@ export async function readStandings(): Promise<StandingsResult | null> {
     season: rows[0].season,
     isPreviousSeason: rows[0].isPreviousSeason,
   };
+}
+
+/** Oxirgi o'ynalgan o'yin — bosh sahifadagi natija kartasi uchun. */
+export async function readLastMatch() {
+  return prisma.match.findFirst({
+    where: { homeScore: { not: null } },
+    orderBy: { kickoff: "desc" },
+  });
 }
 
 /** Eng yaqin kelgusi o'yin — sanoq uchun. */

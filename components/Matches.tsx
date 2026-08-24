@@ -1,5 +1,7 @@
 "use client";
 
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import TeamBadge from "./TeamBadge";
 import { MU } from "@/lib/data";
@@ -11,6 +13,27 @@ function TeamName({ name, badge }: { name: string; badge?: string | null }) {
       <TeamBadge badge={badge} team={name} size={22} />
       {name}
     </span>
+  );
+}
+
+/**
+ * O'yin qatori. Tafsilot sahifasi faqat API-Football'dan kelgan
+ * o'yinlarda bo'ladi — qolganlari oddiy qator bo'lib qolaveradi.
+ */
+function MatchRow({
+  fixtureId,
+  children,
+}: {
+  fixtureId?: number;
+  children: React.ReactNode;
+}) {
+  if (!fixtureId) return <li className="match">{children}</li>;
+  return (
+    <li>
+      <Link href={`/matches/${fixtureId}`} className="match match--link">
+        {children}
+      </Link>
+    </li>
   );
 }
 
@@ -62,7 +85,7 @@ export default function Matches({ fixtures, results }: Props) {
           <div className="tab-panel is-active">
             <ul className="match-list">
               {fixtures.map((m) => (
-                <li className="match" key={m.id}>
+                <MatchRow key={m.id} fixtureId={m.fixtureId}>
                   <div className="match__date">
                     <b>{m.date}</b>
                     {m.time}
@@ -75,8 +98,9 @@ export default function Matches({ fixtures, results }: Props) {
                   <div className="match__meta">
                     <span className="match__comp">{m.comp}</span>
                     <span className="pill pill--d">{m.venue}</span>
+                    {m.fixtureId && <ChevronRight size={16} className="match__arrow" />}
                   </div>
-                </li>
+                </MatchRow>
               ))}
             </ul>
           </div>
@@ -86,7 +110,7 @@ export default function Matches({ fixtures, results }: Props) {
               {results.map((m) => {
                 const o = outcome(m);
                 return (
-                  <li className="match" key={m.id}>
+                  <MatchRow key={m.id} fixtureId={m.fixtureId}>
                     <div className="match__date">
                       <b>{m.date}</b>
                       {m.comp}
@@ -100,13 +124,18 @@ export default function Matches({ fixtures, results }: Props) {
                     </div>
                     <div className="match__meta">
                       <span className={`pill ${o.cls}`}>{o.label}</span>
+                      {m.fixtureId && <ChevronRight size={16} className="match__arrow" />}
                     </div>
-                  </li>
+                  </MatchRow>
                 );
               })}
             </ul>
           </div>
         )}
+
+        <p className="section-more reveal">
+          <Link href="/matches">Barcha o'yinlar, filtrlar va tafsilotlar →</Link>
+        </p>
       </div>
     </section>
   );

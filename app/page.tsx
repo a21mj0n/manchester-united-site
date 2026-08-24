@@ -12,11 +12,14 @@ import Footer from "@/components/Footer";
 import ToTop from "@/components/ToTop";
 import UnofficialNotice from "@/components/UnofficialNotice";
 import RevealProvider from "@/components/RevealProvider";
-import { readNextKickoff } from "@/lib/db-read";
+import LiveBanner from "@/components/LiveBanner";
+import LastMatch from "@/components/LastMatch";
 import { getPublishedNews } from "@/lib/news";
 import {
   getFixtures,
+  getLastMatch,
   getLegends,
+  getNextMatch,
   getResults,
   getSquad,
   getStandings,
@@ -37,7 +40,7 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   // Server komponentida ma'lumot olinadi — backend qo'shilganda
   // faqat lib/queries.ts o'zgaradi, bu yer o'sha-o'shaligicha qoladi.
-  const [squad, fixtures, results, standingsData, timeline, legends, news, nextMatch] =
+  const [squad, fixtures, results, standingsData, timeline, legends, news, nextMatch, lastMatch] =
     await Promise.all([
       getSquad(),
       getFixtures(),
@@ -46,7 +49,8 @@ export default async function HomePage() {
       getTimeline(),
       getLegends(),
       getPublishedNews(),
-      readNextKickoff(),
+      getNextMatch(),
+      getLastMatch(),
     ]);
 
   return (
@@ -55,6 +59,7 @@ export default async function HomePage() {
       <Header />
       <main>
         <Hero />
+        <LiveBanner />
         <UnofficialNotice />
         <NextMatch
           kickoff={(nextMatch?.kickoff ?? getNextKickoff()).toISOString()}
@@ -71,6 +76,7 @@ export default async function HomePage() {
               : undefined
           }
         />
+        {lastMatch && <LastMatch match={lastMatch} />}
         <Standings
           rows={standingsData.rows}
           season={standingsData.season}

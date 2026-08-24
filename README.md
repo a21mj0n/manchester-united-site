@@ -27,15 +27,28 @@ app/
   layout.tsx           # root layout, next/font (Anton + Inter), metadata
   page.tsx             # bosh sahifa — server component, ma'lumotni o'zi oladi
   globals.css          # butun dizayn (klub ranglari :root da)
+  matches/             # o'yinlar ro'yxati + [id] tafsilot sahifasi
+  standings/           # to'liq turnir jadvali
+  squad/               # tarkib + [id] futbolchi statistikasi
   api/
     join/route.ts      # POST — fan-klub arizasi
     squad/route.ts     # GET  — tarkib (?pos=FW filtri bilan)
     standings/route.ts # GET  — turnir jadvali
+    matches/route.ts   # GET  — mavsum o'yinlari (?season=2026)
+    matches/[id]/      # GET  — o'yin tafsilotlari
+    live/route.ts      # GET  — jonli o'yin (yoki null)
 components/            # bo'limlar: Header, Hero, Squad, Matches, ...
+config/
+  football.ts          # team ID, musobaqalar, mavsum, kesh muddatlari
+types/
+  football.ts          # API-Football javob type'lari + domain type'lar
 lib/
-  types.ts             # TypeScript interfeyslari
+  types.ts             # sayt bo'ylab ishlatiladigan interfeyslar
   data.ts              # demo ma'lumotlar
   queries.ts           # ma'lumot qatlami (async — baza uchun tayyor)
+  matches.ts           # /matches sahifasi uchun manba tanlash
+  live.ts              # jonli o'yin (faqat o'yin oynasida so'raladi)
+  football/            # API-Football: client, fixtures, standings, players, teams
   schedule.ts          # keyingi o'yin vaqtini hisoblash
 public/assets/         # SVG emblema, favicon, fon naqshlari
 legacy/                # eskirgan statik HTML/CSS/JS versiya — o'chirsa bo'ladi
@@ -141,11 +154,15 @@ Ikki bosqichli zaxira:
 2. API umuman javob bermasa — `lib/data.ts` dagi demo ma'lumot ishlatiladi,
    ya'ni sayt baribir ochiladi
 
-## Jamoa tarkibi — real ma'lumot
+## API-Football integratsiyasi
 
-Manba: [API-Football](https://www.api-football.com) — `FOOTBALL_API_KEY` kerak.
-Beradi: joriy ro'yxat, o'yinchi raqami, pozitsiyasi, yoshi va rasmi.
-Javob **24 soat keshlanadi** (bepul tarifda kuniga 100 so'rov).
+Manba: [API-Football v3](https://www.api-football.com/documentation-v3) —
+`FOOTBALL_API_KEY` kerak. Kalit **faqat serverda** o'qiladi; brauzer API
+bilan bevosita gaplashmaydi:
+
+```
+Brauzer → Next.js server / route handler → API-Football
+```
 
 Kalitni o'rnatish (terminaldan o'qiladi, git'ga tushmaydi):
 
@@ -153,21 +170,105 @@ Kalitni o'rnatish (terminaldan o'qiladi, git'ga tushmaydi):
 ./deploy/set-football-key.sh
 ```
 
-Kalit yo'q bo'lsa `lib/data.ts` dagi demo tarkib ko'rsatiladi.
+### Qaysi bo'lim nimani beradi
 
-### Nega o'yinlar va jadval bu API dan olinmaydi
+| Bo'lim | Endpoint | Kesh |
+|---|---|---|
+| Keyingi o'yin | `fixtures?team=33&next=1` | 15 daqiqa |
+| Oxirgi o'yin | `fixtures?team=33&last=1` | 15 daqiqa |
+| Mavsum o'yinlari | `fixtures?team=33&season=…` | 15 daqiqa |
+| O'yin tafsilotlari | `fixtures?id=…` | tugagan 60 daq. / jonli 2 daq. |
+| Voqealar | `fixtures/events?fixture=…` | o'yin holatiga qarab |
+| Tarkiblar | `fixtures/lineups?fixture=…` | o'yin holatiga qarab |
+| Statistika | `fixtures/statistics?fixture=…` | o'yin holatiga qarab |
+| Turnir jadvali | `standings?league=39&season=…` | 15 daqiqa |
+| Jamoa tarkibi | `players/squads?team=33` | 24 soat |
+| Futbolchi statistikasi | `players?id=…&season=…` | 6 soat |
+| Jonli o'yin | `fixtures?live=all` | 2 daqiqa |
 
-Bepul tarifda tekshirib ko'rilgan cheklovlar:
+Kesh muddatlari `config/football.ts` dagi `CACHE` da — bir joyda
+o'zgartiriladi. Kalit yo'q bo'lsa so'rov umuman ketmaydi.
 
-| Imkoniyat | Holat |
+Tarkiblar ikki ko'rinishda: **sxema** (maydon ustidagi joylashuv) va
+**ro'yxat**. Joylashuv API beradigan `grid` ("qator:ustun") qiymatidan
+hisoblanadi — 1-qator darvozabon, 1-ustun chap qanot. Uy egalari
+chapdan o'ngga hujum qiladi, mehmonlar teskarisiga, shuning uchun
+mehmon jamoada ustunlar teskari o'qiladi
+([components/LineupPitch.tsx](components/LineupPitch.tsx)).
+Manba `grid` bermagan o'yinlarda faqat ro'yxat ko'rsatiladi.
+
+### Team ID va mavsum
+
+`config/football.ts`:
+
+- `MANCHESTER_UNITED_TEAM_ID = 33` — `GET /teams?id=33` orqali tekshiriladi;
+  har sinxronizatsiyada `verifyTeamId()` ishlaydi va natija `/admin/sync`
+  sahifasida ko'rinadi
+- `currentApiSeason()` — sanadan hisoblanadi (mavsum iyulda almashadi),
+  `FOOTBALL_SEASON` env orqali qo'lda ham belgilanadi
+- `COMPETITIONS` — Premer-liga, Chempionlar ligasi, FA Kubogi, EFL va h.k.
+  Hech qayerda hardcode qilinmaydi
+
+### Jonli o'yin
+
+`/api/live` — server tomonda **faqat o'yin oynasida** (boshlanishidan
+15 daqiqa oldin, tugashidan 150 daqiqa keyingacha) API ga murojaat
+qiladi, javob 2 daqiqa keshlanadi. Klient shu manzilni 90 soniyada bir
+so'rab turadi, ya'ni tashqi API ga klientdan hech qachon bormaydi.
+
+### Tarif (2026-08-24 da tekshirilgan)
+
+`GET /status` orqali: **Pro**, kuniga **7500** so'rov.
+
+Pro'da hammasi ochiq — joriy mavsum, `next`/`last` parametrlari,
+jonli hisob, events/lineups/statistics va futbolchi statistikasi.
+
+Solishtirish uchun **Free** tarifda tekshirilgan cheklovlar
+(tarif tushirilsa sayt shu holatga qaytadi, kod o'zgartirilmaydi):
+
+| Imkoniyat | Free |
 |---|---|
-| Jamoa tarkibi | ✅ ishlaydi |
-| Joriy mavsum jadvali | ❌ faqat 2022-2024 mavsumlari |
-| `next` / `last` parametrlari | ❌ yopiq |
-| Sana bo'yicha so'rov | ❌ faqat bugundan +2 kungacha |
+| `teams`, `players/squads`, `live=all` | ✅ |
+| `fixtures?season=` 2022–2024 | ✅ |
+| `fixtures/events` · `lineups` · `statistics` | ✅ |
+| `next` / `last` parametrlari | ❌ |
+| Joriy (2025–2026) mavsumlar | ❌ |
+| Kunlik limit | 100 |
 
-Shu sababli o'yinlar va turnir jadvali TheSportsDB dan olinadi —
-u kalitsiz ishlaydi va joriy mavsumni beradi.
+Kod har ikkala holatda ham ishlaydi: joriy mavsum yopiq bo'lsa
+zaxira manbaga tushadi, ochiq bo'lsa o'zi API-Football'ga o'tadi.
+
+### Limitni asrash
+
+Yopiq endpoint har safar qayta so'ralsa 100 talik limit bir necha
+soatda tugaydi. Shuning uchun `lib/football/client.ts` xato bergan
+so'rovni xotirada belgilab qo'yadi:
+
+- **tarif xatosi** → 6 soat so'ralmaydi (o'z-o'zidan tuzalmaydi)
+- **tarmoq xatosi** → 1 daqiqa (o'tkinchi bo'lishi mumkin)
+- `x-ratelimit-requests-remaining` nolga tushsa — barcha so'rovlar
+  1 soatga to'xtatiladi
+
+Bu Next.js keshining ustiga qo'shimcha qatlam: kesh muddati tugagach
+so'rov qaytadan ketishining oldini oladi.
+
+### Zaxira manbalar
+
+Har bir so'rov xatolikda `null` qaytaradi va sayt pastroq bosqichga
+tushadi — foydalanuvchi bo'sh sahifa ko'rmaydi, API xatosining
+tafsilotlari esa frontendga chiqmaydi (faqat server log'ida):
+
+```
+API-Football → baza (kunlik sinxronizatsiya) → TheSportsDB → demo ma'lumot
+```
+
+Turnir jadvalida tartib boshqacha — API-Football birinchi, chunki u
+to'liq 20 talik jadvalni beradi, TheSportsDB bepul tarifi esa faqat
+yuqori bir necha o'rinni.
+
+`events`, `lineups`, `statistics` va futbolchi statistikasi faqat
+API-Football'da bor — kalit yo'q bo'lsa bu sahifalar tushunarli xato
+holati ko'rsatadi.
 
 ## Kunlik sinxronizatsiya
 
@@ -176,10 +277,16 @@ ma'lumot olib bazaga yozadi. Sayt esa bazadan o'qiydi.
 
 | Bo'lim | Manba |
 |---|---|
-| Tarkib | API-Football (`FOOTBALL_API_KEY`) |
-| Keyingi o'yin, o'yinlar | TheSportsDB |
-| Turnir jadvali | TheSportsDB |
+| Team ID tekshiruvi | API-Football (`FOOTBALL_API_KEY`) |
+| Tarkib | API-Football |
+| O'yinlar | API-Football → TheSportsDB |
+| Turnir jadvali | API-Football → TheSportsDB |
 | Jamoa gerblari | Premer-liga (bir marta yuklab olinadi) |
+
+O'yin yozuvidagi `extId` manba prefiksi bilan saqlanadi —
+`af:1557368` (API-Football) yoki `sdb:2052641` (TheSportsDB).
+Shu bois sayt qaysi o'yin uchun tafsilot sahifasi ochilishini
+biladi ([lib/match-id.ts](lib/match-id.ts)).
 
 Yangiliklar sinxronizatsiyaga kirmaydi — ular admin panelda qo'lda
 yoziladi (`/admin/news`).
