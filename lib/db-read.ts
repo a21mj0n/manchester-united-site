@@ -47,7 +47,7 @@ export async function readFixtures(): Promise<Fixture[] | null> {
   const rows = await prisma.match.findMany({
     where: { homeScore: null, kickoff: { gte: new Date(Date.now() - 3 * 3600 * 1000) } },
     orderBy: { kickoff: "asc" },
-    take: 8,
+    take: 5,
   });
   if (rows.length === 0) return null;
 
@@ -71,7 +71,7 @@ export async function readResults(): Promise<Result[] | null> {
   const rows = await prisma.match.findMany({
     where: { homeScore: { not: null } },
     orderBy: { kickoff: "desc" },
-    take: 8,
+    take: 5,
   });
   if (rows.length === 0) return null;
 

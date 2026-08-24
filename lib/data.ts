@@ -32,7 +32,6 @@ export const FIXTURES: Fixture[] = [
   { id: 3, date: "14-sentabr", time: "22:00", home: "Manchester United", away: "Liverpool",         comp: "Premer-liga", venue: "Old Trafford" },
   { id: 4, date: "21-sentabr", time: "19:30", home: "Manchester City",   away: "Manchester United", comp: "Derbi",       venue: "Etihad" },
   { id: 5, date: "28-sentabr", time: "20:00", home: "Manchester United", away: "Chelsea",           comp: "Premer-liga", venue: "Old Trafford" },
-  { id: 6, date: "5-oktabr",   time: "18:30", home: "Newcastle",         away: "Manchester United", comp: "Premer-liga", venue: "St James' Park" },
 ];
 
 export const RESULTS: Result[] = [
