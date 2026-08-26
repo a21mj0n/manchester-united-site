@@ -1,4 +1,4 @@
-import { CalendarDays, Flag, Ruler, Weight } from "lucide-react";
+import { ArrowLeftRight, CalendarDays, Flag, Ruler, Weight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -149,6 +149,11 @@ export default async function PlayerPage({
               </span>
             )}
           </div>
+          <p style={{ marginTop: 12 }}>
+            <Link className="chip" href={`/compare?p1=${profile.id}`}>
+              <ArrowLeftRight size={14} aria-hidden="true" /> Boshqa futbolchi bilan taqqoslash
+            </Link>
+          </p>
         </div>
       </div>
 

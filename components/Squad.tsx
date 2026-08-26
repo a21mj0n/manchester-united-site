@@ -153,6 +153,8 @@ export default function Squad({ players, bare }: Props) {
         {content}
         <p className="section-more reveal">
           <Link href="/squad">Tarkib va futbolchilar statistikasi →</Link>
+          {" · "}
+          <Link href="/compare">O&apos;yinchilarni taqqoslash ⇄</Link>
         </p>
       </div>
     </section>

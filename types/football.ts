@@ -232,11 +232,15 @@ export interface PlayerCompetitionStats {
   tackles: number;
   interceptions: number;
   dribblesWon: number;
+  dribbleAttempts: number;
   duelsWon: number;
+  duelsTotal: number;
   foulsDrawn: number;
   foulsCommitted: number;
   yellow: number;
   red: number;
+  penaltyScored: number;
+  penaltyMissed: number;
   /** Darvozabon uchun */
   saves: number;
   conceded: number;
