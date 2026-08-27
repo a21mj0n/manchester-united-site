@@ -470,6 +470,29 @@ ul{list-style:none}
 .to-top.is-visible{opacity:1;visibility:visible;transform:none}
 .to-top:hover{background:#ef3123;transform:translateY(-4px)}
 
+/* ---------- PWA o'rnatish banneri ---------- */
+.install-banner{
+  position:fixed;left:16px;right:16px;bottom:16px;z-index:95;
+  display:flex;align-items:center;gap:12px;
+  max-width:440px;margin:0 auto;padding:12px 14px;
+  background:rgba(14,14,19,.96);border:1px solid rgba(218,41,28,.45);border-radius:14px;
+  box-shadow:0 18px 44px -14px rgba(0,0,0,.85);
+  backdrop-filter:blur(10px);
+  animation:install-in .45s var(--ease) both;
+}
+@keyframes install-in{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.install-banner__icon{border-radius:10px;flex-shrink:0}
+.install-banner__text{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.install-banner__text strong{font-size:.9rem;white-space:nowrap}
+.install-banner__text span{color:var(--muted);font-size:.78rem;line-height:1.35}
+.install-banner__btn{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;font-size:.8rem;flex-shrink:0;white-space:nowrap}
+.install-banner__close{
+  display:grid;place-items:center;flex-shrink:0;
+  width:32px;height:32px;border-radius:50%;color:var(--muted);
+  transition:background .2s,color .2s;
+}
+.install-banner__close:hover{background:rgba(255,255,255,.09);color:#fff}
+
 /* ---------- Scroll reveal ---------- */
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .reveal.is-visible{opacity:1;transform:none}
