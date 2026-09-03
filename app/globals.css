@@ -1382,3 +1382,44 @@ a.chip{display:inline-flex;align-items:center;gap:7px;text-decoration:none}
 }
 .nav__link--support{display:inline-flex;align-items:center;gap:6px;color:var(--gold)}
 .nav__link--support::after{display:none}
+
+/* =========================================================
+   ADMIN — STATISTIKA
+   ========================================================= */
+.stats__tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+.stat-tile{
+  display:flex;flex-direction:column;gap:4px;padding:20px 22px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+}
+.stat-tile__label{color:var(--muted);font-size:.82rem;font-weight:600;text-transform:uppercase;letter-spacing:.6px}
+.stat-tile__value{font-family:var(--font-display);font-size:2.3rem;line-height:1.05;letter-spacing:.5px}
+.stat-tile__sub{color:var(--muted);font-size:.85rem}
+
+.stats__card{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:22px;margin-bottom:22px;
+}
+.stats__card-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:18px}
+.stats__card-head h2{font-size:1.05rem;letter-spacing:.3px}
+.stats__card-head span{color:var(--muted);font-size:.82rem}
+
+.bars{display:flex;align-items:flex-end;gap:2px;height:160px;padding-top:18px;border-bottom:1px solid var(--line)}
+.bars__col{flex:1;position:relative;height:100%;display:flex;flex-direction:column;justify-content:flex-end;min-width:0}
+.bars__col:hover .bars__bar{background:var(--red)}
+.bars__bar{width:100%;background:var(--gold);border-radius:4px 4px 0 0;min-height:0;transition:background .2s}
+.bars__label{
+  position:absolute;top:-2px;left:50%;transform:translateX(-50%);
+  font-size:.72rem;font-weight:700;color:var(--text);white-space:nowrap;
+}
+.bars__axis{display:flex;justify-content:space-between;margin-top:8px;color:var(--muted);font-size:.75rem}
+
+.stats__details{margin-top:16px}
+.stats__details summary{cursor:pointer;color:var(--muted);font-size:.85rem;font-weight:600;margin-bottom:12px}
+.stats__table{min-width:0}
+.stats__table td,.stats__table th{padding:10px 14px;font-size:.88rem}
+.stats__path{text-align:left!important;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.84rem!important}
+
+@media (max-width:680px){
+  .stats__tiles{grid-template-columns:1fr}
+  .bars{height:120px}
+}

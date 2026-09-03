@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ApplicationsTable from "@/components/admin/ApplicationsTable";
-import LogoutButton from "@/components/admin/LogoutButton";
+import AdminNav from "@/components/admin/AdminNav";
 import { getApplications, getApplicationStats } from "@/lib/applications";
 import { STATUS_LABELS } from "@/lib/status";
 
@@ -40,23 +40,7 @@ export default async function AdminPage({
             Jami {counts.all} ta ariza · {counts.new} tasi ko'rilmagan
           </p>
         </div>
-        <div className="admin__actions">
-          <Link href="/admin/squad" className="btn btn--ghost">Tarkib</Link>
-          <Link href="/admin/news" className="btn btn--ghost">
-            Yangiliklar
-          </Link>
-          <Link href="/admin/sync" className="btn btn--ghost">
-            Sinxronizatsiya
-          </Link>
-          <Link href="/admin/stream" className="btn btn--ghost">
-            Efir
-          </Link>
-          <Link href="/admin/support" className="btn btn--ghost">Donat</Link>
-          <Link href="/" className="btn btn--ghost">
-            Saytga
-          </Link>
-          <LogoutButton />
-        </div>
+        <AdminNav current="/admin" />
       </header>
 
       <nav className="filters">

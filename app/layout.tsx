@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Anton, Inter } from "next/font/google";
 import InstallPrompt from "@/components/InstallPrompt";
+import VisitBeacon from "@/components/VisitBeacon";
 import "./globals.css";
 
 const inter = Inter({
@@ -49,6 +50,7 @@ export default function RootLayout({
       <body>
         {children}
         <InstallPrompt />
+        <VisitBeacon />
       </body>
     </html>
   );

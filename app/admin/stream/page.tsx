@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import LogoutButton from "@/components/admin/LogoutButton";
+import AdminNav from "@/components/admin/AdminNav";
 import StreamForm from "@/components/admin/StreamForm";
 import { getSecretStreamUrl } from "@/lib/settings";
 
@@ -24,14 +24,7 @@ export default async function AdminStreamPage() {
             Tomosha sahifasidagi yashirin havola. Har o'yin oldidan yangilang.
           </p>
         </div>
-        <div className="admin__actions">
-          <Link href="/admin" className="btn btn--ghost">Arizalar</Link>
-          <Link href="/admin/squad" className="btn btn--ghost">Tarkib</Link>
-          <Link href="/admin/news" className="btn btn--ghost">Yangiliklar</Link>
-          <Link href="/admin/sync" className="btn btn--ghost">Sinxronizatsiya</Link>
-          <Link href="/admin/support" className="btn btn--ghost">Donat</Link>
-          <LogoutButton />
-        </div>
+        <AdminNav current="/admin/stream" />
       </header>
 
       <StreamForm initialUrl={url} />

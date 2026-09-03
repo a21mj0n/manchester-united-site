@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import LogoutButton from "@/components/admin/LogoutButton";
+import AdminNav from "@/components/admin/AdminNav";
 import NewsManager from "@/components/admin/NewsManager";
 import { getAllNews } from "@/lib/news";
 
@@ -25,16 +24,7 @@ export default async function AdminNewsPage() {
               : `${posts.length} ta yozuv · ${posts.filter((p) => p.published).length} tasi saytda`}
           </p>
         </div>
-        <div className="admin__actions">
-          <Link href="/admin" className="btn btn--ghost">Arizalar</Link>
-          <Link href="/admin/squad" className="btn btn--ghost">Tarkib</Link>
-          <Link href="/admin/sync" className="btn btn--ghost">
-            Sinxronizatsiya
-          </Link>
-          <Link href="/" className="btn btn--ghost">Saytga</Link>
-          <Link href="/admin/support" className="btn btn--ghost">Donat</Link>
-          <LogoutButton />
-        </div>
+        <AdminNav current="/admin/news" />
       </header>
 
       <NewsManager

@@ -157,3 +157,19 @@ model SyncLog {
 
   @@index([startedAt])
 }
+
+/// Tashriflar — kun, tashrifchi va sahifa kesimida.
+/// Shaxsiy ma'lumot saqlanmaydi: `visitor` bu IP + brauzer + kunlik tuzdan
+/// olingan xesh, ertasi kuni uni qayta tiklab bo'lmaydi.
+model Visit {
+  id      Int    @id @default(autoincrement())
+  /// Toshkent vaqti bo'yicha kun: YYYY-MM-DD
+  day     String
+  visitor String
+  path    String
+  /// Shu tashrifchi shu kuni shu sahifani necha marta ochgani
+  count   Int    @default(1)
+
+  @@unique([day, visitor, path])
+  @@index([day])
+}

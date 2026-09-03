@@ -6,6 +6,7 @@ import { hasFootballKey } from "../football/client";
 import { fetchLeagueStandings } from "../football/standings";
 import { fetchSeasonFixtures } from "../football/fixtures";
 import { verifyTeamId } from "../football/teams";
+import { pruneVisits } from "../visits";
 
 /**
  * Kunlik sinxronizatsiya: ochiq manbalardan ma'lumot olib bazaga yozadi.
@@ -368,6 +369,15 @@ export async function runSync(): Promise<{ ok: boolean; sections: SectionResult[
     syncSquad,
     () => syncMatches(badges),
     () => syncStandings(badges),
+    async () => {
+      const deleted = await pruneVisits();
+      return {
+        section: "tashriflar",
+        ok: true,
+        count: deleted,
+        message: deleted ? ` ta eski yozuv o'chirildi` : "eski yozuv yo'q",
+      };
+    },
   ];
 
   for (const task of tasks) {

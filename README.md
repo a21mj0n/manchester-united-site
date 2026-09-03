@@ -118,6 +118,13 @@ Telegram). Hammasi `Setting` jadvalida `donate` kaliti ostida JSON ko'rinishida
 saqlanadi (`lib/donate.ts`), kodga yozilmaydi. Bo'sh usul sahifada chiqmaydi,
 maqsad 0 bo'lsa progress-bar ko'rinmaydi.
 
+`/admin/stats` — tashriflar statistikasi: bugun, 7 va 30 kun, kunlik diagramma va
+eng ko'p ochilgan sahifalar. Brauzer har sahifada `/api/hit` ga signal yuboradi
+(`components/VisitBeacon.tsx`), server uni `Visit` jadvaliga kun, sahifa va
+tashrifchi xeshi kesimida yozadi (`lib/visits.ts`). Xesh IP + brauzer + kunlik
+tuzdan olinadi, shaxsiy ma'lumot saqlanmaydi. Botlar, admin va login sahifalari
+sanalmaydi. Tarix 90 kun, eskisi kunlik sinxronizatsiyada o'chiriladi.
+
 ### Xavfsizlik
 
 Tashqi kutubxonasiz: parol **scrypt** bilan xeshlanadi (`node:crypto`),
