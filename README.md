@@ -29,6 +29,7 @@ app/
   globals.css          # butun dizayn (klub ranglari :root da)
   matches/             # o'yinlar ro'yxati + [id] tafsilot sahifasi
   standings/           # to'liq turnir jadvali
+  support/             # saytni qo'llab-quvvatlash (donat) sahifasi
   squad/               # tarkib + [id] futbolchi statistikasi
   api/
     join/route.ts      # POST — fan-klub arizasi
@@ -110,6 +111,12 @@ Qolgan kod o'zgarishsiz qoladi.
 qidiruv va holatni o'zgartirish (`Yangi` → `Qabul qilingan` / `Rad etilgan`).
 
 Kirish `/login` orqali, parol bilan. Sessiya 12 soat amal qiladi.
+
+`/admin/support` — qo'llab-quvvatlash sahifasi (`/support`) sozlamalari: oylik
+maqsad, shu oyda yig'ilgan summa va to'lov rekvizitlari (Payme, Click, karta,
+Telegram). Hammasi `Setting` jadvalida `donate` kaliti ostida JSON ko'rinishida
+saqlanadi (`lib/donate.ts`), kodga yozilmaydi. Bo'sh usul sahifada chiqmaydi,
+maqsad 0 bo'lsa progress-bar ko'rinmaydi.
 
 ### Xavfsizlik
 

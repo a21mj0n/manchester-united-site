@@ -43,6 +43,7 @@ export default async function AdminSyncPage() {
           <Link href="/admin" className="btn btn--ghost">Arizalar</Link>
           <Link href="/admin/squad" className="btn btn--ghost">Tarkib</Link>
           <Link href="/admin/news" className="btn btn--ghost">Yangiliklar</Link>
+          <Link href="/admin/support" className="btn btn--ghost">Donat</Link>
           <LogoutButton />
         </div>
       </header>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { Heart, Menu, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -75,6 +75,14 @@ export default function Header() {
               {l.label}
             </a>
           ))}
+          <a
+            href="/support"
+            className="nav__link nav__link--support"
+            onClick={() => setOpen(false)}
+          >
+            <Heart size={15} aria-hidden="true" />
+            Qo'llab-quvvatlash
+          </a>
           <a
             href="#fanclub"
             className="nav__link nav__link--cta"

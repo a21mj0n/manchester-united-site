@@ -32,6 +32,7 @@ export default async function AdminNewsPage() {
             Sinxronizatsiya
           </Link>
           <Link href="/" className="btn btn--ghost">Saytga</Link>
+          <Link href="/admin/support" className="btn btn--ghost">Donat</Link>
           <LogoutButton />
         </div>
       </header>

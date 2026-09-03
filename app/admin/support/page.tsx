@@ -2,26 +2,26 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import LogoutButton from "@/components/admin/LogoutButton";
-import StreamForm from "@/components/admin/StreamForm";
-import { getSecretStreamUrl } from "@/lib/settings";
+import SupportForm from "@/components/admin/SupportForm";
+import { getDonateSettings } from "@/lib/donate";
 
 export const metadata: Metadata = {
-  title: "Yashirin efir — Admin panel",
+  title: "Donat — Admin panel",
   robots: { index: false, follow: false },
 };
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminStreamPage() {
-  const url = await getSecretStreamUrl();
+export default async function AdminSupportPage() {
+  const settings = await getDonateSettings();
 
   return (
     <main className="admin">
       <header className="admin__head">
         <div>
-          <h1 className="admin__title">Yashirin efir</h1>
+          <h1 className="admin__title">Donat</h1>
           <p className="admin__sub">
-            Tomosha sahifasidagi yashirin havola. Har o'yin oldidan yangilang.
+            Qo'llab-quvvatlash sahifasidagi oylik maqsad va to'lov rekvizitlari.
           </p>
         </div>
         <div className="admin__actions">
@@ -29,16 +29,16 @@ export default async function AdminStreamPage() {
           <Link href="/admin/squad" className="btn btn--ghost">Tarkib</Link>
           <Link href="/admin/news" className="btn btn--ghost">Yangiliklar</Link>
           <Link href="/admin/sync" className="btn btn--ghost">Sinxronizatsiya</Link>
-          <Link href="/admin/support" className="btn btn--ghost">Donat</Link>
+          <Link href="/admin/stream" className="btn btn--ghost">Efir</Link>
           <LogoutButton />
         </div>
       </header>
 
-      <StreamForm initialUrl={url} />
+      <SupportForm initial={settings} />
 
       <p className="note">
-        Havola <Link href="/tomosha">/tomosha</Link> sahifasida ⚽ tugmasi 5
-        marta bosilganda ko'rinadi.
+        Sahifa: <Link href="/support">/support</Link>. Rekvizitlar bazada saqlanadi,
+        kodga yozilmaydi.
       </p>
     </main>
   );

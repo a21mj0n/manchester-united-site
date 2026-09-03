@@ -51,6 +51,7 @@ export default async function AdminPage({
           <Link href="/admin/stream" className="btn btn--ghost">
             Efir
           </Link>
+          <Link href="/admin/support" className="btn btn--ghost">Donat</Link>
           <Link href="/" className="btn btn--ghost">
             Saytga
           </Link>

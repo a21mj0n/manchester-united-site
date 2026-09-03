@@ -1335,3 +1335,50 @@ a.chip{display:inline-flex;align-items:center;gap:7px;text-decoration:none}
   .statbar__val{font-size:.9rem}
   .statbar__label{font-size:.72rem}
 }
+
+/* =========================================================
+   QO'LLAB-QUVVATLASH (/support)
+   ========================================================= */
+.support__h2{
+  font-family:var(--font-display);font-size:1.4rem;letter-spacing:1px;
+  text-transform:uppercase;margin:44px 0 18px;
+}
+.support__goal{
+  background:linear-gradient(165deg,#15151c,#0d0d12);
+  border:1px solid rgba(251,225,34,.3);border-radius:var(--radius);
+  padding:26px 28px;box-shadow:var(--shadow);max-width:720px;
+}
+.support__goal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.support__percent{font-family:var(--font-display);font-size:2rem;color:var(--gold);line-height:1}
+.progress{height:14px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+.progress__bar{
+  height:100%;border-radius:999px;
+  background:linear-gradient(90deg,var(--red),var(--gold));
+  transition:width .8s var(--ease);
+}
+.support__nums{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px;color:var(--muted);font-size:.9rem}
+.support__nums b{color:var(--text)}
+
+.pay-card .btn{align-self:flex-start;margin-top:6px}
+.pay-card__number{
+  font-family:var(--font-display);font-size:clamp(1.05rem,1.6vw,1.35rem);letter-spacing:1px;
+  color:var(--gold);margin-top:4px;white-space:nowrap;
+}
+.pay-card__owner{color:var(--muted);font-size:.85rem;letter-spacing:.5px;text-transform:uppercase;flex:0!important}
+.copy-btn{
+  display:inline-flex;align-items:center;gap:7px;align-self:flex-start;
+  padding:9px 16px;border-radius:10px;font-size:.84rem;font-weight:700;
+  border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);
+  transition:all .2s var(--ease);
+}
+.copy-btn:hover{border-color:var(--gold);color:var(--gold)}
+.support__note{display:flex;align-items:center;gap:8px;margin-top:40px}
+
+.news-form__row--2{grid-template-columns:repeat(2,1fr)}
+@media (max-width:680px){
+  .support__goal{padding:20px 18px}
+  .support__nums{flex-direction:column;gap:6px}
+  .news-form__row--2{grid-template-columns:1fr}
+}
+.nav__link--support{display:inline-flex;align-items:center;gap:6px;color:var(--gold)}
+.nav__link--support::after{display:none}
