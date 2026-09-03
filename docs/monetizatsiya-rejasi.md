@@ -57,7 +57,7 @@ a'zolik ichidagi kichik bonus sifatida qoldiriladi.
 
 - Sahifa: "Saytni qo'llab-quvvatlash".
 - Oylik xarajat (server + API) ochiq ko'rsatiladi, yig'ilgan summa progress-bar bilan.
-- To'lov usullari: Payme/Click havolasi, karta raqami, Telegram Stars botda.
+- To'lov usullari: Payme/Click havolasi, karta raqami, Telegram orqali bog'lanish.
 - Rekvizitlar admin panelda kiritiladi (`Setting` jadvali), kodga yozilmaydi.
 - Yig'ilgan summa admin panelda qo'lda yangilanadi (webhook keyin).
 
@@ -90,20 +90,20 @@ yoki Stars orqali.
 
 - Payme Business, Click, Uzum merchant uchun YaTT yoki yuridik shaxs kerak.
 - Boshlanish uchun "o'zini o'zi band qilgan" maqomi yetarli, soliq oddiy.
-- Usiz faqat karta raqami, P2P havola va Telegram Stars qoladi.
+- Usiz faqat karta raqami va P2P havola qoladi.
 - API-Football shartnomasini ma'lumotni pullik ko'rsatish bo'yicha tekshirish.
 
 ## Texnik reja
 
 ### Bosqich 1 (donat) — kodga minimal o'zgarish
 
-**Holat: bajarildi (2026-09-03).** Telegram Stars botda hali yo'q, keyingi qadam.
+**Holat: bajarildi (2026-09-03).**
 
 - `app/support/page.tsx` — donat sahifasi.
 - `Setting` jadvalida bitta `donate` kaliti, JSON qiymat (`lib/donate.ts`).
 - Admin panelda forma: `/admin/support` (`components/admin/SupportForm.tsx`, `/api/admin/support`).
 - Header va footer'da "Qo'llab-quvvatlash" havolasi.
-- Telegram botda `/donate` buyrug'i va Stars invoice — **hali qilinmadi**, bot webhook talab qiladi.
+- Telegram Stars: **hozircha kerak emas** (qaror 2026-09-03). Sabab: komissiya katta, pul 21 kundan keyin TON orqali keladi, O'zbekistonda Stars sotib olish qiyin. Kerak bo'lsa keyin bot webhook bilan qo'shiladi.
 
 ### Bosqich 2 (a'zolik) — yangi modellar
 
@@ -165,7 +165,7 @@ model Payment {
 
 ## Bajarish tartibi
 
-1. **Shu hafta:** donat sahifasi, oylik maqsad progress-bari, Telegram Stars botda.
+1. **Bajarildi:** donat sahifasi, oylik maqsad progress-bari. Admin panelda rekvizitlarni kiritish qoldi.
 2. **Keyin:** YaTT ochish, Telegram Login, pullik a'zolik, yopiq guruhga avtomatik qo'shish.
 3. **Undan keyin:** homiy bloklari, merch, tadbir chiptalari.
 
@@ -173,4 +173,4 @@ model Payment {
 
 - Oylik a'zolik narxi qancha bo'ladi? (Taxminan: server + API xarajati / kutilayotgan a'zolar soni.)
 - Yopiq Telegram guruh yangi ochiladimi yoki mavjudi ishlatiladimi?
-- YaTT qachon ochiladi? Ungacha faqat karta raqami va Stars.
+- YaTT qachon ochiladi? Ungacha faqat karta raqami va P2P havola.
