@@ -30,6 +30,8 @@ app/
   matches/             # o'yinlar ro'yxati + [id] tafsilot sahifasi
   standings/           # to'liq turnir jadvali
   support/             # saytni qo'llab-quvvatlash (donat) sahifasi
+  shop/                # do'kon: katalog + [slug] mahsulot sahifasi va buyurtma formasi
+  uploads/[name]/      # yuklangan mahsulot rasmlarini beradi
   squad/               # tarkib + [id] futbolchi statistikasi
   api/
     join/route.ts      # POST — fan-klub arizasi
@@ -124,6 +126,16 @@ eng ko'p ochilgan sahifalar. Brauzer har sahifada `/api/hit` ga signal yuboradi
 tashrifchi xeshi kesimida yozadi (`lib/visits.ts`). Xesh IP + brauzer + kunlik
 tuzdan olinadi, shaxsiy ma'lumot saqlanmaydi. Botlar, admin va login sahifalari
 sanalmaydi. Tarix 90 kun, eskisi kunlik sinxronizatsiyada o'chiriladi.
+
+`/admin/shop` va `/admin/orders` — do'kon. Oldindan buyurtma rejimi: onlayn to'lov
+yo'q, muxlis `/shop/[slug]` sahifasida buyurtma qoldiradi (`POST /api/orders`),
+adminga Telegram xabar keladi, to'lov va yetkazish kelishiladi, holat admin panelda
+o'zgartiriladi (yangi → bog'lanildi → to'landi → yetkazildi). Mahsulot rasmlari
+`UPLOAD_DIR` ga saqlanadi (serverda `data/uploads`, lokal `public/uploads`) va
+`/uploads/<nom>` orqali beriladi — reliz papkasidan tashqarida, deploy tegmaydi.
+Buyurtmasi bor mahsulot o'chirilmaydi, sotuvdan olinadi. Kod: `lib/shop.ts`,
+`lib/uploads.ts`; client komponentlar uchun konstantalar `lib/shop-constants.ts`
+(Prisma importisiz).
 
 ### Xavfsizlik
 

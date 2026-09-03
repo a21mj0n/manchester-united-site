@@ -10,6 +10,8 @@ const ITEMS = [
   { href: "/admin/stream", label: "Efir" },
   { href: "/admin/support", label: "Donat" },
   { href: "/admin/stats", label: "Statistika" },
+  { href: "/admin/shop", label: "Do'kon" },
+  { href: "/admin/orders", label: "Buyurtmalar" },
 ];
 
 /** Admin sahifalari sarlavhasidagi bo'limlar ro'yxati. Joriy sahifa ko'rsatilmaydi. */

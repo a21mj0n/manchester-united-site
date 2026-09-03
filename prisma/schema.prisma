@@ -173,3 +173,45 @@ model Visit {
   @@unique([day, visitor, path])
   @@index([day])
 }
+
+/// Do'kon mahsuloti — fan-klub atributikasi, oldindan buyurtma rejimida
+model Product {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  name        String
+  description String   @default("")
+  /// Narx, so'mda
+  price       Int
+  /// O'lchamlar vergul bilan: "S,M,L,XL". Bo'sh bo'lsa o'lcham tanlanmaydi.
+  sizes       String   @default("")
+  /// Rasm yo'li: /uploads/<fayl>
+  image       String?
+  active      Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  orders      Order[]
+
+  @@index([active, sortOrder])
+}
+
+/// Buyurtma — to'lov va yetkazish admin bilan kelishiladi
+model Order {
+  id          Int      @id @default(autoincrement())
+  productId   Int
+  product     Product  @relation(fields: [productId], references: [id])
+  /// Mahsulot nomi va narxi buyurtma paytidagi holatda
+  productName String
+  price       Int
+  size        String   @default("")
+  qty         Int      @default(1)
+  name        String
+  contact     String
+  city        String
+  note        String   @default("")
+  /// new | contacted | paid | delivered | cancelled
+  status      String   @default("new")
+  createdAt   DateTime @default(now())
+
+  @@index([status, createdAt])
+}

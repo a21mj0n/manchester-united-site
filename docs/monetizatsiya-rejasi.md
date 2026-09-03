@@ -159,15 +159,17 @@ model Payment {
 
 ### Bosqich 3 (homiylik, merch, tadbirlar)
 
-- `Sponsor` modeli va admin panelda banner boshqaruvi.
-- Merch buyurtma formasi (`/api/orders`), to'lov Payme.
+- Merch: **bajarildi (2026-09-03)** — `/shop`, oldindan buyurtma rejimi, `Product` va `Order`
+  modellari, admin `/admin/shop` va `/admin/orders`. Onlayn to'lov keyin (Payme merchant).
+  Huquqiy: faqat fan-klubning o'z brendi, MU gerbi va rasmiy forma dizayni ishlatilmaydi.
+- `Sponsor` modeli va admin panelda banner boshqaruvi — homiylar paydo bo'lganda.
 - `Event` va `Ticket` modellari, QR-kod bilan chipta.
 
 ## Bajarish tartibi
 
 1. **Bajarildi:** donat sahifasi, oylik maqsad progress-bari. Admin panelda rekvizitlarni kiritish qoldi.
 2. **Keyin:** YaTT ochish, Telegram Login, pullik a'zolik, yopiq guruhga avtomatik qo'shish.
-3. **Undan keyin:** homiy bloklari, merch, tadbir chiptalari.
+3. **Undan keyin:** homiy bloklari, tadbir chiptalari. Merch do'koni tayyor, mahsulot kiritish qoldi.
 
 ## Ochiq savollar
 

@@ -25,6 +25,8 @@ Environment=PORT=3000
 Environment=DATABASE_URL=file:/var/www/manchester-united-site/data/app.db
 # Gerblar reliz papkasidan tashqarida saqlanadi, nginx ularni /badges/ da beradi
 Environment=BADGE_DIR=/var/www/manchester-united-site/data/badges
+# Do'kon mahsulotlari rasmlari — reliz papkasidan tashqarida
+Environment=UPLOAD_DIR=/var/www/manchester-united-site/data/uploads
 # Faqat lokal interfeys — tashqariga nginx chiqaradi
 Environment=HOSTNAME=127.0.0.1
 

@@ -19,3 +19,6 @@ prisma/*.db-journal
 
 # Sinxronizatsiya yuklab oladigan gerblar
 /public/badges
+
+# Do'kon mahsulotlari rasmlari (lokal)
+/public/uploads

@@ -75,6 +75,9 @@ export default function Header() {
               {l.label}
             </a>
           ))}
+          <a href="/shop" className="nav__link" onClick={() => setOpen(false)}>
+            Do'kon
+          </a>
           <a
             href="/support"
             className="nav__link nav__link--support"

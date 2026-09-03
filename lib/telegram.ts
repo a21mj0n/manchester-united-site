@@ -41,6 +41,35 @@ export function buildApplicationMessage(app: ApplicationNotice): string {
   return lines.join("\n");
 }
 
+export interface OrderNotice {
+  id: number;
+  productName: string;
+  price: number;
+  size: string;
+  qty: number;
+  name: string;
+  contact: string;
+  city: string;
+  note: string;
+}
+
+/** Yangi buyurtma haqidagi xabar matni. */
+export function buildOrderMessage(o: OrderNotice): string {
+  const sum = String(o.price * o.qty).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  const lines = [
+    "🛍 <b>Yangi buyurtma</b>",
+    "",
+    `<b>Mahsulot:</b> ${escapeHtml(o.productName)}${o.size ? ` (${escapeHtml(o.size)})` : ""} × ${o.qty}`,
+    `<b>Summa:</b> ${sum} so'm`,
+    `<b>Ism:</b> ${escapeHtml(o.name)}`,
+    `<b>Aloqa:</b> ${escapeHtml(o.contact)}`,
+    `<b>Shahar:</b> ${escapeHtml(o.city)}`,
+  ];
+  if (o.note) lines.push(`<b>Izoh:</b> ${escapeHtml(o.note)}`);
+  lines.push("", `<a href="https://manchester-united.uz/admin/orders">Buyurtmalarni ko'rish</a>`);
+  return lines.join("\n");
+}
+
 /**
  * Xabarni yuboradi. Hech qachon xato tashlamaydi —
  * bildirishnoma yetkazilmagani asosiy oqimni buzmasligi kerak.

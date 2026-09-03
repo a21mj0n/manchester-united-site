@@ -7,6 +7,7 @@ const LINKS = [
   { href: "#squad", label: "Tarkib" },
   { href: "#history", label: "Tarix" },
   { href: "#fanclub", label: "Fan-klub" },
+  { href: "/shop", label: "Do'kon" },
   { href: "/support", label: "Qo'llab-quvvatlash" },
 ];
 
