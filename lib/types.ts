@@ -21,6 +21,8 @@ export interface Fixture {
   id: number;
   /** API-Football fixture id — bo'lsa tafsilot sahifasi ochiladi */
   fixtureId?: number;
+  /** Aniq boshlanish vaqti (ISO, UTC) — manba bersa */
+  utcDate?: string;
   date: string;
   time: string;
   home: string;
@@ -35,6 +37,8 @@ export interface Result {
   id: number;
   /** API-Football fixture id — bo'lsa tafsilot sahifasi ochiladi */
   fixtureId?: number;
+  /** Aniq boshlanish vaqti (ISO, UTC) — manba bersa */
+  utcDate?: string;
   date: string;
   home: string;
   away: string;

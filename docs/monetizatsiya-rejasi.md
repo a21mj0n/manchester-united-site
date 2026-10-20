@@ -13,6 +13,9 @@ Sana: 2026-09-03
 - `/tomosha` sahifasida bazadan o'qiladigan yashirin efir havolasi bor (`Setting` jadvali).
 - PWA bor, push-xabarnomalar yo'q.
 - Baza: Prisma 7 + SQLite.
+- 2026-yil oktabr: API-Football obunasi tugadi, sayt daromad keltirguncha
+  yangilanmaydi. O'yinlar, jadval va tarkib football-data.org bepul tarifidan
+  olinadi; tafsilot va statistika sahifalari kalit qaytguncha yopiq.
 
 ## Dastlabki fikrlar tahlili
 

@@ -27,6 +27,7 @@ import {
   getTimeline,
 } from "@/lib/queries";
 import { getNextKickoff } from "@/lib/schedule";
+import { hasFootballKey } from "@/lib/football/client";
 
 /**
  * Sahifa har so'rovda qayta chiziladi.
@@ -84,7 +85,7 @@ export default async function HomePage() {
           isPreviousSeason={standingsData.isPreviousSeason}
         />
         <Matches fixtures={fixtures} results={results} />
-        <Squad players={squad} />
+        <Squad players={squad} statsEnabled={hasFootballKey()} />
         <News items={news} />
         <Timeline items={timeline} />
         <Legends items={legends} />

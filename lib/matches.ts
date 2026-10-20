@@ -2,18 +2,20 @@
  * /matches sahifasi uchun ma'lumot qatlami.
  *
  * Asosiy manba — API-Football (mavsumning barcha o'yinlari, barcha
- * musobaqalar). U ishlamasa joriy mavsum uchun bazadagi (TheSportsDB
- * sinxronizatsiyasi) o'yinlar ko'rsatiladi — ularda tafsilot sahifasi
- * bo'lmaydi, chunki events/lineups/statistics faqat API-Football'da bor.
+ * musobaqalar). U ishlamasa joriy mavsum uchun bazadagi o'yinlar,
+ * baza bo'sh bo'lsa football-data.org ko'rsatiladi — ularda tafsilot
+ * sahifasi bo'lmaydi, chunki events/lineups/statistics faqat
+ * API-Football'da bor.
  */
 
 import { competitionLabel, currentApiSeason } from "@/config/football";
 import { fetchSeasonFixtures } from "./football/fixtures";
+import { fetchTeamMatches } from "./footballdata";
 import { apiFixtureId } from "./match-id";
 import { prisma } from "./prisma";
 import type { MatchItem } from "@/types/football";
 
-export type MatchSource = "api" | "db" | "none";
+export type MatchSource = "api" | "db" | "fd" | "none";
 
 export interface SeasonMatches {
   matches: MatchItem[];
@@ -64,7 +66,7 @@ function dbMatchToItem(m: {
   };
 }
 
-/** Mavsum o'yinlari: API-Football → baza (faqat joriy mavsum). */
+/** Mavsum o'yinlari: API-Football → baza → football-data.org (faqat joriy mavsum). */
 export async function getSeasonMatches(
   season: number = currentApiSeason(),
 ): Promise<SeasonMatches> {
@@ -82,6 +84,26 @@ export async function getSeasonMatches(
       }
     } catch (error) {
       console.error("[matches] baza o'qilmadi:", error);
+    }
+
+    const fromFd = await fetchTeamMatches(season);
+    if (fromFd && fromFd.length > 0) {
+      const items = fromFd.map((m) =>
+        dbMatchToItem({
+          id: m.id,
+          extId: `fd:${m.id}`,
+          kickoff: m.kickoff,
+          homeTeam: m.home,
+          awayTeam: m.away,
+          homeScore: m.homeScore,
+          awayScore: m.awayScore,
+          competition: m.competition,
+          venue: null,
+          homeBadge: m.homeCrest,
+          awayBadge: m.awayCrest,
+        }),
+      );
+      return { matches: items, season, source: "fd" };
     }
   }
 

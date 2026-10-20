@@ -1,4 +1,4 @@
-import { competitionLabel } from "@/config/football";
+import { competitionLabel, currentApiSeason } from "@/config/football";
 import { FIXTURES, LEGENDS, RESULTS, SQUAD, STANDINGS, TIMELINE } from "./data";
 import {
   readFixtures,
@@ -11,17 +11,24 @@ import {
 import { fetchLastFixtures, fetchNextFixtures } from "./football/fixtures";
 import { fetchSquad } from "./football/players";
 import { fetchLeagueStandings } from "./football/standings";
+import {
+  fetchFixtures as fetchFdFixtures,
+  fetchResults as fetchFdResults,
+  fetchSquad as fetchFdSquad,
+  fetchStandings as fetchFdStandings,
+} from "./footballdata";
 import { fetchFixtures, fetchResults, fetchStandings, type StandingsResult } from "./sportsdb";
 import type { Fixture, Legend, Player, Result, Standing, TimelineItem } from "./types";
 
 /**
  * Ma'lumot qatlami (data layer).
  *
- * To'rt bosqichli manba:
+ * Besh bosqichli manba:
  *   1. Baza — kunlik sinxronizatsiya to'ldiradi (lib/sync/run.ts)
  *   2. API-Football — kalit o'rnatilgan va tarif ochiq bo'lsa
- *   3. TheSportsDB — bepul zaxira manba
- *   4. Demo ma'lumot — hech biri ishlamasa
+ *   3. football-data.org — bepul tarif (liga o'yinlari, to'liq jadval, tarkib)
+ *   4. TheSportsDB — juda cheklangan bepul zaxira
+ *   5. Demo ma'lumot — hech biri ishlamasa
  * (turnir jadvalida API-Football birinchi o'rinda — izohga qarang)
  * Shu sababli sayt hech qachon bo'sh bo'lim ko'rsatmaydi.
  * Tarix va afsonalar o'zgarmaydi — ular demo massivlarda qoladi.
@@ -31,7 +38,7 @@ import type { Fixture, Legend, Player, Result, Standing, TimelineItem } from "./
  */
 
 export async function getSquad(): Promise<Player[]> {
-  return (await readSquad()) ?? (await fetchSquad()) ?? SQUAD;
+  return (await readSquad()) ?? (await fetchSquad()) ?? (await fetchFdSquad()) ?? SQUAD;
 }
 
 /**
@@ -44,11 +51,21 @@ function withLabel<T extends { comp: string }>(items: T[]): T[] {
 }
 
 export async function getFixtures(): Promise<Fixture[]> {
-  return withLabel((await readFixtures()) ?? (await fetchFixtures()) ?? FIXTURES);
+  return withLabel(
+    (await readFixtures()) ??
+      (await fetchFdFixtures(currentApiSeason())) ??
+      (await fetchFixtures()) ??
+      FIXTURES,
+  );
 }
 
 export async function getResults(): Promise<Result[]> {
-  return withLabel((await readResults()) ?? (await fetchResults()) ?? RESULTS);
+  return withLabel(
+    (await readResults()) ??
+      (await fetchFdResults(currentApiSeason())) ??
+      (await fetchResults()) ??
+      RESULTS,
+  );
 }
 
 /**
@@ -61,6 +78,7 @@ export async function getStandings(): Promise<StandingsResult> {
   return (
     (await fetchLeagueStandings()) ??
     (await readStandings()) ??
+    (await fetchFdStandings()) ??
     (await fetchStandings()) ?? {
       rows: STANDINGS,
       season: "namunaviy",

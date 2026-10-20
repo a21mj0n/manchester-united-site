@@ -1,8 +1,10 @@
 /**
- * TheSportsDB — o'yinlar va turnir jadvali uchun tashqi API.
+ * TheSportsDB — o'yinlar va turnir jadvali uchun zaxira manba.
  *
- * Kalit shart emas: bepul "3" test kaliti ishlaydi. Ko'proq so'rov
- * kerak bo'lsa SPORTSDB_KEY orqali o'z kalitingizni bering.
+ * Kalit shart emas: bepul "123" test kaliti ishlaydi (eski "3" kalit
+ * 2026-yil oktabrda butunlay o'chirilgan). Bepul kalit juda cheklangan:
+ * jadvaldan faqat top 5, o'yinlardan faqat eng yaqin va oxirgi bittasi.
+ * Pullik kalit bo'lsa SPORTSDB_KEY orqali bering.
  *
  * Har bir funksiya xatolikda null qaytaradi — chaqiruvchi tomon
  * demo ma'lumotga tushadi, ya'ni API yotib qolsa ham sayt ishlaydi.
@@ -20,7 +22,7 @@ const REVALIDATE_SECONDS = 3600;
 const TIMEOUT_MS = 8000;
 
 function apiKey(): string {
-  return process.env.SPORTSDB_KEY || "3";
+  return process.env.SPORTSDB_KEY || "123";
 }
 
 /** Futbol mavsumi avgustda boshlanadi: 2026-yil avgust → "2026-2027". */
@@ -140,20 +142,27 @@ interface RawEvent {
 const MONTHS = ["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"];
 const TASHKENT_OFFSET_MS = 5 * 60 * 60 * 1000;
 
-/** UTC vaqtni Toshkent vaqtidagi "22-avgust" va "16:30" ko'rinishiga aylantiradi. */
+/**
+ * UTC vaqtni Toshkent vaqtidagi "22-avgust" va "16:30" ko'rinishiga
+ * aylantiradi; aniq vaqt bo'lsa ISO ko'rinishida ham qaytaradi.
+ */
 function toTashkentParts(timestamp: string | null | undefined, fallbackDate?: string | null) {
   const raw = timestamp ?? (fallbackDate ? `${fallbackDate}T00:00:00` : null);
-  if (!raw) return { date: "—", time: "—" };
+  if (!raw) return { date: "—", time: "—", utcDate: undefined };
 
   const parsed = new Date(raw.endsWith("Z") ? raw : `${raw}Z`);
-  if (Number.isNaN(parsed.getTime())) return { date: "—", time: "—" };
+  if (Number.isNaN(parsed.getTime())) return { date: "—", time: "—", utcDate: undefined };
 
   const local = new Date(parsed.getTime() + TASHKENT_OFFSET_MS);
   const time = timestamp
     ? `${String(local.getUTCHours()).padStart(2, "0")}:${String(local.getUTCMinutes()).padStart(2, "0")}`
     : "—";
 
-  return { date: `${local.getUTCDate()}-${MONTHS[local.getUTCMonth()]}`, time };
+  return {
+    date: `${local.getUTCDate()}-${MONTHS[local.getUTCMonth()]}`,
+    time,
+    utcDate: timestamp ? parsed.toISOString() : undefined,
+  };
 }
 
 /** Kelgusi o'yinlar. */
@@ -162,9 +171,10 @@ export async function fetchFixtures(): Promise<Fixture[] | null> {
   if (!data?.events?.length) return null;
 
   return data.events.map((e, index) => {
-    const { date, time } = toTashkentParts(e.strTimestamp, e.dateEvent);
+    const { date, time, utcDate } = toTashkentParts(e.strTimestamp, e.dateEvent);
     return {
       id: Number(e.idEvent) || index,
+      utcDate,
       date,
       time,
       home: e.strHomeTeam,
@@ -186,9 +196,10 @@ export async function fetchResults(): Promise<Result[] | null> {
   if (!played.length) return null;
 
   return played.map((e, index) => {
-    const { date } = toTashkentParts(e.strTimestamp, e.dateEvent);
+    const { date, utcDate } = toTashkentParts(e.strTimestamp, e.dateEvent);
     return {
       id: Number(e.idEvent) || index,
+      utcDate,
       date,
       home: e.strHomeTeam,
       away: e.strAwayTeam,

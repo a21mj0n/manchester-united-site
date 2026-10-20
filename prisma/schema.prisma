@@ -68,8 +68,12 @@ model NewsPost {
 /// Jamoa tarkibi — kunlik sinxronizatsiya to'ldiradi
 model Player {
   id       Int     @id @default(autoincrement())
-  /// Tashqi API dagi identifikator. Qo'lda qo'shilgan o'yinchida bo'lmaydi.
+  /// API-Football identifikatori — statistika sahifasi havolasi uchun.
+  /// Qo'lda qo'shilgan o'yinchida bo'lmaydi.
   apiId    Int?    @unique
+  /// football-data.org identifikatori — kalit yo'q paytda tarkib shu
+  /// manbadan keladi; API-Football qaytganda apiId va rasm saqlanib qoladi.
+  fdId     Int?    @unique
   num      Int
   name     String
   /// GK | DF | MF | FW

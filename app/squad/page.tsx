@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Squad from "@/components/Squad";
 import SubpageShell from "@/components/SubpageShell";
+import { hasFootballKey } from "@/lib/football/client";
 import { getSquad } from "@/lib/queries";
 
 export const metadata: Metadata = {
@@ -19,7 +20,11 @@ export default async function SquadPage() {
   return (
     <SubpageShell
       title="Jamoa tarkibi"
-      sub="O'yinchi kartasini bosib mavsum statistikasini ko'ring"
+      sub={
+        hasFootballKey()
+          ? "O'yinchi kartasini bosib mavsum statistikasini ko'ring"
+          : "Joriy mavsum tarkibi"
+      }
       backHref="/#squad"
     >
       <p style={{ marginBottom: 18 }}>
@@ -27,7 +32,7 @@ export default async function SquadPage() {
           <ArrowLeftRight size={14} aria-hidden="true" /> O&apos;yinchilarni taqqoslash
         </Link>
       </p>
-      <Squad players={squad} bare />
+      <Squad players={squad} bare statsEnabled={hasFootballKey()} />
     </SubpageShell>
   );
 }

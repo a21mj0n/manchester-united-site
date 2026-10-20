@@ -13,7 +13,15 @@ const FILTERS: { key: Position | "all"; label: string }[] = [
   { key: "FW", label: "Hujumchi" },
 ];
 
-function PlayerCard({ player, index }: { player: Player; index: number }) {
+function PlayerCard({
+  player,
+  index,
+  linkable,
+}: {
+  player: Player;
+  index: number;
+  linkable: boolean;
+}) {
   const body = (
     <>
       <span className="player__num">{player.num || "—"}</span>
@@ -44,8 +52,8 @@ function PlayerCard({ player, index }: { player: Player; index: number }) {
     </>
   );
 
-  // API identifikatori bo'lsa statistika sahifasiga olib boradi
-  if (player.apiId) {
+  // Statistika manbasi ulangan va API identifikatori bo'lsa sahifaga olib boradi
+  if (linkable && player.apiId) {
     return (
       <Link
         href={`/squad/${player.apiId}`}
@@ -68,9 +76,11 @@ interface Props {
   players: Player[];
   /** true — section qobiq'siz (alohida sahifada SubpageShell beradi) */
   bare?: boolean;
+  /** false — statistika manbasi (API-Football) ulanmagan, kartalar havola bo'lmaydi */
+  statsEnabled?: boolean;
 }
 
-export default function Squad({ players, bare }: Props) {
+export default function Squad({ players, bare, statsEnabled = true }: Props) {
   const [pos, setPos] = useState<Position | "all">("all");
   const [showAcademy, setShowAcademy] = useState(false);
 
@@ -94,7 +104,7 @@ export default function Squad({ players, bare }: Props) {
 
       <div className="squad-grid">
         {first.map((p, i) => (
-          <PlayerCard key={p.id} player={p} index={i} />
+          <PlayerCard key={p.id} player={p} index={i} linkable={statsEnabled} />
         ))}
       </div>
 
@@ -129,7 +139,7 @@ export default function Squad({ players, bare }: Props) {
               </p>
               <div className="squad-grid">
                 {academy.map((p, i) => (
-                  <PlayerCard key={p.id} player={p} index={i} />
+                  <PlayerCard key={p.id} player={p} index={i} linkable={statsEnabled} />
                 ))}
               </div>
             </>

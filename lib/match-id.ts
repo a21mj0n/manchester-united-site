@@ -1,6 +1,7 @@
 /**
  * Bazadagi `Match.extId` manba prefiksi bilan saqlanadi:
- * "af:1557368" (API-Football) yoki "sdb:2052641" (TheSportsDB).
+ * "af:1557368" (API-Football), "fd:535961" (football-data.org) yoki
+ * "sdb:2052641" (TheSportsDB).
  *
  * Faqat API-Football id'si bo'yicha o'yin tafsilotlari (voqealar,
  * tarkiblar, statistika) olinadi — shuning uchun sayt qaysi yozuv

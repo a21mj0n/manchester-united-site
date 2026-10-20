@@ -164,12 +164,31 @@ faylida (`chmod 600`) va lokal `.env` da turadi.
 
 ## O'yinlar va turnir jadvali — real ma'lumot
 
-Manba: [TheSportsDB](https://www.thesportsdb.com) — API kaliti shart emas,
-bepul `3` test kaliti ishlaydi. Ko'proq so'rov kerak bo'lsa `SPORTSDB_KEY`
-orqali o'z kalitingizni bering.
+### football-data.org (bepul tarif)
 
-- Kelgusi o'yinlar va natijalar — Manchester United jamoasi bo'yicha
-- Turnir jadvali — Angliya Premer-ligasi, joriy mavsum
+Manba: [football-data.org](https://www.football-data.org) — `FOOTBALL_DATA_KEY`
+kerak (ro'yxatdan o'tish bepul, kalit emailga keladi). API-Football obunasi
+yo'q paytda asosiy manba shu ([lib/footballdata.ts](lib/footballdata.ts)):
+
+- Mavsumning barcha liga o'yinlari va natijalari — Premer-liga va
+  Chempionlar ligasi (bepul tarifda Angliya kubogi va Liga kubogi yo'q,
+  ular TheSportsDB'dan qo'shiladi)
+- To'liq 20 talik turnir jadvali
+- Jamoa tarkibi (rasmsiz — rasm faqat API-Football'dan keladi)
+- Limit: daqiqasiga 10 so'rov; sahifalar javobni 15 daqiqa keshlaydi
+
+O'yin tafsilotlari, futbolchi statistikasi va taqqoslash bu manbada yo'q —
+ular `FOOTBALL_API_KEY` qaytganda o'zi ochiladi.
+
+Serverga kalit o'rnatish: `./deploy/set-football-data-key.sh`.
+
+### TheSportsDB (cheklangan zaxira)
+
+Manba: [TheSportsDB](https://www.thesportsdb.com) — kalit shart emas, bepul
+`123` test kaliti ishlaydi (eski `3` kalit 2026-yil oktabrda o'chirilgan).
+Bepul kalit juda cheklangan: eng yaqin va oxirgi bittadan o'yin, jadvaldan
+faqat top 5. Pullik kalit bo'lsa `SPORTSDB_KEY` orqali bering.
+
 - Vaqtlar Toshkent vaqtiga (UTC+5) o'giriladi
 - Javoblar **1 soat keshlanadi** — API ortiqcha bezovta qilinmaydi
 
@@ -195,6 +214,10 @@ Kalitni o'rnatish (terminaldan o'qiladi, git'ga tushmaydi):
 ```bash
 ./deploy/set-football-key.sh
 ```
+
+Obuna tugab kalit olib tashlansa sayt yiqilmaydi: o'yinlar, jadval va
+tarkib football-data.org'dan keladi, tafsilot va statistika sahifalari esa
+"manba ulanmagan" holatini ko'rsatadi.
 
 ### Qaysi bo'lim nimani beradi
 
@@ -285,12 +308,12 @@ tushadi — foydalanuvchi bo'sh sahifa ko'rmaydi, API xatosining
 tafsilotlari esa frontendga chiqmaydi (faqat server log'ida):
 
 ```
-API-Football → baza (kunlik sinxronizatsiya) → TheSportsDB → demo ma'lumot
+API-Football → baza (kunlik sinxronizatsiya) → football-data.org → TheSportsDB → demo ma'lumot
 ```
 
 Turnir jadvalida tartib boshqacha — API-Football birinchi, chunki u
 to'liq 20 talik jadvalni beradi, TheSportsDB bepul tarifi esa faqat
-yuqori bir necha o'rinni.
+top 5 ni.
 
 `events`, `lineups`, `statistics` va futbolchi statistikasi faqat
 API-Football'da bor — kalit yo'q bo'lsa bu sahifalar tushunarli xato
@@ -304,15 +327,22 @@ ma'lumot olib bazaga yozadi. Sayt esa bazadan o'qiydi.
 | Bo'lim | Manba |
 |---|---|
 | Team ID tekshiruvi | API-Football (`FOOTBALL_API_KEY`) |
-| Tarkib | API-Football |
-| O'yinlar | API-Football → TheSportsDB |
-| Turnir jadvali | API-Football → TheSportsDB |
+| Tarkib | API-Football → football-data.org |
+| O'yinlar | API-Football → football-data.org (+ kubok o'yinlari TheSportsDB'dan) → TheSportsDB |
+| Turnir jadvali | API-Football → football-data.org → TheSportsDB |
 | Jamoa gerblari | Premer-liga (bir marta yuklab olinadi) |
 
 O'yin yozuvidagi `extId` manba prefiksi bilan saqlanadi —
-`af:1557368` (API-Football) yoki `sdb:2052641` (TheSportsDB).
-Shu bois sayt qaysi o'yin uchun tafsilot sahifasi ochilishini
-biladi ([lib/match-id.ts](lib/match-id.ts)).
+`af:1557368` (API-Football), `fd:535961` (football-data.org) yoki
+`sdb:2052641` (TheSportsDB). Shu bois sayt qaysi o'yin uchun tafsilot
+sahifasi ochilishini biladi ([lib/match-id.ts](lib/match-id.ts)).
+
+Manba almashganda dublikat paydo bo'lmaydi: asosiy manba yozgan o'yinlar
+boshqa manbaning eski nusxalarini o'chiradi, TheSportsDB esa faqat asosiy
+manbada yo'q o'yinlarni (vaqti 3 soat ichida mos kelmaydiganlarni) qo'shadi.
+O'yinchilar ham ism bo'yicha bog'lanadi (`apiId` va `fdId` bir yozuvda
+turadi), shuning uchun API-Football qaytganda rasm va statistika
+havolalari o'sha yozuvlarda tiklanadi.
 
 Yangiliklar sinxronizatsiyaga kirmaydi — ular admin panelda qo'lda
 yoziladi (`/admin/news`).

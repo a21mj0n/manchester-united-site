@@ -149,7 +149,7 @@ export default function MatchesBrowser({ matches, season, seasons, source }: Pro
         )}
       </div>
 
-      {source === "db" && (
+      {source !== "api" && filtered.length > 0 && (
         <p className="note">
           Tafsilotli statistika manbasi hozircha ulanmagan — ro'yxat kunlik
           sinxronizatsiyadan ko'rsatilmoqda.
