@@ -25,6 +25,7 @@ function plain(text: string): string {
 function kindOf(key: string): string {
   if (key.includes(":matchday:")) return "O'yin kuni";
   if (key.includes(":result:")) return "Natija";
+  if (key.includes(":news:")) return "Yangilik";
   return "Post";
 }
 

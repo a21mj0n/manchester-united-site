@@ -1,8 +1,9 @@
 "use client";
 
-import { Eye, EyeOff, Pencil, Plus, Trash2 } from "lucide-react";
+import { Eye, EyeOff, Pencil, Plus, Send, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { formatTashkentDate } from "@/lib/format";
 
 interface Post {
   id: number;
@@ -14,6 +15,8 @@ interface Post {
   meta: string;
   featured: boolean;
   published: boolean;
+  /** Kanalga oxirgi yuborilgan vaqt (ISO), yuborilmagan bo'lsa null */
+  channelSentAt?: string | null;
 }
 
 const EMPTY: Omit<Post, "id"> = {
@@ -27,7 +30,37 @@ const EMPTY: Omit<Post, "id"> = {
   published: true,
 };
 
-export default function NewsManager({ posts }: { posts: Post[] }) {
+export default function NewsManager({
+  posts,
+  channelReady = false,
+}: {
+  posts: Post[];
+  /** Bot va kanal sozlanganmi — bo'lmasa tugma o'chiq turadi */
+  channelReady?: boolean;
+}) {
+  const [channelMsg, setChannelMsg] = useState<Record<number, { ok: boolean; text: string }>>({});
+  const [sendingId, setSendingId] = useState<number | null>(null);
+
+  async function sendToChannel(post: Post) {
+    if (post.channelSentAt && !confirm(`"${post.title}" kanalga yana yuborilsinmi?`)) return;
+    setSendingId(post.id);
+    try {
+      const res = await fetch(`/api/admin/news/${post.id}/channel`, { method: "POST" });
+      const data = (await res.json()) as { error?: string };
+      setChannelMsg((m) => ({
+        ...m,
+        [post.id]: res.ok
+          ? { ok: true, text: "Kanalga yuborildi." }
+          : { ok: false, text: data.error ?? "Yuborilmadi." },
+      }));
+      if (res.ok) router.refresh();
+    } catch {
+      setChannelMsg((m) => ({ ...m, [post.id]: { ok: false, text: "Serverga ulanib bo'lmadi." } }));
+    } finally {
+      setSendingId(null);
+    }
+  }
+
   const router = useRouter();
   const [editing, setEditing] = useState<Post | null>(null);
   const [draft, setDraft] = useState<Omit<Post, "id">>(EMPTY);
@@ -236,6 +269,30 @@ export default function NewsManager({ posts }: { posts: Post[] }) {
                 <button className="mini mini--no" onClick={() => remove(p)}>
                   <Trash2 size={13} aria-hidden="true" /> O&apos;chirish
                 </button>
+                <button
+                  className="mini mini--tg"
+                  onClick={() => sendToChannel(p)}
+                  disabled={!channelReady || sendingId === p.id}
+                  title={
+                    !channelReady
+                      ? "Kanal sozlanmagan"
+                      : p.channelSentAt
+                        ? `Yuborilgan: ${formatTashkentDate(p.channelSentAt)}`
+                        : "Telegram kanalga yuborish"
+                  }
+                >
+                  <Send size={13} aria-hidden="true" />
+                  {sendingId === p.id
+                    ? "Yuborilmoqda…"
+                    : p.channelSentAt
+                      ? "Kanalga yana"
+                      : "Kanalga yuborish"}
+                </button>
+                {channelMsg[p.id] && (
+                  <small className={`news-admin__tgmsg ${channelMsg[p.id].ok ? "ok" : "err"}`}>
+                    {channelMsg[p.id].text}
+                  </small>
+                )}
               </div>
             </article>
           ))}

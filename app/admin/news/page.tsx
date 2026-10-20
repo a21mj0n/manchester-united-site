@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import AdminNav from "@/components/admin/AdminNav";
 import NewsManager from "@/components/admin/NewsManager";
+import { channelConfigured, newsChannelSent } from "@/lib/channel";
 import { getAllNews } from "@/lib/news";
 
 export const metadata: Metadata = {
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function AdminNewsPage() {
-  const posts = await getAllNews();
+  const [posts, sent] = await Promise.all([getAllNews(), newsChannelSent()]);
 
   return (
     <main className="admin">
@@ -28,7 +29,9 @@ export default async function AdminNewsPage() {
       </header>
 
       <NewsManager
+        channelReady={channelConfigured()}
         posts={posts.map((p) => ({
+          channelSentAt: sent.get(p.id) ?? null,
           id: p.id,
           title: p.title,
           excerpt: p.excerpt,

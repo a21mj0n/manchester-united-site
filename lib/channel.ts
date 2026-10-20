@@ -289,6 +289,73 @@ export async function runChannelPosts(now = new Date()): Promise<ChannelRunResul
   return result;
 }
 
+/* ---------------- Yangiliklar ---------------- */
+
+interface NewsLike {
+  id: number;
+  title: string;
+  excerpt: string;
+  tag: string;
+  sourceName: string | null;
+  sourceUrl: string | null;
+}
+
+/** Yangilik posti: sarlavha, qisqa matn va havola (manba yoki sayt). */
+export function buildNewsPost(n: NewsLike): string {
+  const link = n.sourceUrl ?? `${SITE_URL}/#news`;
+  const lines = [`📰 <b>${escapeHtml(n.title)}</b>`];
+  if (n.excerpt.trim()) lines.push("", escapeHtml(n.excerpt.trim()));
+  lines.push("", `🔗 ${link}`);
+  if (n.sourceUrl && n.sourceName) lines.push(`Manba: ${escapeHtml(n.sourceName)}`);
+  lines.push(`— Red Devils Uzbekistan · ${SITE_URL.replace(/^https?:\/\//, "")}`);
+  return lines.join("\n");
+}
+
+export function newsPostKey(id: number): string {
+  return `${POST_PREFIX}news:${id}`;
+}
+
+/**
+ * Yangilikni kanalga yuboradi. Qayta yuborish mumkin — kalit faqat
+ * oxirgi yuborilgan vaqtni saqlaydi. Natija: ok yoki xato sababi.
+ */
+export async function sendNewsToChannel(
+  id: number,
+): Promise<{ ok: true; text: string } | { ok: false; error: string }> {
+  const chat = channelId();
+  if (!chat || !channelConfigured()) {
+    return { ok: false, error: "Kanal sozlanmagan (bot tokeni yoki kanal yo'q)." };
+  }
+
+  const post = await prisma.newsPost.findUnique({ where: { id } });
+  if (!post) return { ok: false, error: "Yangilik topilmadi." };
+
+  const text = buildNewsPost(post);
+  const sent = await sendTelegramTo(chat, text);
+  if (!sent) return { ok: false, error: "Telegram qabul qilmadi — bot kanalda adminmi?" };
+
+  await markPosted(newsPostKey(id), text);
+  return { ok: true, text };
+}
+
+/** Kanalga yuborilgan yangiliklar: id → yuborilgan vaqt (ISO). */
+export async function newsChannelSent(): Promise<Map<number, string>> {
+  const rows = await prisma.setting.findMany({
+    where: { key: { startsWith: `${POST_PREFIX}news:` } },
+  });
+  const map = new Map<number, string>();
+  for (const row of rows) {
+    const id = Number(row.key.slice(`${POST_PREFIX}news:`.length));
+    if (!Number.isInteger(id)) continue;
+    try {
+      map.set(id, (JSON.parse(row.value) as { at?: string }).at ?? "");
+    } catch {
+      map.set(id, "");
+    }
+  }
+  return map;
+}
+
 /** Admin paneldan sinov xabari — kanal va bot to'g'ri ulanganini tekshirish. */
 export async function sendChannelTest(): Promise<boolean> {
   const chat = channelId();
