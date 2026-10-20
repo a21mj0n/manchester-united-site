@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import SecretStream from "@/components/SecretStream";
+import SocialIcon from "@/components/icons/SocialIcon";
+import { TELEGRAM_CHANNEL } from "@/config/social";
 import { getSecretStreamUrl } from "@/lib/settings";
 
 export const metadata: Metadata = {
@@ -84,6 +86,28 @@ export default async function TomoshaPage() {
         </div>
 
         <SecretStream url={secretUrl} />
+
+        {TELEGRAM_CHANNEL && (
+          <a
+            href={TELEGRAM_CHANNEL.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="watch-card watch-card--channel"
+          >
+            <div className="watch-card__head">
+              <SocialIcon network="telegram" size={22} />
+              <span className="tag tag--red">Kanal</span>
+            </div>
+            <h3>Efir havolalari Telegram kanalda</h3>
+            <p>
+              O'yin kuni efir havolasi va natijalar avval kanalda e'lon qilinadi.
+              Obuna bo'ling — o'tkazib yubormaysiz.
+            </p>
+            <span className="watch-card__link">
+              {TELEGRAM_CHANNEL.handle} <ExternalLink size={14} aria-hidden="true" />
+            </span>
+          </a>
+        )}
 
         <p className="note">
           Barcha havolalar tashqi saytlarga olib boradi. Translyatsiya huquqlari

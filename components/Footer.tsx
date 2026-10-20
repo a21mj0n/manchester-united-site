@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { Facebook, Instagram, Telegram, XLogo, YouTube } from "./icons/Brands";
+import { SOCIAL_LINKS } from "@/config/social";
+import SocialIcon from "./icons/SocialIcon";
 
 const LINKS = [
   { href: "#news", label: "Yangiliklar" },
@@ -9,14 +10,6 @@ const LINKS = [
   { href: "#fanclub", label: "Fan-klub" },
   { href: "/shop", label: "Do'kon" },
   { href: "/support", label: "Qo'llab-quvvatlash" },
-];
-
-const SOCIAL = [
-  { label: "Telegram", href: "#", Icon: Telegram },
-  { label: "Instagram", href: "#", Icon: Instagram },
-  { label: "YouTube", href: "#", Icon: YouTube },
-  { label: "Facebook", href: "#", Icon: Facebook },
-  { label: "X", href: "#", Icon: XLogo },
 ];
 
 export default function Footer() {
@@ -47,9 +40,16 @@ export default function Footer() {
         </nav>
 
         <div className="footer__social">
-          {SOCIAL.map(({ label, href, Icon }) => (
-            <a key={label} href={href} aria-label={label} title={label}>
-              <Icon size={18} />
+          {SOCIAL_LINKS.map((s) => (
+            <a
+              key={s.key}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={s.label}
+              title={`${s.label} — ${s.handle}`}
+            >
+              <SocialIcon network={s.key} size={18} />
             </a>
           ))}
         </div>

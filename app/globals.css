@@ -407,6 +407,22 @@ ul{list-style:none}
    ========================================================= */
 .fanclub{display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:start}
 .perks{display:flex;flex-direction:column;gap:16px;margin-top:30px}
+/* Ijtimoiy tarmoqlar — fan-klub bo'limi */
+.social-block{margin-top:30px;padding:20px 22px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.03)}
+.social-block b{display:block;font-family:var(--font-display);letter-spacing:1px;font-size:1.05rem}
+.social-block small{display:block;color:var(--muted);margin-top:4px;font-size:.88rem}
+.social-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.social-btn{
+  display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;
+  border:1px solid var(--line);font-weight:700;font-size:.9rem;color:#fff;
+  transition:all .28s var(--ease);
+}
+.social-btn:hover{transform:translateY(-3px)}
+.social-btn--telegram:hover{background:#229ED9;border-color:#229ED9}
+.social-btn--instagram:hover{background:#E1306C;border-color:#E1306C}
+.social-btn--youtube:hover{background:#FF0000;border-color:#FF0000}
+.watch-card--channel{margin-top:28px;display:block}
+
 .perks li{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;border-radius:var(--radius-sm);background:rgba(255,255,255,.04);border:1px solid var(--line);transition:transform .3s var(--ease),border-color .3s}
 .perks li:hover{transform:translateX(6px);border-color:rgba(218,41,28,.5)}
 .perks li > span{font-size:1.5rem;line-height:1}

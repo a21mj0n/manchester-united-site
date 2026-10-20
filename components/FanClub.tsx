@@ -2,6 +2,8 @@
 
 import { HandHeart, Send, Shirt, Ticket, Trophy } from "lucide-react";
 import { useState } from "react";
+import { SOCIAL_LINKS } from "@/config/social";
+import SocialIcon from "./icons/SocialIcon";
 
 const CITIES = ["Toshkent","Samarqand","Buxoro","Farg'ona","Namangan","Andijon","Nukus","Qarshi","Boshqa"];
 
@@ -91,6 +93,27 @@ export default function FanClub() {
               </li>
             ))}
           </ul>
+
+          {SOCIAL_LINKS.length > 0 && (
+            <div className="social-block">
+              <b>Kanallarimizga obuna bo'ling</b>
+              <small>O'yin e'lonlari, natijalar va efir havolalari avval shu yerda chiqadi.</small>
+              <div className="social-row">
+                {SOCIAL_LINKS.map((s) => (
+                  <a
+                    key={s.key}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`social-btn social-btn--${s.key}`}
+                  >
+                    <SocialIcon network={s.key} size={18} />
+                    <span>{s.handle}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <form className="form reveal" onSubmit={onSubmit} noValidate>
@@ -130,7 +153,8 @@ export default function FanClub() {
             {status?.text}
           </p>
           <p className="form__hint">
-            Ariza /api/join route handler ga yuboriladi — hozircha baza ulanmagan.
+            Ariza bilan birga Telegram kanalimizga ham qo'shiling — tadbirlar
+            avval o'sha yerda e'lon qilinadi.
           </p>
         </form>
       </div>

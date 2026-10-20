@@ -14,7 +14,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import SubpageShell from "@/components/SubpageShell";
+import SocialIcon from "@/components/icons/SocialIcon";
 import CopyButton from "@/components/support/CopyButton";
+import { SOCIAL_LINKS } from "@/config/social";
 import {
   currentMonthUz,
   formatCard,
@@ -199,6 +201,22 @@ export default async function SupportPage() {
             Ariza qoldirish
           </Link>
         </div>
+        {SOCIAL_LINKS.map((s) => (
+          <a
+            key={s.key}
+            href={s.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="watch-card"
+          >
+            <div className="watch-card__head">
+              <h3>{s.label}da obuna bo'ling</h3>
+              <SocialIcon network={s.key} size={20} />
+            </div>
+            <p>Obunachilar soni jamoaga homiy va hamkor topishga yordam beradi.</p>
+            <span className="watch-card__link">{s.handle}</span>
+          </a>
+        ))}
         <div className="watch-card">
           <div className="watch-card__head">
             <h3>Homiy bo'ling</h3>
