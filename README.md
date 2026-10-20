@@ -347,6 +347,33 @@ havolalari o'sha yozuvlarda tiklanadi.
 Yangiliklar sinxronizatsiyaga kirmaydi — ular admin panelda qo'lda
 yoziladi (`/admin/news`).
 
+## Telegram kanal postlari
+
+Bot ommaviy kanalga ([config/social.ts](config/social.ts) dagi Telegram,
+yoki `TELEGRAM_CHANNEL`) avtomatik yozadi ([lib/channel.ts](lib/channel.ts)):
+
+| Post | Qachon |
+|---|---|
+| "Bugun o'yin" — raqib, musobaqa, vaqt, tomosha havolasi | O'yin kuni, Toshkent vaqti 08:00 dan keyin |
+| Natija — hisob, g'alaba/durang/mag'lubiyat, jadvaldagi o'rin | O'yin tugagach (hisob football-data.org dan olinadi) |
+
+`/api/cron/channel` ni systemd timer **har 30 daqiqada** chaqiradi
+(`deploy/red-devils-channel.timer`). Har bir post `Setting` jadvalida
+`tg:<tur>:<extId>` kaliti bilan belgilanadi — takror yuborilmaydi. Shu
+yurishda tugagan o'yinlar hisobi ham bazaga yoziladi, ya'ni sayt natijani
+ertalabki sinxronizatsiyagacha kutmaydi.
+
+Bot kanalda administrator bo'lishi kerak. Admin paneldagi Sinxronizatsiya
+sahifasida sinov xabari yuborish va postlarni qo'lda tekshirish tugmalari bor.
+
+Serverda timerni yoqish:
+
+```bash
+sudo cp deploy/red-devils-channel.* /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now red-devils-channel.timer
+```
+
 Har bir bo'lim mustaqil — biri yiqilsa qolganlari baribir bajariladi,
 natija `SyncLog` jadvaliga yoziladi va `/admin/sync` sahifasida ko'rinadi.
 

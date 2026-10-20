@@ -6,6 +6,9 @@
  * Havolasi hali yo'q tarmoq `null` qoladi va saytda ko'rsatilmaydi.
  */
 
+/** Saytning tashqi manzili — Telegram postlari va bildirishnomalar uchun */
+export const SITE_URL = "https://manchester-united.uz";
+
 export type SocialKey = "telegram" | "instagram" | "youtube";
 
 export interface SocialLink {

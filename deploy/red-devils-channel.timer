@@ -1,0 +1,11 @@
+[Unit]
+Description=Har 30 daqiqada Telegram kanal postlarini tekshirish
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=30min
+# Server o'chiq bo'lgan payt o'tkazib yuborilgan bo'lsa, yoqilganda bajaradi
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,19 @@
+# Telegram kanal postlari — o'yin kuni e'loni va natija.
+# Timer bilan birga ishlatiladi (red-devils-channel.timer).
+#
+#   sudo cp deploy/red-devils-channel.* /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now red-devils-channel.timer
+
+[Unit]
+Description=Red Devils Uzbekistan — Telegram kanal postlari
+After=network-online.target red-devils.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/red-devils.env
+
+ExecStart=/usr/bin/curl --fail --silent --show-error --max-time 60 \
+  -X POST http://127.0.0.1:3000/api/cron/channel \
+  -H "Authorization: Bearer ${CRON_SECRET}"

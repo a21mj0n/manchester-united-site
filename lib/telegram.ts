@@ -6,6 +6,8 @@
  */
 
 const API_TIMEOUT_MS = 5000;
+/** Sinovda soxta serverga yo'naltirish uchun; odatda o'zgartirilmaydi */
+const API_BASE = process.env.TELEGRAM_API_BASE || "https://api.telegram.org";
 
 /** Telegram HTML rejimida maxsus belgilarni ekranlash. */
 function escapeHtml(value: string): string {
@@ -71,17 +73,26 @@ export function buildOrderMessage(o: OrderNotice): string {
 }
 
 /**
- * Xabarni yuboradi. Hech qachon xato tashlamaydi —
+ * Admin chatiga xabar yuboradi. Hech qachon xato tashlamaydi —
  * bildirishnoma yetkazilmagani asosiy oqimni buzmasligi kerak.
  */
 export async function sendTelegramMessage(text: string): Promise<boolean> {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
+  if (!chatId) return false; // sozlanmagan — jimgina o'tkazamiz
+  return sendTelegramTo(chatId, text);
+}
 
-  if (!token || !chatId) return false; // sozlanmagan — jimgina o'tkazamiz
+/**
+ * Ko'rsatilgan chat yoki kanalga xabar yuboradi. Kanal uchun
+ * "@kanal_nomi" ko'rinishi ishlaydi, bot kanalda administrator bo'lishi kerak.
+ * Muvaffaqiyatsizlikda sababini log'ga yozadi va false qaytaradi.
+ */
+export async function sendTelegramTo(chatId: string, text: string): Promise<boolean> {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  if (!token) return false;
 
   try {
-    const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    const response = await fetch(`${API_BASE}/bot${token}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

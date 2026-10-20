@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import AdminNav from "@/components/admin/AdminNav";
+import ChannelPanel from "@/components/admin/ChannelPanel";
 import SyncPanel from "@/components/admin/SyncPanel";
+import { channelConfigured, channelId, recentPosts } from "@/lib/channel";
 import { prisma } from "@/lib/prisma";
 import { formatTashkentDate } from "@/lib/format";
 
@@ -12,7 +14,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function AdminSyncPage() {
-  const [logs, counts] = await Promise.all([
+  const [logs, counts, posts] = await Promise.all([
     prisma.syncLog.findMany({ orderBy: { startedAt: "desc" }, take: 10 }),
     Promise.all([
       prisma.player.count(),
@@ -20,6 +22,7 @@ export default async function AdminSyncPage() {
       prisma.standingRow.count(),
       prisma.newsPost.count({ where: { externalId: { not: null } } }),
     ]),
+    recentPosts(),
   ]);
 
   const [players, matches, standings, importedNews] = counts;
@@ -47,6 +50,8 @@ export default async function AdminSyncPage() {
         <div><b>{standings}</b><span>jadval qatori</span></div>
         <div><b>{importedNews}</b><span>import qilingan yangilik</span></div>
       </div>
+
+      <ChannelPanel channel={channelId()} configured={channelConfigured()} posts={posts} />
 
       <SyncPanel
         logs={logs.map((l) => ({
