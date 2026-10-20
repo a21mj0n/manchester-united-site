@@ -46,6 +46,11 @@ function escapeHtml(value: string): string {
   return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 }
 
+/** href ichidagi manzil — manba havolasida & va " bo'lishi mumkin */
+function escapeAttr(url: string): string {
+  return escapeHtml(url).replaceAll('"', "&quot;");
+}
+
 function tashkent(d: Date): Date {
   return new Date(d.getTime() + TASHKENT_OFFSET_MS);
 }
@@ -61,6 +66,17 @@ function tashkentTime(d: Date): string {
 
 function isUnited(name: string): boolean {
   return /manchester united|man utd|man united/i.test(name);
+}
+
+/**
+ * Har bir postning pastki qismi: sayt havolasi va kanal manzili.
+ * Kanal manzili bo'lmasa faqat sayt qoladi.
+ */
+function signature(): string {
+  const parts = [`<a href="${SITE_URL}">Sayt</a>`];
+  const handle = TELEGRAM_CHANNEL?.handle;
+  if (handle) parts.push(handle);
+  return parts.join(" · ");
 }
 
 interface MatchRow {
@@ -85,7 +101,9 @@ export function buildMatchdayPost(m: MatchRow): string {
     `🏆 ${escapeHtml(competitionLabel(m.competition))}`,
     `🕘 ${tashkentTime(m.kickoff)} (Toshkent vaqti) · ${where}`,
     "",
-    `📺 Qayerda ko'rish: ${SITE_URL}/tomosha`,
+    `📺 <a href="${SITE_URL}/tomosha">Qayerda ko'rish</a>`,
+    "",
+    signature(),
   ].join("\n");
 }
 
@@ -114,7 +132,7 @@ export function buildResultPost(m: MatchRow, table: TablePosition | null): strin
   if (table && /premier/i.test(m.competition)) {
     lines.push(`📊 Jadvalda ${table.pos}-o'rin · ${table.points} ochko (${table.played} o'yin)`);
   }
-  lines.push("", `Tafsilotlar: ${link}`);
+  lines.push("", `<a href="${link}">Tafsilotlar</a>`, "", signature());
   return lines.join("\n");
 }
 
@@ -305,9 +323,13 @@ export function buildNewsPost(n: NewsLike): string {
   const link = n.sourceUrl ?? `${SITE_URL}/#news`;
   const lines = [`📰 <b>${escapeHtml(n.title)}</b>`];
   if (n.excerpt.trim()) lines.push("", escapeHtml(n.excerpt.trim()));
-  lines.push("", `🔗 ${link}`);
-  if (n.sourceUrl && n.sourceName) lines.push(`Manba: ${escapeHtml(n.sourceName)}`);
-  lines.push(`— Red Devils Uzbekistan · ${SITE_URL.replace(/^https?:\/\//, "")}`);
+  lines.push(
+    "",
+    n.sourceUrl && n.sourceName
+      ? `🔗 <a href="${escapeAttr(link)}">To'liq o'qish</a> · Manba: ${escapeHtml(n.sourceName)}`
+      : `🔗 <a href="${escapeAttr(link)}">Saytda o'qish</a>`,
+  );
+  lines.push("", signature());
   return lines.join("\n");
 }
 
@@ -362,6 +384,6 @@ export async function sendChannelTest(): Promise<boolean> {
   if (!chat) return false;
   return sendTelegramTo(
     chat,
-    `🔴 <b>Red Devils Uzbekistan</b>\nSayt bilan bog'landi: o'yin kuni va natijalar endi shu yerda avtomatik chiqadi.\n\n${SITE_URL}`,
+    `🔴 <b>Red Devils Uzbekistan</b>\nSayt bilan bog'landi: o'yin kuni va natijalar endi shu yerda avtomatik chiqadi.\n\n${signature()}`,
   );
 }
