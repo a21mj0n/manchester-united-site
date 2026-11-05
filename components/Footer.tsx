@@ -1,4 +1,6 @@
+import { Heart } from "lucide-react";
 import Image from "next/image";
+import { TAPS_URL } from "@/config/donate";
 import { SOCIAL_LINKS } from "@/config/social";
 import SocialIcon from "./icons/SocialIcon";
 
@@ -40,6 +42,16 @@ export default function Footer() {
         </nav>
 
         <div className="footer__social">
+          <a
+            href={TAPS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer__donate"
+            title="Taps orqali donat"
+          >
+            <Heart size={15} aria-hidden="true" />
+            Donat
+          </a>
           {SOCIAL_LINKS.map((s) => (
             <a
               key={s.key}

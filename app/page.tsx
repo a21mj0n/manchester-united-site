@@ -9,6 +9,7 @@ import Timeline from "@/components/Timeline";
 import Legends from "@/components/Legends";
 import FanClub from "@/components/FanClub";
 import ShopTeaser from "@/components/ShopTeaser";
+import DonateBanner from "@/components/DonateBanner";
 import Footer from "@/components/Footer";
 import ToTop from "@/components/ToTop";
 import UnofficialNotice from "@/components/UnofficialNotice";
@@ -90,6 +91,7 @@ export default async function HomePage() {
         <Timeline items={timeline} />
         <Legends items={legends} />
         <ShopTeaser />
+        <DonateBanner />
         <FanClub />
       </main>
       <Footer />

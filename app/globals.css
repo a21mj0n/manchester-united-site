@@ -1517,3 +1517,121 @@ a.chip{display:inline-flex;align-items:center;gap:7px;text-decoration:none}
   .order-form__row{grid-template-columns:1fr}
   .order-form{padding:18px}
 }
+
+/* =========================================================
+   DONAT (Taps)
+   ========================================================= */
+.donate{padding:40px 0 72px}
+.donate__card{
+  position:relative;overflow:clip;
+  display:grid;grid-template-columns:1.35fr .65fr;gap:36px;align-items:center;
+  padding:52px 56px;border-radius:28px;
+  background:
+    radial-gradient(900px 400px at 0% 0%,rgba(218,41,28,.55),transparent 60%),
+    radial-gradient(600px 400px at 100% 100%,rgba(251,225,34,.18),transparent 60%),
+    linear-gradient(160deg,#17171f,#0b0b10);
+  border:1px solid rgba(218,41,28,.4);
+  box-shadow:0 40px 90px -40px rgba(218,41,28,.7),var(--shadow);
+}
+.donate__glow{
+  position:absolute;inset:auto -120px -160px auto;width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,rgba(218,41,28,.35),transparent 65%);
+  filter:blur(10px);pointer-events:none;
+}
+.donate__content{position:relative;z-index:1}
+.donate__tag{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px}
+.donate__title{
+  font-family:var(--font-display);font-size:clamp(2rem,4.4vw,3.4rem);
+  line-height:1.02;letter-spacing:1px;text-transform:uppercase;
+}
+.donate__title span{color:var(--gold)}
+.donate__text{color:#c6c6d0;margin-top:16px;max-width:560px;font-size:1.02rem}
+.donate__amounts{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.donate__chip{
+  display:inline-flex;align-items:baseline;gap:4px;
+  padding:10px 16px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);
+  font-family:var(--font-display);font-size:1.05rem;letter-spacing:.6px;color:#fff;
+  transition:all .25s var(--ease);
+}
+.donate__chip small{font-family:var(--font);font-size:.72rem;color:var(--muted);font-weight:600}
+.donate__chip:hover{background:var(--gold);border-color:var(--gold);color:#111;transform:translateY(-3px)}
+.donate__chip:hover small{color:#333}
+.donate__actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:26px}
+.donate__btn{padding:16px 30px;font-size:1.02rem;position:relative;overflow:clip}
+.donate__btn .donate__arrow{transition:transform .25s var(--ease)}
+.donate__btn:hover .donate__arrow{transform:translateX(4px)}
+.donate__btn::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.28) 50%,transparent 70%);
+  transform:translateX(-120%);animation:donate-shine 3.2s var(--ease) infinite;
+}
+@keyframes donate-shine{0%{transform:translateX(-120%)}45%,100%{transform:translateX(120%)}}
+.donate__trust{display:flex;flex-wrap:wrap;gap:18px;margin-top:22px;color:var(--muted);font-size:.84rem}
+.donate__trust li{display:inline-flex;align-items:center;gap:6px}
+.donate__trust svg{color:var(--gold)}
+
+.donate__side{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:22px}
+.donate__heart{
+  display:grid;place-items:center;width:150px;height:150px;border-radius:50%;
+  color:var(--red);
+  background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.08),transparent 60%),rgba(218,41,28,.12);
+  border:1px solid rgba(218,41,28,.4);
+  box-shadow:0 0 0 14px rgba(218,41,28,.08),0 0 0 30px rgba(218,41,28,.04),0 30px 60px -30px rgba(218,41,28,.9);
+  animation:donate-beat 1.8s ease-in-out infinite;
+}
+.donate__heart svg{fill:rgba(218,41,28,.25)}
+@keyframes donate-beat{0%,100%{transform:scale(1)}14%{transform:scale(1.08)}28%{transform:scale(1)}42%{transform:scale(1.06)}70%{transform:scale(1)}}
+.donate__goal{width:100%;max-width:300px;padding:18px 20px;border-radius:16px;background:rgba(0,0,0,.35);border:1px solid var(--line)}
+.donate__goal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:var(--muted);font-size:.85rem}
+.donate__goal-head b{font-family:var(--font-display);font-size:1.6rem;color:var(--gold);line-height:1}
+.donate__goal small{display:block;margin-top:10px;color:var(--muted);font-size:.82rem;text-align:right}
+.donate__side-text{color:var(--muted);font-size:.86rem;text-align:center;max-width:240px}
+
+/* /support — Taps bloki */
+.taps-card{
+  position:relative;overflow:clip;
+  display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center;
+  padding:34px 38px;border-radius:var(--radius);margin-bottom:28px;
+  background:
+    radial-gradient(700px 300px at 0% 0%,rgba(218,41,28,.45),transparent 60%),
+    linear-gradient(160deg,#17171f,#0b0b10);
+  border:1px solid rgba(218,41,28,.4);box-shadow:var(--shadow);
+}
+.taps-card h2{font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.3rem);letter-spacing:1px;text-transform:uppercase;line-height:1.05}
+.taps-card p{color:#c6c6d0;margin-top:12px;max-width:520px}
+.taps-card .donate__btn{margin-top:22px;display:inline-flex}
+.taps-card__url{display:flex;align-items:center;gap:6px;margin-top:14px;color:var(--muted);font-size:.82rem}
+.taps-card__url svg{color:var(--gold)}
+.taps-card__side .donate__heart{width:128px;height:128px}
+.pay-card--taps{border-color:rgba(251,225,34,.4)}
+.pay-card--taps .watch-card__link{display:inline-flex;align-items:center;gap:6px}
+
+/* Footer donat tugmasi */
+.footer__donate{
+  display:inline-flex!important;align-items:center;gap:7px;
+  width:auto!important;height:42px;padding:0 16px!important;border-radius:999px!important;
+  background:var(--red)!important;border-color:var(--red)!important;color:#fff!important;
+  font-weight:700;font-size:.88rem;
+}
+.footer__donate:hover{background:#ef3123!important;border-color:#ef3123!important}
+
+@media (max-width:820px){
+  .donate__card{grid-template-columns:1fr;padding:36px 28px;gap:28px}
+  .donate__side{flex-direction:row;justify-content:space-between;align-items:center}
+  .donate__heart{width:110px;height:110px}
+  .donate__heart svg{width:52px;height:52px}
+  .taps-card{grid-template-columns:1fr;padding:26px 22px}
+  .taps-card__side{display:none}
+}
+@media (max-width:680px){
+  .donate{padding:20px 0 56px}
+  .donate__card{padding:28px 20px;border-radius:22px}
+  .donate__side{flex-direction:column}
+  .donate__goal{max-width:none}
+  .donate__btn{width:100%;justify-content:center}
+  .donate__actions .btn--ghost{width:100%;justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){
+  .donate__heart,.donate__btn::after{animation:none}
+}

@@ -1,4 +1,5 @@
 import {
+  ArrowRight,
   Cloud,
   CreditCard,
   Database,
@@ -8,7 +9,9 @@ import {
   Megaphone,
   Send,
   Share2,
+  ShieldCheck,
   Users,
+  Zap,
 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -16,13 +19,13 @@ import Link from "next/link";
 import SubpageShell from "@/components/SubpageShell";
 import SocialIcon from "@/components/icons/SocialIcon";
 import CopyButton from "@/components/support/CopyButton";
+import { TAPS_AMOUNTS, TAPS_URL } from "@/config/donate";
 import { SOCIAL_LINKS } from "@/config/social";
 import {
   currentMonthUz,
   formatCard,
   formatSum,
   getDonateSettings,
-  hasPaymentMethod,
 } from "@/lib/donate";
 
 export const metadata: Metadata = {
@@ -63,6 +66,50 @@ export default async function SupportPage() {
       title="Saytni qo'llab-quvvatlash"
       sub="Bu sayt reklama va homiysiz, muxlislar hisobidan ishlaydi. Har bir hissa serverni yana bir oy yoqiq saqlaydi."
     >
+      <section className="taps-card" aria-label="Taps orqali donat">
+        <div className="taps-card__main">
+          <span className="tag tag--gold donate__tag">
+            <Zap size={12} aria-hidden="true" /> Eng tez usul
+          </span>
+          <h2>Taps orqali donat</h2>
+          <p>
+            Summani tanlang, kartani kiriting — tamom. Uzcard, Humo va Visa
+            kartalari qabul qilinadi, ro&apos;yxatdan o&apos;tish shart emas.
+          </p>
+          <div className="donate__amounts" aria-label="Tayyor summalar">
+            {TAPS_AMOUNTS.map((a) => (
+              <a
+                key={a}
+                href={TAPS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="donate__chip"
+              >
+                {formatSum(a)} <small>so&apos;m</small>
+              </a>
+            ))}
+          </div>
+          <a
+            href={TAPS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn--primary donate__btn"
+          >
+            <HandHeart size={18} aria-hidden="true" />
+            Donat qilish
+            <ArrowRight size={16} aria-hidden="true" className="donate__arrow" />
+          </a>
+          <small className="taps-card__url">
+            <ShieldCheck size={13} aria-hidden="true" /> taps.uz/manchesteruniteduz
+          </small>
+        </div>
+        <div className="taps-card__side" aria-hidden="true">
+          <div className="donate__heart">
+            <HandHeart size={64} strokeWidth={1.4} />
+          </div>
+        </div>
+      </section>
+
       {hasGoal && (
         <section className="support__goal" aria-label="Oylik maqsad">
           <div className="support__goal-head">
@@ -103,8 +150,22 @@ export default async function SupportPage() {
       </div>
 
       <h2 className="support__h2">To'lov usullari</h2>
-      {hasPaymentMethod(s) ? (
-        <div className="watch__grid">
+      <div className="watch__grid">
+        <a
+          href={TAPS_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="watch-card pay-card pay-card--taps"
+        >
+          <div className="watch-card__head">
+            <h3>Taps</h3>
+            <Zap size={20} aria-hidden="true" />
+          </div>
+          <p>Istalgan karta bilan bir necha soniyada. Tavsiya etiladigan usul.</p>
+          <span className="watch-card__link">
+            taps.uz/manchesteruniteduz <ExternalLink size={14} aria-hidden="true" />
+          </span>
+        </a>
           {s.paymeUrl && (
             <div className="watch-card pay-card">
               <div className="watch-card__head">
@@ -174,13 +235,7 @@ export default async function SupportPage() {
               </a>
             </div>
           )}
-        </div>
-      ) : (
-        <div className="empty-state">
-          To'lov rekvizitlari tez orada joylanadi. Hozircha saytni do'stlaringiz
-          bilan ulashing.
-        </div>
-      )}
+      </div>
 
       <h2 className="support__h2">Pulsiz ham yordam bera olasiz</h2>
       <div className="watch__grid">
