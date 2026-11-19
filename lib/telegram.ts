@@ -116,3 +116,52 @@ export async function sendTelegramTo(chatId: string, text: string): Promise<bool
     return false;
   }
 }
+
+export interface TelegramPhoto {
+  bytes: Uint8Array<ArrayBuffer>;
+  /** Fayl nomi (kengaytma bilan) — Telegram turini shundan ham aniqlaydi */
+  name: string;
+  type: string;
+}
+
+/**
+ * Rasmli post: sendPhoto, izoh (caption) HTML rejimida.
+ * Telegram izohni 1024 belgigacha qabul qiladi — uzunroq matnni
+ * chaqiruvchi alohida xabar qilib yuborishi kerak.
+ */
+export async function sendTelegramPhoto(
+  chatId: string,
+  photo: TelegramPhoto,
+  caption: string,
+): Promise<boolean> {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  if (!token) return false;
+
+  const form = new FormData();
+  form.set("chat_id", chatId);
+  form.set("photo", new Blob([photo.bytes], { type: photo.type }), photo.name);
+  if (caption) {
+    form.set("caption", caption);
+    form.set("parse_mode", "HTML");
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/bot${token}/sendPhoto`, {
+      method: "POST",
+      body: form,
+      // Rasm yuklash matnga qaraganda uzoqroq olishi mumkin
+      signal: AbortSignal.timeout(API_TIMEOUT_MS * 4),
+    });
+
+    if (!response.ok) {
+      const details = await response.text().catch(() => "");
+      console.error("[telegram] rasm yuborilmadi:", response.status, details.slice(0, 200));
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("[telegram] rasm xatolik:", error);
+    return false;
+  }
+}

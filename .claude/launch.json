@@ -4,7 +4,24 @@
     {
       "name": "mu-next",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 3000,
+      "autoPort": true
+    },
+    {
+      "name": "mu-next-tgmock",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "TELEGRAM_BOT_TOKEN=test-token",
+        "TELEGRAM_API_BASE=http://127.0.0.1:9911",
+        "TELEGRAM_CHANNEL=@test_channel",
+        "npm",
+        "run",
+        "dev"
+      ],
       "port": 3000,
       "autoPort": true
     }

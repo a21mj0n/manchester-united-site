@@ -25,7 +25,7 @@ export function uploadDir(): string {
 }
 
 /** Fayl boshidagi baytlar bo'yicha turini aniqlaydi — kengaytmaga ishonmaymiz */
-function detectExt(bytes: Uint8Array): keyof typeof TYPES | null {
+export function detectExt(bytes: Uint8Array): keyof typeof TYPES | null {
   if (bytes.length < 12) return null;
   if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return "jpg";
   if (bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47) return "png";
@@ -37,6 +37,10 @@ function detectExt(bytes: Uint8Array): keyof typeof TYPES | null {
 
 export function isSafeUploadName(name: string): boolean {
   return /^[a-f0-9]{16}\.(jpg|png|webp)$/.test(name);
+}
+
+export function contentTypeForExt(ext: string): string {
+  return TYPES[ext] ?? "application/octet-stream";
 }
 
 export function contentTypeFor(name: string): string {

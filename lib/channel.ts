@@ -19,7 +19,7 @@ import { SITE_URL, TELEGRAM_CHANNEL } from "@/config/social";
 import { apiFixtureId } from "./match-id";
 import { fetchStandings as fetchFdStandings, fetchTeamMatches } from "./footballdata";
 import { prisma } from "./prisma";
-import { sendTelegramTo } from "./telegram";
+import { sendTelegramPhoto, sendTelegramTo, type TelegramPhoto } from "./telegram";
 
 const TASHKENT_OFFSET_MS = 5 * 60 * 60 * 1000;
 /** O'yin kuni posti shu soatdan (Toshkent) oldin yuborilmaydi */
@@ -386,4 +386,63 @@ export async function sendChannelTest(): Promise<boolean> {
     chat,
     `🔴 <b>Red Devils Uzbekistan</b>\nSayt bilan bog'landi: o'yin kuni va natijalar endi shu yerda avtomatik chiqadi.\n\n${signature()}`,
   );
+}
+
+/* ---------------- Erkin post ---------------- */
+
+/** Telegram cheklovlari */
+const CAPTION_LIMIT = 1024;
+const MESSAGE_LIMIT = 4096;
+
+export interface CustomPostInput {
+  /** Post matni. `html` false bo'lsa oddiy matn deb olinadi va ekranlanadi */
+  text: string;
+  /** Matn Telegram HTML belgilari (<b>, <a>, …) bilan yozilganmi */
+  html?: boolean;
+  /** Ixtiyoriy rasm — bo'lsa post sendPhoto orqali ketadi */
+  image?: TelegramPhoto | null;
+}
+
+export function customPostKey(at = new Date()): string {
+  return `${POST_PREFIX}custom:${at.toISOString()}`;
+}
+
+/**
+ * Admin yozgan (yoki tashqaridan tasdiqlab yuborilgan) postni kanalga
+ * joylaydi. Rasm bo'lsa matn izoh sifatida ketadi; izoh 1024 belgidan
+ * uzun bo'lsa rasm izohsiz, matn esa alohida xabar bo'lib yuboriladi.
+ * Yuborilgan post Setting jadvaliga yoziladi — admin panelda ko'rinadi.
+ */
+export async function sendCustomPost(
+  input: CustomPostInput,
+): Promise<{ ok: true; text: string; key: string } | { ok: false; error: string }> {
+  const chat = channelId();
+  if (!chat || !channelConfigured()) {
+    return { ok: false, error: "Kanal sozlanmagan (bot tokeni yoki kanal yo'q)." };
+  }
+
+  const raw = input.text.trim();
+  if (!raw && !input.image) return { ok: false, error: "Post matni bo'sh." };
+  if (raw.length > MESSAGE_LIMIT) {
+    return { ok: false, error: `Matn ${MESSAGE_LIMIT} belgidan uzun.` };
+  }
+
+  const text = input.html ? raw : escapeHtml(raw);
+
+  let sent: boolean;
+  if (input.image) {
+    if (text.length <= CAPTION_LIMIT) {
+      sent = await sendTelegramPhoto(chat, input.image, text);
+    } else {
+      sent = (await sendTelegramPhoto(chat, input.image, "")) && (await sendTelegramTo(chat, text));
+    }
+  } else {
+    sent = await sendTelegramTo(chat, text);
+  }
+
+  if (!sent) return { ok: false, error: "Telegram qabul qilmadi — bot kanalda adminmi?" };
+
+  const key = customPostKey();
+  await markPosted(key, text);
+  return { ok: true, text, key };
 }

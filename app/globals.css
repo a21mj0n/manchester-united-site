@@ -751,6 +751,15 @@ ul{list-style:none}
 .channel-panel{margin:0 0 28px;padding:20px 22px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.02)}
 .channel-panel__head{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start}
 .admin__h2{display:flex;align-items:center;gap:8px;font-family:var(--font-display);letter-spacing:1px;font-size:1.2rem;margin:0 0 4px}
+.channel-compose{margin:18px 0 0;padding:16px 18px;border:1px dashed var(--line);border-radius:12px}
+.channel-compose__title{display:flex;align-items:center;gap:8px;margin:0 0 12px;font-size:.95rem}
+.channel-compose .field textarea{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.04);color:var(--text);font:inherit;font-size:.92rem;line-height:1.5;resize:vertical}
+.channel-compose .field textarea:focus{outline:none;border-color:var(--red);background:rgba(218,41,28,.08)}
+.channel-compose__row{display:flex;flex-wrap:wrap;gap:14px 18px;align-items:flex-end}
+.channel-compose__file{margin:0;flex:1 1 220px}
+.channel-compose__file input{padding:9px 0;border:0;background:transparent}
+.channel-compose__check{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--muted);padding-bottom:12px}
+.channel-compose__check input{accent-color:var(--red)}
 .channel-posts{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:10px}
 .channel-posts li{border:1px solid var(--line);border-radius:12px;padding:12px 14px}
 .channel-posts__meta{display:flex;align-items:center;gap:10px;margin-bottom:8px}
